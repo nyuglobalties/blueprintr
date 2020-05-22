@@ -22,4 +22,7 @@ Depends:
     R (>= 3.2)
 Imports: 
     rlang,
-    here
+    here,
+    drake,
+    data.table,
+    glue

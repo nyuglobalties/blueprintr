@@ -64,11 +64,26 @@ collapse_ast <- function(ast) {
 
     collapsed_args <- lapply(ast$args, collapse_ast)
 
+    if (is_namespaced_ast(ast)) {
+        return(call2(ast$head, !!!collapsed_args, .ns = ast$ns))
+    }
+
+    if (is_qualified_ast(ast)) {
+        browser()
+    }
+
+    call2(ast$head, !!!collapsed_args)
+}
+
+collapse_qualified_ast <- function(ast) {
+    collapsed_args <- lapply(ast$args, collapse_ast)
+
     if (!is.null(ast$ns)) {
-        calling_cmd <- expr(`::`(!!as.name(ast$ns), !!as.name(ast$head)))
+        calling_cmd <- expr((!!ast$qual_sym)(!!as.name(ast$ns), !!as.name(ast$head)))
+
         expr((!!calling_cmd)(!!!collapsed_args))
     } else {
-        call2(ast$head, !!!collapsed_args)
+
     }
 }
 
@@ -77,14 +92,88 @@ ast <- function(call) {
         return(function_ast(call)) 
     }
 
+    if (is_qualified_call(call)) {
+        return(qualified_ast(call))
+    }
+
     structure(
         list(
             head = call_name(call),
-            ns   = call_ns(call),
             args = as.list(call)[-1]
         ),
         class = "ast"
     )
+}
+
+qualified_ast <- function(call) {
+    qual_sym <- qualifier(call)
+    qual_head <- qualified_head(call)
+    namespace <- if (is_namespaced_call(call)) {
+        call_ns(call)
+    } else {
+        NULL
+    }
+
+    structure(
+        list(
+            head = call_name(call),
+            qual_head = qual_head,
+            qual_sym = qual_sym,
+            ns = namespace,
+            args = as.list(call)[-1]
+        ),
+        class = c("ast", "qualified_ast")
+    )
+}
+
+is_language <- function(x) {
+    identical(typeof(x), "language")
+}
+
+qualifier <- function(call) {
+    stopifnot(is_language(call))
+
+    node_caar(call)
+}
+
+qualified_head <- function(call) {
+    stopifnot(is_language(call))
+
+    extract_ast(node_car(node_cdar(call)))
+}
+
+is_qualified_call <- function(call) {
+    if (!is_language(call)) {
+        return(FALSE)
+    }
+
+    if (!is_language(node_car(call))) {
+        return(FALSE)
+    }
+
+    call_cmd <- node_car(call)
+
+    if (!is_symbol(node_cadr(node_cdr(call_cmd)))) {
+        return(FALSE)
+    }
+
+    qual_sym <- qualifier(call)
+
+    identical(qual_sym, quote(`::`)) ||
+        identical(qual_sym, quote(`:::`)) ||
+        identical(qual_sym, quote(`$`)) ||
+        identical(qual_sym, quote(`@`))
+}
+
+is_namespaced_call <- function(call) {
+    if (!is_qualified_call(call)) {
+        return(FALSE)
+    }
+
+    qual_sym <- qualifier(call)
+
+    identical(qual_sym, quote(`::`)) ||
+        identical(qual_sym, quote(`:::`))
 }
 
 function_ast <- function(call) {
@@ -106,4 +195,16 @@ is_ast <- function(x) {
 
 is_function_ast <- function(x) {
     inherits(x, "function_ast")
+}
+
+is_qualified_ast <- function(x) {
+    inherits(x, "qualified_ast")
+}
+
+is_namespaced_ast <- function(x) {
+    if (!inherits(x, "qualified_ast")) {
+        return(FALSE)
+    }
+
+    !is.null(x$ns)
 }
