@@ -1,8 +1,8 @@
 `%||%` <- function(x, y) if (is.null(x)) y else x
 
-viapply <- function(.x, .f, integer, ...) vapply(.x, .f, integer(1L), ...)
-vcapply <- function(.x, .f, character, ...) vapply(.x, .f, character(1L), ...)
-vlapply <- function(.x, .f, logical, ...) vapply(.x, .f, logical(1L), ...)
+viapply <- function(.x, .f, ...) vapply(.x, .f, integer(1L), ...)
+vcapply <- function(.x, .f, ...) vapply(.x, .f, character(1L), ...)
+vlapply <- function(.x, .f, ...) vapply(.x, .f, logical(1L), ...)
 
 collapse_message_list <- function(x, and = TRUE) {
   x <- paste0("'", x, "'")
@@ -71,13 +71,13 @@ ui_quote <- function(x) {
 bp_err <- function(x, .envir = parent.frame()) {
   msg <- glue(glue_collapse(x), .envir = .envir)
 
-  abort(.subclass = "tk_error", message = msg)
+  abort(.subclass = "bp_error", message = msg)
 }
 
 bp_warn <- function(x, .envir = parent.frame()) {
   msg <- glue(glue_collapse(x), .envir = .envir)
 
-  warn(.subclass = "tk_warning", message = msg)
+  warn(.subclass = "bp_warning", message = msg)
 }
 
 bp_assert <- function(x, msg = NULL, .envir = parent.frame()) {
