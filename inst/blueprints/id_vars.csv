@@ -1,0 +1,5 @@
+"name","description","type"
+"student_id","Student ID","character"
+"teacher_id","Teacher ID","character"
+"school_id","School ID","character"
+"classroom_id","Classroom ID","character"

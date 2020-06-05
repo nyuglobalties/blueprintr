@@ -31,17 +31,15 @@ attach_blueprint <- function(plan, blueprint) {
     plan <- add_metadata_creation_target(plan, blueprint)
   } else {
     meta <- load_metadata(blueprint)
-
     plan <- add_blueprint_metadata(plan, blueprint, meta)
-    plan <- add_content_checks(plan, blueprint, meta)
   }
 
-  plan
+  add_content_checks(plan, blueprint)
 }
 
 add_blueprint_target <- function(plan, blueprint) {
   command_ast <- extract_ast(blueprint$command)
-  command_ast <- modify_ast_if(command_ast, is_chunk_ast, eval_chunk)
+  command_ast <- modify_ast_if(command_ast, is_blueprint_ast, eval_blueprint_ast)
   translated_command <- collapse_ast(command_ast)
 
   arglist <- list2(!!blueprint_target_name(blueprint) := translated_command)
@@ -73,20 +71,25 @@ add_blueprint_metadata <- function(plan, blueprint, meta) {
 }
 
 add_metadata_creation_target <- function(plan, blueprint) {
-  command <- bquote(create_metadata_file(
-    .(as.name(blueprint_target_name(blueprint))),
-    .(as.name(blueprint_reference_name(blueprint)))
-  ))
+  deps <- blueprint_deps(blueprint)
+  deps_syms <- lapply(deps, function(dep) as.name(paste0(dep, "_meta")))
+
+  command <- call2(
+    "create_metadata_file", 
+    as.name(blueprint_target_name(blueprint)),
+    as.name(blueprint_reference_name(blueprint)),
+    !!!deps_syms
+  )
 
   arglist <- list2(
-    !!paste0(blueprint_target_name(blueprint), "_metadata_export") := command
+    !!metadata_target_name(blueprint) := command
   )
 
   target_plan <- do.call(drake::drake_plan, arglist)
   drake::bind_plans(plan, target_plan)
 }
 
-add_content_checks <- function(plan, blueprint, meta) {
+add_content_checks <- function(plan, blueprint) {
   command1 <- bquote(check_content(
     .(as.name(blueprint_target_name(blueprint))),
     .(as.name(blueprint_reference_name(blueprint))),
@@ -94,19 +97,21 @@ add_content_checks <- function(plan, blueprint, meta) {
   ))
 
   arglist <- list2(
-    !!paste0(blueprint_target_name(blueprint), "_content_checks") := command1
+    !!blueprint_checks_name(blueprint) := command1
   )
 
   target_plan <- do.call(drake::drake_plan, arglist)
   plan <- drake::bind_plans(plan, target_plan)
 
   command2 <- bquote(accept_content(
-    .(as.name(paste0(blueprint_target_name(blueprint), "_content_checks"))),
-    .(as.name(blueprint_reference_name(blueprint)))
+    .(as.name(blueprint_checks_name(blueprint))),
+    .(as.name(blueprint_target_name(blueprint))),
+    .(as.name(blueprint_reference_name(blueprint))),
+    .(as.name(metadata_target_name(blueprint)))
   ))
 
   arglist <- list2(
-    !!paste0(blueprint_target_name(blueprint), "_content_pass") := command2
+    !!blueprint_final_name(blueprint) := command2
   )
 
   target_plan <- do.call(drake::drake_plan, arglist)

@@ -27,14 +27,6 @@ blueprint <- function(name,
     )
 }
 
-blueprint_dependencies <- function(blueprint) {
-    stopifnot(inherits(blueprint, "blueprint"))
-
-    command_ast <- extract_ast(blueprint$command)
-
-    browser()
-}
-
 capture_command <- function(quoted_statement) {
     if (identical(quote(.), node_car(quoted_statement))) {
         return(eval(node_cdr(quoted_statement)[[1]]))
@@ -44,6 +36,18 @@ capture_command <- function(quoted_statement) {
 }
 
 blueprint_target_name <- function(blueprint) {
+    stopifnot(inherits(blueprint, "blueprint"))
+
+    paste0(blueprint$name, "_initial")
+}
+
+blueprint_checks_name <- function(blueprint) {
+    stopifnot(inherits(blueprint, "blueprint"))
+
+    paste0(blueprint$name, "_checks")
+}
+
+blueprint_final_name <- function(blueprint) {
     stopifnot(inherits(blueprint, "blueprint"))
 
     blueprint$name

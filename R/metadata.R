@@ -36,12 +36,49 @@ metadata_file_exists <- function(blueprint) {
   file.exists(metadata_path(blueprint))
 }
 
-create_metadata_file <- function(df, blueprint) {
+create_metadata_file <- function(df, blueprint, ...) {
   stopifnot(is.data.frame(df))
 
-  metadata_dt <- data.table(name = names(df), description = "", type = vcapply(df, typeof))
+  metadata_dt <- data.table(name = names(df), description = NA_character_, type = vcapply(df, typeof))
+  deps_metalist <- dots_list(...)
 
-  data.table::fwrite(df, file = metadata_path(blueprint))
+  if (length(deps_metalist) > 0) {
+    metadata_dt <- link_dependency_meta(metadata_dt, deps_metalist)
+  }
+
+  if (any(metadata_dt$type_issue, na.rm = TRUE)) {
+    data.table::fwrite(metadata_dt, file = metadata_path(blueprint))
+
+    bp_err(c(
+      "Type inconsistency between current and previous variables.\n",
+      "Please edit the metadata file to resolve the issue and then rerun."
+    ))
+  }
+  
+  metadata_dt[, type_issue := NULL]
+  metadata_dt[, deps_type := NULL]
+  data.table::fwrite(metadata_dt, file = metadata_path(blueprint))
+
+  if (any(duplicated(metadata_dt$name))) {
+    bp_err(c(
+      "Metadata for {ui_value(blueprint$name)} has duplicated variables.\n",
+      "This can happen if a variable in a dataset exists in multiple depencies.\n",
+      "Please edit the metadata file to resolve the issue and then rerun."
+    ))
+  }
+
+  metadata(as.data.frame(metadata_dt))
+}
+
+link_dependency_meta <- function(meta_dt, deps_metalist) {
+  meta_dt <- meta_dt[, .(name, type)]
+  deps_meta_full <- rbindlist(deps_metalist, use.names = TRUE, fill = TRUE)
+  setnames(deps_meta_full, "type", "deps_type")
+
+  meta_dt <- deps_meta_full[meta_dt, on = "name"]
+  meta_dt[, type_issue := type != deps_type]
+
+  meta_dt
 }
 
 load_metadata <- function(blueprint) {
@@ -55,5 +92,9 @@ load_metadata <- function(blueprint) {
 }
 
 metadata_target_name <- function(blueprint) {
-  paste0(blueprint_target_name(blueprint), "_meta")
+  paste0(blueprint_final_name(blueprint), "_meta")
+}
+
+metadata_export_name <- function(blueprint) {
+  paste0(blueprint_final_name(blueprint), "_metadata_export")
 }

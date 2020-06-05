@@ -7,25 +7,6 @@ check_content <- function(df, blueprint, meta) {
   test_results
 }
 
-accept_content <- function(results, blueprint) {
-  if (any(results$pass) == FALSE) {
-    bp_err(c(
-      "'{blueprint$name}' content checks failed. ", 
-      "See `{paste0(blueprint_target_name(blueprint), '_content_checks')}` for more information."
-    ))
-  }
-
-  TRUE
-}
-
-blueprint_check_results <- function(blueprint_name, ...) {
-  bp_name_chr <- as.character(substitute(blueprint_name))
-
-  command <- call2("readd", as.name(paste0(bp_name_chr, "_content_checks")), ..., .ns = "drake")
-
-  eval(command)
-}
-
 check_variable_presence <- function(df, meta, stop_on_new_vars = TRUE) {
   stopifnot(is.data.frame(df))
   stopifnot(inherits(meta, "blueprint_metadata"))

@@ -1,0 +1,5 @@
+name,description,type
+student_id,Student ID,character
+age,,double
+grade,,double
+classroom_id,Classroom ID,character
