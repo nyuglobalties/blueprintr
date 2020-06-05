@@ -25,4 +25,5 @@ Imports:
     here,
     drake,
     data.table,
-    glue
+    glue,
+    purrr

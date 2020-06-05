@@ -46,7 +46,7 @@ test_that("blueprint tests are run", {
   bad_mtcars_bp <- blueprint(
     "bad_mtcars_chunk",
     command = { 
-      df <- .CHUNK("mtcars_chunk")
+      df <- .BLUEPRINT("mtcars_chunk")
       df$mpg <- NULL
       df
     },
@@ -57,4 +57,62 @@ test_that("blueprint tests are run", {
 
   drake::clean()
   expect_error(drake::make(plan))
+})
+
+test_that("Dependencies are handled properly", {
+  id_data <- data.frame(
+    student_id = c("ST5402", "ST4910", "ST2819"),
+    teacher_id = c("RT0014", "RT0013", "RT0013"),
+    school_id = c("SC01", "SC01", "SC01"),
+    classroom_id = c("RC0011", "RC0012", "RC0012"),
+    stringsAsFactors = FALSE
+  )
+
+  id_bp <- blueprint(
+    "id_vars",
+    description = "Dataset that contains all ID variables for relations",
+    command = data.frame(
+      student_id = c("ST5402", "ST4910", "ST2819"),
+      teacher_id = c("RT0014", "RT0013", "RT0013"),
+      school_id = c("SC01", "SC01", "SC01"),
+      classroom_id = c("RC0011", "RC0012", "RC0012"),
+      stringsAsFactors = FALSE
+    ),
+    metadata_file_path = bp_path("blueprints") 
+  )
+
+  student_demo_bp <- blueprint(
+    "student_demographics",
+    description = "Some demographics for students",
+    command = {
+      ids <- .BLUEPRINT("id_vars")
+      id_dt <- as.data.table(ids)
+
+      demos <- data.frame(
+        student_id = c("ST5402", "ST4910", "ST2819"),
+        age = c(8, 10, 9),
+        grade = c(4, 5, 5),
+        stringsAsFactors = FALSE
+      )
+
+      demos_dt <- as.data.table(demos)
+      demos_dt[, classroom_id := id_dt[.SD, classroom_id, on = "student_id"]]
+      as.data.frame(demos_dt)
+    },
+    metadata_file_path = bp_path("blueprints")
+  )
+
+  if (metadata_file_exists(student_demo_bp)) {
+    unlink(metadata_path(student_demo_bp))
+  }
+
+  expect_identical(blueprint_deps(student_demo_bp), "id_vars")
+
+  plan <- plan_from_blueprint(id_bp) %>% 
+    attach_blueprint(student_demo_bp)
+
+  drake::clean()
+  drake::make(plan)
+
+  browser()
 })

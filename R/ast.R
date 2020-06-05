@@ -1,7 +1,6 @@
 extract_ast <- function(expr) {
-    # Protect from weird bquote.. bug?
     if (identical(expr, bquote())) {
-        abort("Cannot expand AST of empty expression.")
+        return(expr)
     }
 
     # Base cases
@@ -48,6 +47,29 @@ modify_ast_if <- function(ast, .p, .f, ..., recurse = TRUE) {
 
         out
     }
+}
+
+find_ast_if <- function(ast, .p, recurse = TRUE) {
+    if (!is_ast(ast)) {
+        if (isTRUE(.p(ast))) {
+            return(extract_ast(ast))
+        } else {
+            return(list())
+        }
+    } else {
+        out <- list()
+
+        if (isTRUE(.p(ast))) {
+            out <- list(ast)
+        } else {
+          if (isTRUE(recurse)) {
+              out <- lapply(ast$args, find_ast_if, .p)
+          }
+        }
+
+        out
+    }
+
 }
 
 collapse_ast <- function(ast) {

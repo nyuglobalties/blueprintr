@@ -2,9 +2,9 @@ context("chunk-ast")
 
 test_that("Chunk comprehension works", {
     command <- bquote({
-        .CHUNK("chunk1") %>% 
+        .BLUEPRINT("chunk1") %>% 
             left_join(
-                .CHUNK("chunk2") %>% 
+                .BLUEPRINT("chunk2") %>% 
                     select(site_id, tent),
                 by = "site_id"
             ) %>% 
@@ -22,7 +22,7 @@ test_that("Chunk comprehension works", {
     })
 
     extracted <- extract_ast(command)
-    modifed <- modify_ast_if(extracted, is_chunk_ast, eval_chunk)
+    modifed <- modify_ast_if(extracted, is_blueprint_ast, eval_blueprint_ast)
 
     expect_equal(collapse_ast(modifed), answer)
 })
