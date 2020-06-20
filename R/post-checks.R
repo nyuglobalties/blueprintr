@@ -1,11 +1,4 @@
 accept_content <- function(results, df, blueprint, meta) {
-  if (any(results$pass) == FALSE) {
-    bp_err(c(
-      "'{blueprint$name}' content checks failed. ", 
-      "See `{blueprint_checks_name(blueprint)}` for more information."
-    ))
-  }
-
   if (has_dropped_feature(blueprint, meta)) {
     df <- drop_columns(df, blueprint, meta)
   }

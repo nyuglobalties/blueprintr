@@ -1,13 +1,4 @@
-check_content <- function(df, blueprint, meta) {
-  test_results <- data.table(test = character(), pass = logical(), messages = list())
-
-  var_presence <- results_dt("variable_presence", check_variable_presence(df, meta))
-  test_results <- rbindlist(list(test_results, var_presence))
-
-  test_results
-}
-
-check_variable_presence <- function(df, meta, stop_on_new_vars = TRUE) {
+all_variables_present <- function(df, meta, blueprint) {
   stopifnot(is.data.frame(df))
   stopifnot(inherits(meta, "blueprint_metadata"))
 
@@ -16,37 +7,54 @@ check_variable_presence <- function(df, meta, stop_on_new_vars = TRUE) {
   new_vars <- setdiff(names(df), known_vars)
   missing_vars <- setdiff(known_vars, names(df))
 
-  msg_payload <- blueprint_test_result()
-
   if (length(missing_vars) > 0) {
-    msg_payload <- add_test_message(
-      msg_payload,
+    message(
       glue("Expected variables are missing: {glue_collapse(missing_vars, ', ')}")
     )
   }
 
   if (length(new_vars) > 0) {
-    msg_payload <- add_test_message(
-      msg_payload,
+    message(
       glue("Unexpected new variables: {glue_collapse(new_vars, ', ')}"),
       "Please edit documentation if this is intended."
     )
   }
 
   if (length(missing_vars) > 0) {
-    return(reject(msg_payload))
+    return(FALSE)
   }
 
-  if (length(new_vars) > 0 && stop_on_new_vars == TRUE) {
-    return(reject(msg_payload))
+  if (length(new_vars) > 0 && isTRUE(blueprint$stop_on_new_vars)) {
+    return(FALSE)
   }
 
-  accept(msg_payload)
+  TRUE
 }
 
-check_variable_types <- function(df, types_df) {
+all_types_match <- function(df, meta) {
   stopifnot(is.data.frame(df))
-  stopifnot(is.data.frame(types_df))
+  stopifnot(inherits(meta, "blueprint_metadata"))
 
-  msg_payload <- blueprint_test_result()
+  df_types <- data.table(
+    name = names(df),
+    type = vcapply(df, typeof)
+  )
+
+  meta_dt <- as.data.table(meta)
+
+  df_types[, expected_type := meta_dt[.SD, type, on = "name"]]
+  df_types[, issue := expected_type != type]
+
+  if (any(df_types$issue, na.rm = TRUE)) {
+    format <- "{name}: '{type}' found, '{expected_type}' expected"
+    df_types[issue == TRUE, .err := glue(format)]
+
+    for (.err in df_types[issue == TRUE, .err]) {
+      message(.err)
+    }
+
+    return(FALSE)
+  }
+  
+  TRUE
 }

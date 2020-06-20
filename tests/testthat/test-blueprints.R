@@ -46,7 +46,7 @@ test_that("blueprint tests are run", {
   bad_mtcars_bp <- blueprint(
     "bad_mtcars_chunk",
     command = { 
-      df <- .BLUEPRINT("mtcars_chunk")
+      df <- .TARGET("mtcars_chunk")
       df$mpg <- NULL
       df
     },
@@ -85,7 +85,7 @@ test_that("Dependencies are handled properly", {
     "student_demographics",
     description = "Some demographics for students",
     command = {
-      ids <- .BLUEPRINT("id_vars")
+      ids <- .TARGET("id_vars")
       id_dt <- as.data.table(ids)
 
       demos <- data.frame(

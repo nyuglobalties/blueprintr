@@ -1,66 +1,116 @@
-blueprint_test_result <- function(...) {
+checks <- function(...) {
+  dots <- as.list(substitute(list(...))[-1])
+
+  check_list <- lapply(dots, check)
+  check_dat <- data.frame(
+    check_func = I(lapply(check_list, function(x) x$check_func)),
+    target = vcapply(check_list, function(x) x$target),
+    variable = vcapply(check_list, function(x) if (is.null(x$variable)) NA_character_ else x$variable),
+    stringsAsFactors = FALSE
+  )
+
   structure(
-    list(...),
-    class = c("bp_test_result", "list")
+    check_dat,
+    class = c("checks", class(check_dat))
   )
 }
 
-accept <- function(x, ...) {
-  UseMethod("accept")
-}
+check <- function(func) {
+  stopifnot(rlang::is_call(func))
 
-accept.bp_test_result <- function(x) {
   structure(
-    x,
-    pass = TRUE
+    list(
+      check_func = func,
+      target = check_func_target(func),
+      variable = check_func_variable(func)
+    ),
+    class = "check"
   )
 }
 
-reject <- function(x, ...) {
-  UseMethod("reject")
-}
+check_func_target <- function(func) {
+  first_arg <- rlang::call_args(func)[[1]]
 
-reject.bp_test_result <- function(x) {
-  structure(
-    x,
-    pass = FALSE
-  )
-}
-
-print.bp_test_result <- function(x, ...) {
-  cat("<blueprint test result>\n")
-
-  if (length(x) == 0) {
-    cat("Test has no messages.\n")
+  if (is_variable_check_func(func)) {
+    as.character(node_cadr(first_arg))
   } else {
-    cat(glue("Test has {length(x)} message{if (length(x) != 1) 's' else ''}:"), "\n", sep = "")
+    as.character(first_arg)
+  }
+}
 
-    for (msg in x) {
-      cat(msg, "\n", sep = "")
-    }
+check_func_variable <- function(func) {
+  if (is_variable_check_func(func)) {
+    first_arg <- rlang::call_args(func)[[1]]
+    
+    as.character(node_cddr(first_arg)[[1]])
+  } else {
+    NULL
+  }
+}
+
+is_variable_check_func <- function(func) {
+  first_arg <- rlang::call_args(func)[[1]]
+  arg_ast <- extract_ast(first_arg)
+
+  if (!is_ast(arg_ast)) {
+    return(FALSE)
   }
 
-  invisible()
+  identical(arg_ast$head, "$")
 }
 
-results_dt <- function(test_name, x) {
-  stopifnot(inherits(x, "bp_test_result"))
+eval_checks <- function(..., .env = parent.frame()) {
+  checks_dt <- checks(...)
 
-  if (length(x) == 0) {
-    all_messages <- NA_character_
-  } else {
-    all_messages <- unlist(x)
+  checks_dt$.pass <- vlapply(checks_dt$check_func, function(f) eval(f, envir = .env))
+
+  if (any(checks_dt$.pass == FALSE)) {
+    checks_error(checks_dt)
   }
 
-  data.table(test = test_name, pass = attr(x, "pass") %||% FALSE, messages = all_messages)
+  checks_dt
 }
 
-add_test_message <- function(test_result, ...) {
-  stopifnot(inherits(test_result, "bp_test_result"))
+checks_error <- function(checks) {
+  false_funcs <- checks[checks$.pass == FALSE, checks$check_func]
 
-  dots <- unlist(dots_list(...))
-  message <- glue_collapse(dots, "\n")
+  err_msgs <- glue("`{safe_deparse(false_funcs)}` is not TRUE")
 
-  test_result[[length(test_result) + 1]] <- message
-  test_result
+  rlang::abort(
+    .subclass = "checks_error",
+    message = glue_collapse(err_msgs, "\n"),
+    checks = checks
+  )
+}
+
+interpret_raw_check <- function(func, target, variable = NULL) {
+  stopifnot(rlang::is_call(func))
+  stopifnot(is.character(target))
+  stopifnot(is.character(variable) || is.null(variable))
+
+  call_head <- list(
+    name = rlang::call_name(func),
+    ns = rlang::call_ns(func)
+  )
+
+  if (!is.null(variable)) {
+    first_arg <- bquote(`$`(.(as.name(target)), .(as.name(variable))))
+  } else {
+    first_arg <- as.name(target)
+  }
+
+  new_func <- rlang::call2(
+    call_head$name,
+    first_arg,
+    !!!rlang::call_args(func),
+    .ns = call_head$ns
+  )
+
+  is_any_macro <- function(ast) {
+    is_macro_ast(ast, c(".TARGET", ".BLUEPRINT", ".META"))
+  }
+
+  new_func_ast <- extract_ast(new_func)
+  new_func_ast <- modify_ast_if(new_func_ast, is_any_macro, eval_ast)
+  collapse_ast(new_func_ast)
 }

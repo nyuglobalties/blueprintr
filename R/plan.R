@@ -39,7 +39,7 @@ attach_blueprint <- function(plan, blueprint) {
 
 add_blueprint_target <- function(plan, blueprint) {
   command_ast <- extract_ast(blueprint$command)
-  command_ast <- modify_ast_if(command_ast, is_blueprint_ast, eval_blueprint_ast)
+  command_ast <- modify_ast_if(command_ast, is_target_ast, eval_ast)
   translated_command <- collapse_ast(command_ast)
 
   arglist <- list2(!!blueprint_target_name(blueprint) := translated_command)
@@ -90,11 +90,38 @@ add_metadata_creation_target <- function(plan, blueprint) {
 }
 
 add_content_checks <- function(plan, blueprint) {
+  default_checks <- list(
+    bquote(all_variables_present(.META(.(blueprint$name)), .BLUEPRINT(.(blueprint$name)))),
+    bquote(all_types_match(.META(.(blueprint$name))))
+  )
+
+  if (!is.null(blueprint$checks)) {
+    content_checks <- blueprint$checks
+  } else {
+    content_checks <- list()
+  }
+
+  all_checks <- rlang::list2(
+    !!!default_checks,
+    !!!content_checks
+  )
+
+  all_checks <- lapply(
+    all_checks, 
+    interpret_raw_check,
+    blueprint_target_name(blueprint)
+  )
+
   command1 <- bquote(check_content(
     .(as.name(blueprint_target_name(blueprint))),
     .(as.name(blueprint_reference_name(blueprint))),
     .(as.name(metadata_target_name(blueprint)))
   ))
+
+  command1 <- rlang::call2(
+    "eval_checks",
+    !!!all_checks
+  )
 
   arglist <- list2(
     !!blueprint_checks_name(blueprint) := command1

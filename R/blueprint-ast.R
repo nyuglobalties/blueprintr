@@ -1,18 +1,36 @@
-# For now, just an alias to as.name, but will allow for more
-# structured drake target names with configuration
-.BLUEPRINT <- function(bp_name, ...) {
-  as.name(bp_name)
+.TARGET <- function(bp_name) {
+  as.name(blueprint_final_name(bp_name))
 }
 
-is_blueprint_ast <- function(ast) {
+.BLUEPRINT <- function(bp_name) {
+  as.name(blueprint_reference_name(bp_name))
+}
+
+.META <- function(bp_name) {
+  as.name(metadata_target_name(bp_name))
+}
+
+is_macro_ast <- function(ast, .macro = ".TARGET") {
   if (!is_ast(ast)) {
     return(FALSE)
   }
 
-  identical(ast$head, ".BLUEPRINT")
+  ast$head %in% .macro
 }
 
-eval_blueprint_ast <- function(ast, env = parent.frame()) {
+is_target_ast <- function(ast) {
+  is_macro_ast(ast)
+}
+
+is_blueprint_ast <- function(ast) {
+  is_macro_ast(ast, ".BLUEPRINT")
+}
+
+is_meta_ast <- function(ast) {
+  is_macro_ast(ast, ".META")
+}
+
+eval_ast <- function(ast, env = parent.frame()) {
   collapsed <- collapse_ast(ast)
 
   eval_tidy(collapsed, env = env)
@@ -23,19 +41,19 @@ blueprint_deps <- function(blueprint) {
 
   command_ast <- extract_ast(blueprint$command)
 
-  blueprint_calls <- find_ast_if(command_ast, blueprint_call_check)
-  blueprint_names <- unlist(blueprint_calls)
+  target_calls <- find_ast_if(command_ast, target_call_check)
+  target_names <- unlist(target_calls)
 
-  if (is.null(blueprint_names)) {
+  if (is.null(target_names)) {
     return(character())
   }
   
-  unname(blueprint_names[blueprint_names != ".BLUEPRINT"])
+  unname(target_names[target_names != ".TARGET"])
 }
 
-blueprint_call_check <- function(ast) {
+target_call_check <- function(ast) {
   if (is_ast(ast)) {
-    identical(ast$head, ".BLUEPRINT")
+    identical(ast$head, ".TARGET")
   } else {
     FALSE
   } 
