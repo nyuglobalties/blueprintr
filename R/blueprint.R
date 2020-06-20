@@ -7,32 +7,32 @@ blueprint <- function(name,
                       metadata_file_path = here::here("blueprints"),
                       ..., 
                       class = character()) {
-    stopifnot(is.character(name))
-    stopifnot(is.null(description) || is.character(description))
+  stopifnot(is.character(name))
+  stopifnot(is.null(description) || is.character(description))
 
-    captured_command <- capture_command(substitute(command))
-    metadata_file_type <- match.arg(metadata_file_type)
+  captured_command <- capture_command(substitute(command))
+  metadata_file_type <- match.arg(metadata_file_type)
 
-    structure(
-        list(
-            name = name,
-            command = captured_command,
-            description = description,
-            export_metadata = export_metadata,
-            metadata_file_type = metadata_file_type,
-            metadata_file_path = metadata_file_path,
-            ...
-        ),
-        class = c(class, "blueprint")
-    )
+  structure(
+    list(
+      name = name,
+      command = captured_command,
+      description = description,
+      export_metadata = export_metadata,
+      metadata_file_type = metadata_file_type,
+      metadata_file_path = metadata_file_path,
+      ...
+    ),
+    class = c(class, "blueprint")
+  )
 }
 
 capture_command <- function(quoted_statement) {
-    if (identical(quote(.), node_car(quoted_statement))) {
-        return(eval(node_cdr(quoted_statement)[[1]]))
-    }
+  if (identical(quote(.), node_car(quoted_statement))) {
+    return(eval(node_cdr(quoted_statement)[[1]]))
+  }
 
-    quoted_statement
+  quoted_statement
 }
 
 blueprint_target_name <- function(x, ...) {
@@ -44,7 +44,7 @@ blueprint_target_name.default <- function(x) {
 }
 
 blueprint_target_name.character <- function(x) {
-    paste0(x, "_initial")
+  paste0(x, "_initial")
 }
 
 blueprint_target_name.blueprint <- function(blueprint) {
