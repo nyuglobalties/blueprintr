@@ -57,7 +57,12 @@ metadata_file_exists <- function(blueprint) {
 create_metadata_file <- function(df, blueprint, ...) {
   stopifnot(is.data.frame(df))
 
-  metadata_dt <- data.table(name = names(df), description = NA_character_, type = vcapply(df, typeof))
+  metadata_dt <- dplyr::tibble(
+    name = names(df), 
+    description = NA_character_, 
+    type = vcapply(df, typeof)
+  )
+
   deps_metalist <- dots_list(...)
 
   if (length(deps_metalist) > 0) {
@@ -73,8 +78,10 @@ create_metadata_file <- function(df, blueprint, ...) {
     ))
   }
 
-  metadata_dt[, type_issue := NULL]
-  metadata_dt[, deps_type := NULL]
+  metadata_dt <- 
+    metadata_dt %>% 
+    dplyr::mutate(type_issue = NULL, deps_type = NULL)
+
   data.table::fwrite(metadata_dt, file = metadata_path(blueprint))
 
   if (any(duplicated(metadata_dt$name))) {
@@ -85,16 +92,22 @@ create_metadata_file <- function(df, blueprint, ...) {
     ))
   }
 
-  metadata(as.data.frame(metadata_dt))
+  metadata(metadata_dt)
 }
 
 link_dependency_meta <- function(meta_dt, deps_metalist) {
-  meta_dt <- meta_dt[, .(name, type)]
-  deps_meta_full <- rbindlist(deps_metalist, use.names = TRUE, fill = TRUE)
-  setnames(deps_meta_full, "type", "deps_type")
+  meta_dt <-
+    meta_dt %>% 
+    dplyr::select(.data$name, .data$type)
 
-  meta_dt <- deps_meta_full[meta_dt, on = "name"]
-  meta_dt[, type_issue := type != deps_type]
+  deps_meta_full <- 
+    dplyr::bind_rows(!!!deps_metalist) %>% 
+    dplyr::rename(deps_type = .data$type)
+
+  meta_dt <-
+    meta_dt %>% 
+    dplyr::left_join(deps_meta_full, by = "name") %>% 
+    dplyr::mutate(type_issue = .data$type != .data$deps_type)
 
   meta_dt
 }

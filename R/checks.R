@@ -37,21 +37,37 @@ all_types_match <- function(df, meta) {
   stopifnot(is.data.frame(df))
   stopifnot(inherits(meta, "blueprint_metadata"))
 
-  df_types <- data.table(
+  df_types <- dplyr::tibble(
     name = names(df),
     type = vcapply(df, typeof)
   )
 
-  meta_dt <- as.data.table(meta)
-
-  df_types[, expected_type := meta_dt[.SD, type, on = "name"]]
-  df_types[, issue := expected_type != type]
+  df_types <- 
+    df_types %>% 
+    dplyr::left_join(
+      meta %>% 
+        dplyr::select(.data$name, expected_type = .data$type),
+      by = "name"
+    ) %>% 
+    dplyr::mutate(issue = .data$expected_type != .data$type)
 
   if (any(df_types$issue, na.rm = TRUE)) {
     format <- "{name}: '{type}' found, '{expected_type}' expected"
-    df_types[issue == TRUE, .err := glue(format)]
 
-    for (.err in df_types[issue == TRUE, .err]) {
+    df_types <-
+      df_types %>% 
+      dplyr::mutate(.err = ifelse(
+        .data$issue == TRUE, 
+        glue(.data$format), 
+        NA_character_
+      ))
+
+    errors <- 
+      df_types %>% 
+      dplyr::filter(.data$issue == TRUE) %>% 
+      dplyr::pull(.data$.err)
+
+    for (.err in errors) {
       message(.err)
     }
 

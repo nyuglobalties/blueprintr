@@ -43,13 +43,13 @@ ui_quote <- function(x) {
 bp_err <- function(x, .envir = parent.frame()) {
   msg <- glue(glue_collapse(x), .envir = .envir)
 
-  abort(.subclass = "bp_error", message = msg)
+  rlang::abort(.subclass = "bp_error", message = msg)
 }
 
 bp_warn <- function(x, .envir = parent.frame()) {
   msg <- glue(glue_collapse(x), .envir = .envir)
 
-  warn(.subclass = "bp_warning", message = msg)
+  rlang::warn(.subclass = "bp_warning", message = msg)
 }
 
 bp_assert <- function(x, msg = NULL, .envir = parent.frame()) {

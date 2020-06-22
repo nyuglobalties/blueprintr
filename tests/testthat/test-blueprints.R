@@ -1,36 +1,5 @@
 context("blueprints")
 
-test_that("blueprints are attached to drake plans", {
-  initial_plan <- drake::drake_plan(
-    loaded_data = data.table::fread("test/path.csv")
-  )
-
-  test_bp <- blueprint(
-    "wide_data",
-    command = tidyr::pivot_longer(
-      loaded_data,
-      dplyr::starts_with("ID_")
-    )
-  )
-
-  plan <- attach_blueprints(initial_plan, test_bp)
-
-  mock_plan <- dplyr::tribble(
-    ~ target, ~ command,
-    "loaded_data", rlang::expr(data.table::fread("test/path.csv")),
-    "wide_data", rlang::expr(tidyr::pivot_longer(loaded_data, dplyr::starts_with("ID_"))),
-    "wide_data_metadata_export", rlang::expr(create_metadata_file(wide_data, !!metadata_path(test_bp)))
-  )
-
-  equivalent_plans(plan, mock_plan)
-
-  mtcars_bp <- blueprint(
-    "mtcars_chunk",
-    command = { mtcars },
-    metadata_file_path = bp_path("blueprints")
-  )
-})
-
 test_that("blueprint tests are run", {
   mtcars_bp <- blueprint(
     "mtcars_chunk",
@@ -78,18 +47,19 @@ test_that("Dependencies are handled properly", {
     description = "Some demographics for students",
     command = {
       ids <- .TARGET("id_vars")
-      id_dt <- as.data.table(ids)
 
-      demos <- data.frame(
+      demos <- dplyr::tibble(
         student_id = c("ST5402", "ST4910", "ST2819"),
         age = c(8, 10, 9),
-        grade = c(4, 5, 5),
-        stringsAsFactors = FALSE
+        grade = c(4, 5, 5)
       )
 
-      demos_dt <- as.data.table(demos)
-      demos_dt[, classroom_id := id_dt[.SD, classroom_id, on = "student_id"]]
-      as.data.frame(demos_dt)
+      demos %>% 
+        dplyr::left_join(
+          ids %>% 
+            dplyr::select(student_id, classroom_id),
+          by = "student_id"
+        )
     },
     metadata_file_path = bp_path("blueprints")
   )

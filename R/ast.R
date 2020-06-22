@@ -17,7 +17,7 @@ extract_ast <- function(expr) {
     expr$args <- lapply(expr$args, extract_ast)
     return(expr)
   } else if (!is.language(expr)) {
-    abort("extract_ast only handles expressions and ast objects.")
+    bp_err("extract_ast only handles expressions and ast objects.")
   }
 
   extract_ast(ast(expr))

@@ -4,19 +4,28 @@
 \name{blueprintr-package}
 \alias{blueprintr}
 \alias{blueprintr-package}
-\title{blueprintr: What the Package Does (One Line, Title Case)}
+\title{blueprintr: Automagically document and test datasets using drake}
 \description{
-What the package does (one paragraph).
+Documents and tests datasets in a reproducible
+    manner so that data lineage is easier to comprehend for
+    in-memory data. Originally designed to aid data cleaning
+    tasks for humanitarian research houses, specifically
+    large-scale longitudinal studies.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/psanker/blueprintr}
-  \item Report bugs at \url{https://github.com/psanker/blueprintr/issues}
+  \item \url{https://github.com/Global-TIES-for-Children/blueprintr}
+  \item Report bugs at \url{https://github.com/Global-TIES-for-Children/blueprintr/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Patrick Anker \email{psanker@nyu.edu} (\href{https://orcid.org/0000-0003-2302-0445}{ORCID})
+
+Other contributors:
+\itemize{
+  \item Global TIES for Children [copyright holder]
+}
 
 }

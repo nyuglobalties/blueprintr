@@ -1,5 +1,5 @@
 import_blueprint_file <- function(bp_file, env = parent.frame()) {
-  exprs <- parse_exprs(file(bp_file))
+  exprs <- rlang::parse_exprs(file(bp_file))
   vals <- lapply(exprs, eval_tidy, env = env)
 
   if (length(vals) < 1) {

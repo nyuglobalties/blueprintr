@@ -2,12 +2,11 @@ checks <- function(...) {
   dots <- as.list(substitute(list(...))[-1])
 
   checklist <- lapply(dots, check)
-  check_dat <- data.table(
+  check_dat <- dplyr::tibble(
     check_func = lapply(checklist, function(x) x$check_func),
     target = vcapply(checklist, function(x) x$target),
     variable = vcapply(checklist, function(x) if (is.null(x$variable)) NA_character_ else x$variable)
   )
-  check_dat <- as.data.frame(check_dat)
 
   structure(
     check_dat,
