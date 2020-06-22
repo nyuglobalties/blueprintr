@@ -45,7 +45,7 @@ test_that("blueprint tests are run", {
 
   bad_mtcars_bp <- blueprint(
     "bad_mtcars_chunk",
-    command = { 
+    command = {
       df <- .TARGET("mtcars_chunk")
       df$mpg <- NULL
       df
@@ -60,14 +60,6 @@ test_that("blueprint tests are run", {
 })
 
 test_that("Dependencies are handled properly", {
-  id_data <- data.frame(
-    student_id = c("ST5402", "ST4910", "ST2819"),
-    teacher_id = c("RT0014", "RT0013", "RT0013"),
-    school_id = c("SC01", "SC01", "SC01"),
-    classroom_id = c("RC0011", "RC0012", "RC0012"),
-    stringsAsFactors = FALSE
-  )
-
   id_bp <- blueprint(
     "id_vars",
     description = "Dataset that contains all ID variables for relations",
@@ -78,7 +70,7 @@ test_that("Dependencies are handled properly", {
       classroom_id = c("RC0011", "RC0012", "RC0012"),
       stringsAsFactors = FALSE
     ),
-    metadata_file_path = bp_path("blueprints") 
+    metadata_file_path = bp_path("blueprints")
   )
 
   student_demo_bp <- blueprint(
@@ -108,11 +100,9 @@ test_that("Dependencies are handled properly", {
 
   expect_identical(blueprint_deps(student_demo_bp), "id_vars")
 
-  plan <- plan_from_blueprint(id_bp) %>% 
+  plan <- plan_from_blueprint(id_bp) %>%
     attach_blueprint(student_demo_bp)
 
   drake::clean()
   drake::make(plan)
-
-  browser()
 })
