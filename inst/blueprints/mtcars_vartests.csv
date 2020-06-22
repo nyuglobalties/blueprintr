@@ -1,0 +1,12 @@
+"name","description","type","tests"
+"mpg",,"double",
+"cyl",,"double","in_set(c(4, 6, 8))"
+"disp",,"double",
+"hp",,"double",
+"drat",,"double",
+"wt",,"double",
+"qsec",,"double",
+"vs",,"double",
+"am",,"double",
+"gear",,"double",
+"carb",,"double",
