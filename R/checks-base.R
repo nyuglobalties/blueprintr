@@ -1,13 +1,13 @@
 checks <- function(...) {
   dots <- as.list(substitute(list(...))[-1])
 
-  check_list <- lapply(dots, check)
-  check_dat <- data.frame(
-    check_func = I(lapply(check_list, function(x) x$check_func)),
-    target = vcapply(check_list, function(x) x$target),
-    variable = vcapply(check_list, function(x) if (is.null(x$variable)) NA_character_ else x$variable),
-    stringsAsFactors = FALSE
+  checklist <- lapply(dots, check)
+  check_dat <- data.table(
+    check_func = lapply(checklist, function(x) x$check_func),
+    target = vcapply(checklist, function(x) x$target),
+    variable = vcapply(checklist, function(x) if (is.null(x$variable)) NA_character_ else x$variable)
   )
+  check_dat <- as.data.frame(check_dat)
 
   structure(
     check_dat,
@@ -41,7 +41,7 @@ check_func_target <- function(func) {
 check_func_variable <- function(func) {
   if (is_variable_check_func(func)) {
     first_arg <- rlang::call_args(func)[[1]]
-    
+
     as.character(node_cddr(first_arg)[[1]])
   } else {
     NULL
@@ -59,6 +59,7 @@ is_variable_check_func <- function(func) {
   identical(arg_ast$head, "$")
 }
 
+#' @export
 eval_checks <- function(..., .env = parent.frame()) {
   checks_dt <- checks(...)
 
@@ -72,15 +73,38 @@ eval_checks <- function(..., .env = parent.frame()) {
 }
 
 checks_error <- function(checks) {
-  false_funcs <- checks[checks$.pass == FALSE, checks$check_func]
+  false_funcs <- checks[checks$.pass == FALSE, "check_func"]
+  false_funcs <- vcapply(false_funcs, safe_deparse)
 
-  err_msgs <- glue("`{safe_deparse(false_funcs)}` is not TRUE")
+  err_msgs <- glue("`{false_funcs}` is not TRUE")
 
   rlang::abort(
-    .subclass = "checks_error",
-    message = glue_collapse(err_msgs, "\n"),
-    checks = checks
+    glue_collapse(err_msgs, "\n"),
+    checks = checks,
+    .subclass = "checks_error"
   )
+}
+
+#' @export
+check_list <- function(...) {
+  if (missing(...)) {
+    return(structure(list(), class = "check_list"))
+  }
+
+  dots <- as.list(substitute(list(...))[-1])
+
+  structure(
+    lapply(dots, clean_check_command),
+    class = "check_list"
+  )
+}
+
+clean_check_command <- function(check) {
+  if (rlang::is_symbol(check)) {
+    check <- rlang::call2(check)
+  }
+
+  check
 }
 
 interpret_raw_check <- function(func, target, variable = NULL) {

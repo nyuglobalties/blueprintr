@@ -1,3 +1,4 @@
+#' @export
 all_variables_present <- function(df, meta, blueprint) {
   stopifnot(is.data.frame(df))
   stopifnot(inherits(meta, "blueprint_metadata"))
@@ -31,6 +32,7 @@ all_variables_present <- function(df, meta, blueprint) {
   TRUE
 }
 
+#' @export
 all_types_match <- function(df, meta) {
   stopifnot(is.data.frame(df))
   stopifnot(inherits(meta, "blueprint_metadata"))
@@ -55,6 +57,11 @@ all_types_match <- function(df, meta) {
 
     return(FALSE)
   }
-  
+
   TRUE
+}
+
+#' @export
+in_set <- function(x, y) {
+  all(unique(x) %in% y)
 }

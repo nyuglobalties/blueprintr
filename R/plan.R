@@ -1,3 +1,4 @@
+#' @export
 plan_from_blueprint <- function(blueprint) {
   plan <- drake::drake_plan()
 
@@ -10,6 +11,7 @@ plan_from_blueprint <- function(blueprint) {
   attach_blueprint(plan, blueprint)
 }
 
+#' @export
 attach_blueprints <- function(plan, ...) {
   dots <- dots_list(...)
 
@@ -20,6 +22,7 @@ attach_blueprints <- function(plan, ...) {
   plan
 }
 
+#' @export
 attach_blueprint <- function(plan, blueprint) {
   stopifnot(inherits(plan, "drake_plan"))
   stopifnot(inherits(blueprint, "blueprint"))
@@ -96,7 +99,21 @@ add_content_checks <- function(plan, blueprint, meta = NULL) {
     bquote(all_types_match(.META(.(blueprint$name))))
   )
 
+  if (!is.null(blueprint$base_checks)) {
+    bp_assert(
+      inherits(blueprint$base_checks, "check_list"),
+      "Blueprint checks must be a 'check_list'"
+    )
+
+    default_checks <- blueprint$base_checks
+  }
+
   if (!is.null(blueprint$checks)) {
+    bp_assert(
+      inherits(blueprint$checks, "check_list"),
+      "Blueprint checks must be a 'check_list'"
+    )
+
     content_checks <- blueprint$checks
   } else {
     content_checks <- list()
@@ -118,7 +135,7 @@ add_content_checks <- function(plan, blueprint, meta = NULL) {
       meta$tests,
       meta$name,
       function(.t, .n) {
-        lapply(.t, interpret_raw_check, blueprint_target_name, variable = .n)
+        lapply(.t, interpret_raw_check, blueprint_target_name(blueprint), variable = .n)
       }
     )
     variable_checks <- purrr::flatten(variable_checks)

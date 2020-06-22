@@ -1,3 +1,4 @@
+#' @export
 metadata <- function(df) {
   stopifnot(is.data.frame(df))
 
@@ -13,7 +14,7 @@ metadata <- function(df) {
     ))
   }
 
-  if ("tests" %in% names(df)) {
+  if ("tests" %in% names(df) && !is.list(df$tests)) {
     df$tests <- I(parse_tests(df$tests))
   }
 
@@ -24,26 +25,21 @@ metadata <- function(df) {
 }
 
 parse_variable_tests <- function(x) {
-  x <- glue("list({x})")
-  parsed <- rlang::parse_expr(x)
-  tests <- rlang::call_args(parsed)
-  tests <- lapply(tests, clean_test_command)
+  stopifnot(length(x) == 1)
 
-  tests
+  if (is.na(x)) {
+    x <- ""
+  }
+
+  x <- glue("check_list({x})")
+
+  rlang::eval_bare(rlang::parse_expr(x))
 }
 
 parse_tests <- function(x) {
   stopifnot(is.character(x))
 
   lapply(x, parse_variable_tests)
-}
-
-clean_test_command <- function(test) {
-  if (rlang::is_symbol(test)) {
-    test <- rlang::call2(test)
-  }
-
-  test
 }
 
 metadata_path <- function(blueprint) {
@@ -57,6 +53,7 @@ metadata_file_exists <- function(blueprint) {
   file.exists(metadata_path(blueprint))
 }
 
+#' @export
 create_metadata_file <- function(df, blueprint, ...) {
   stopifnot(is.data.frame(df))
 
