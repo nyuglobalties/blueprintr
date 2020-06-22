@@ -28,13 +28,14 @@ attach_blueprint <- function(plan, blueprint) {
   plan <- add_blueprint_reference(plan, blueprint)
 
   if (!metadata_file_exists(blueprint)) {
+    meta <- NULL
     plan <- add_metadata_creation_target(plan, blueprint)
   } else {
     meta <- load_metadata(blueprint)
     plan <- add_blueprint_metadata(plan, blueprint, meta)
   }
 
-  add_content_checks(plan, blueprint)
+  add_content_checks(plan, blueprint, meta = meta)
 }
 
 add_blueprint_target <- function(plan, blueprint) {
@@ -75,7 +76,7 @@ add_metadata_creation_target <- function(plan, blueprint) {
   deps_syms <- lapply(deps, function(dep) as.name(paste0(dep, "_meta")))
 
   command <- call2(
-    "create_metadata_file", 
+    "create_metadata_file",
     as.name(blueprint_target_name(blueprint)),
     as.name(blueprint_reference_name(blueprint)),
     !!!deps_syms
@@ -89,7 +90,7 @@ add_metadata_creation_target <- function(plan, blueprint) {
   drake::bind_plans(plan, target_plan)
 }
 
-add_content_checks <- function(plan, blueprint) {
+add_content_checks <- function(plan, blueprint, meta = NULL) {
   default_checks <- list(
     bquote(all_variables_present(.META(.(blueprint$name)), .BLUEPRINT(.(blueprint$name)))),
     bquote(all_types_match(.META(.(blueprint$name))))
@@ -107,16 +108,25 @@ add_content_checks <- function(plan, blueprint) {
   )
 
   all_checks <- lapply(
-    all_checks, 
+    all_checks,
     interpret_raw_check,
     blueprint_target_name(blueprint)
   )
 
-  command1 <- bquote(check_content(
-    .(as.name(blueprint_target_name(blueprint))),
-    .(as.name(blueprint_reference_name(blueprint))),
-    .(as.name(metadata_target_name(blueprint)))
-  ))
+  if (!is.null(meta) && !is.null(meta$tests)) {
+    variable_checks <-  purrr::map2(
+      meta$tests,
+      meta$name,
+      function(.t, .n) {
+        lapply(.t, interpret_raw_check, blueprint_target_name, variable = .n)
+      }
+    )
+    variable_checks <- purrr::flatten(variable_checks)
+  } else {
+    variable_checks <- list()
+  }
+
+  all_checks <- c(all_checks, variable_checks)
 
   command1 <- rlang::call2(
     "eval_checks",

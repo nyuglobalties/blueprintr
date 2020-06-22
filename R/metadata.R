@@ -7,10 +7,14 @@ metadata <- function(df) {
     missing_columns <- req_columns[!req_columns %in% names(df)]
 
     bp_err(c(
-      "Required blueprint metadata columns", 
+      "Required blueprint metadata columns",
       collapse_message_list(missing_columns),
       "not found."
     ))
+  }
+
+  if ("tests" %in% names(df)) {
+    df$tests <- I(parse_tests(df$tests))
   }
 
   structure(
@@ -19,15 +23,32 @@ metadata <- function(df) {
   )
 }
 
-clean_tests_column <- function(x) {
-  if (is.character(x)) {
+parse_variable_tests <- function(x) {
+  x <- glue("list({x})")
+  parsed <- rlang::parse_expr(x)
+  tests <- rlang::call_args(parsed)
+  tests <- lapply(tests, clean_test_command)
 
+  tests
+}
+
+parse_tests <- function(x) {
+  stopifnot(is.character(x))
+
+  lapply(x, parse_variable_tests)
+}
+
+clean_test_command <- function(test) {
+  if (rlang::is_symbol(test)) {
+    test <- rlang::call2(test)
   }
+
+  test
 }
 
 metadata_path <- function(blueprint) {
   file.path(
-    blueprint$metadata_file_path, 
+    blueprint$metadata_file_path,
     glue("{blueprint$name}.{blueprint$metadata_file_type}")
   )
 }
@@ -54,7 +75,7 @@ create_metadata_file <- function(df, blueprint, ...) {
       "Please edit the metadata file to resolve the issue and then rerun."
     ))
   }
-  
+
   metadata_dt[, type_issue := NULL]
   metadata_dt[, deps_type := NULL]
   data.table::fwrite(metadata_dt, file = metadata_path(blueprint))
