@@ -43,10 +43,7 @@ parse_tests <- function(x) {
 }
 
 metadata_path <- function(blueprint) {
-  file.path(
-    blueprint$metadata_file_path,
-    glue("{blueprint$name}.{blueprint$metadata_file_type}")
-  )
+  blueprint$metadata_file_path,
 }
 
 metadata_file_exists <- function(blueprint) {

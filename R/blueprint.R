@@ -19,7 +19,8 @@ blueprint <- function(name,
                       metadata = NULL,
                       export_metadata = TRUE,
                       metadata_file_type = c("csv"),
-                      metadata_file_path = here::here("blueprints"),
+                      metadata_directory = here::here("blueprints"),
+                      metadata_file_path = NULL,
                       ...,
                       class = character()) {
   stopifnot(is.character(name))
@@ -28,14 +29,19 @@ blueprint <- function(name,
   captured_command <- capture_command(substitute(command))
   metadata_file_type <- match.arg(metadata_file_type)
 
+  default_path <- file.path(
+    metadata_directory,
+    glue("{name}.{metadata_file_type}")
+  )
+  path <- metadata_file_path %||% default_path
+
   structure(
     list(
       name = name,
       command = captured_command,
       description = description,
       export_metadata = export_metadata,
-      metadata_file_type = metadata_file_type,
-      metadata_file_path = metadata_file_path,
+      metadata_file_path = path,
       ...
     ),
     class = c(class, "blueprint")

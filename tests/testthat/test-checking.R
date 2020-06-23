@@ -11,7 +11,7 @@ test_that("Target content checks work", {
     checks = check_list(
       is_mtcars()
     ),
-    metadata_file_path = bp_path("blueprints"),
+    metadata_directory = bp_path("blueprints"),
     command = {
       df <- mtcars
       df$cyl <- df$cyl - 1
@@ -32,7 +32,7 @@ test_that("Variable checks work", {
   mtcars_bp <- blueprint(
     "mtcars_vartests",
     description = "It's just mtcars, OK?",
-    metadata_file_path = bp_path("blueprints"),
+    metadata_directory = bp_path("blueprints"),
     command = {
       df <- mtcars
       df$cyl <- df$cyl - 1

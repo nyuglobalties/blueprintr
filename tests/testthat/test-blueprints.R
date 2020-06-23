@@ -4,7 +4,7 @@ test_that("blueprint tests are run", {
   mtcars_bp <- blueprint(
     "mtcars_chunk",
     command = { mtcars },
-    metadata_file_path = bp_path("blueprints")
+    metadata_directory = bp_path("blueprints")
   )
 
   plan <- plan_from_blueprint(mtcars_bp)
@@ -19,7 +19,7 @@ test_that("blueprint tests are run", {
       df$mpg <- NULL
       df
     },
-    metadata_file_path = bp_path("blueprints")
+    metadata_directory = bp_path("blueprints")
   )
 
   plan <- attach_blueprints(plan, bad_mtcars_bp)
@@ -39,7 +39,7 @@ test_that("Dependencies are handled properly", {
       classroom_id = c("RC0011", "RC0012", "RC0012"),
       stringsAsFactors = FALSE
     ),
-    metadata_file_path = bp_path("blueprints")
+    metadata_directory = bp_path("blueprints")
   )
 
   student_demo_bp <- blueprint(
@@ -61,7 +61,7 @@ test_that("Dependencies are handled properly", {
           by = "student_id"
         )
     },
-    metadata_file_path = bp_path("blueprints")
+    metadata_directory = bp_path("blueprints")
   )
 
   if (metadata_file_exists(student_demo_bp)) {
