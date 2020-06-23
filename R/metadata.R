@@ -43,7 +43,7 @@ parse_tests <- function(x) {
 }
 
 metadata_path <- function(blueprint) {
-  blueprint$metadata_file_path,
+  blueprint$metadata_file_path
 }
 
 metadata_file_exists <- function(blueprint) {

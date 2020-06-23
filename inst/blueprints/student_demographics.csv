@@ -1,5 +1,5 @@
-name,description,type
-student_id,Student ID,character
-age,,double
-grade,,double
-classroom_id,Classroom ID,character
+name,type,description
+student_id,character,Student ID
+age,double,
+grade,double,
+classroom_id,character,Classroom ID

@@ -19,7 +19,11 @@ test_that("blueprint tests are run", {
       df$mpg <- NULL
       df
     },
-    metadata_directory = bp_path("blueprints")
+    metadata_file_path = 
+      file.path(
+        bp_path("blueprints"),
+        "mtcars_chunk.csv"
+      )
   )
 
   plan <- attach_blueprints(plan, bad_mtcars_bp)
