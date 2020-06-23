@@ -11,7 +11,8 @@ blueprint(
   metadata = NULL,
   export_metadata = TRUE,
   metadata_file_type = c("csv"),
-  metadata_file_path = here::here("blueprints"),
+  metadata_directory = here::here("blueprints"),
+  metadata_file_path = NULL,
   ...,
   class = character()
 )

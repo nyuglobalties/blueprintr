@@ -1,3 +1,4 @@
+#' @export
 accept_content <- function(results, df, blueprint, meta) {
   if (has_dropped_feature(blueprint, meta)) {
     df <- drop_columns(df, blueprint, meta)
