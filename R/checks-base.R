@@ -72,8 +72,11 @@ eval_checks <- function(..., .env = parent.frame()) {
 }
 
 checks_error <- function(checks) {
-  false_funcs <- checks[checks$.pass == FALSE, "check_func"]
-  false_funcs <- vcapply(false_funcs, safe_deparse)
+  false_funcs <-
+    checks %>% 
+    dplyr::filter(.data$.pass == FALSE) %>% 
+    dplyr::pull(.data$check_func) %>% 
+    vcapply(safe_deparse, collapse = " ", trim = TRUE)
 
   err_msgs <- glue("`{false_funcs}` is not TRUE")
 

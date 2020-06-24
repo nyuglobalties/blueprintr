@@ -18,8 +18,12 @@ collapse_message_list <- function(x, and = TRUE) {
   }
 }
 
-safe_deparse <- function(x, collapse = "\n", backtick = TRUE, ...) {
+safe_deparse <- function(x, collapse = "\n", backtick = TRUE, trim = FALSE, ...) {
   out <- deparse(x, backtick = backtick, ...)
+
+  if (isTRUE(trim)) {
+    out <- trimws(out)
+  }
 
   if (length(out) > 1L) {
     out <- paste(out, collapse = collapse)

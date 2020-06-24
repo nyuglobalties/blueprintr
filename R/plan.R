@@ -1,3 +1,9 @@
+#' Create a drake plan from a blueprint
+#'
+#' Creates a new drake plan from a blueprint
+#'
+#' @param blueprint A blueprint
+#' @return A drake plan with all of the necessary blueprint steps
 #' @export
 plan_from_blueprint <- function(blueprint) {
   plan <- drake::drake_plan()
@@ -11,6 +17,7 @@ plan_from_blueprint <- function(blueprint) {
   attach_blueprint(plan, blueprint)
 }
 
+#' @rdname attach_blueprint
 #' @export
 attach_blueprints <- function(plan, ...) {
   dots <- dots_list(...)
@@ -22,6 +29,18 @@ attach_blueprints <- function(plan, ...) {
   plan
 }
 
+#' Attach blueprints to a drake plan
+#'
+#' Blueprints outline a sequence of checks and cleanup steps
+#' that come after a dataset is created. In order for these
+#' steps to be executed, the blueprint must be attached to
+#' a drake plan so that drake can run these steps properly.
+#'
+#' @param plan A drake plan
+#' @param blueprint A blueprint object
+#' @param ... Multiple blueprints
+#'
+#' @rdname attach_blueprint
 #' @export
 attach_blueprint <- function(plan, blueprint) {
   stopifnot(inherits(plan, "drake_plan"))
@@ -65,7 +84,7 @@ add_blueprint_metadata <- function(plan, blueprint, meta) {
   stopifnot(is.data.frame(meta))
 
   meta <- as.data.frame(meta)
-  command <- call2("data.frame", !!!meta, stringsAsFactors = FALSE)
+  command <- call2("tibble", !!!meta, .ns = "dplyr")
   command <- call2("metadata", command)
 
   arglist <- list2(!!metadata_target_name(blueprint) := command)
@@ -75,6 +94,10 @@ add_blueprint_metadata <- function(plan, blueprint, meta) {
 }
 
 add_metadata_creation_target <- function(plan, blueprint) {
+  if (!isTRUE(blueprint$export_metadata)) {
+    return(plan)
+  }
+
   deps <- blueprint_deps(blueprint)
   deps_syms <- lapply(deps, function(dep) as.name(paste0(dep, "_meta")))
 
@@ -82,7 +105,8 @@ add_metadata_creation_target <- function(plan, blueprint) {
     "create_metadata_file",
     as.name(blueprint_target_name(blueprint)),
     as.name(blueprint_reference_name(blueprint)),
-    !!!deps_syms
+    !!!deps_syms,
+    .file = bquote(file_out(metadata_path(blueprint)))
   )
 
   arglist <- list2(

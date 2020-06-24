@@ -1,3 +1,7 @@
+#' Convert an input dataframe into a metadata object
+#'
+#' @param df A dataframe that will be converted into a 
+#'           metadata object, once content checks pass.
 #' @export
 metadata <- function(df) {
   stopifnot(is.data.frame(df))
@@ -50,8 +54,24 @@ metadata_file_exists <- function(blueprint) {
   file.exists(metadata_path(blueprint))
 }
 
+#' Create a metadata file from a dataset
+#'
+#' One of the targets in the blueprint drake target chain.
+#' If a metadata file does not exist and the blueprint has
+#' `export_metadata` set to `TRUE`, then this function will be
+#' added to the drake plan during the blueprint attaching step.
+#' In case the metadata file is accidentally deleted, the `.file`
+#' paramter is set to `file_out(metadata_path(blueprint))`
+#' so that drake can monitor the metadata file's state.
+#'
+#' @param df A dataframe that the metadata table describes
+#' @param blueprint The original blueprint for the dataframe
+#' @param ... A variable list of metadata tables on which this
+#'            metadata table depends
+#' @param .file A dummy parameter that allows drake to monitor
+#'              the metadata file output using `file_out()`
 #' @export
-create_metadata_file <- function(df, blueprint, ...) {
+create_metadata_file <- function(df, blueprint, ..., .file = NULL) {
   stopifnot(is.data.frame(df))
 
   metadata_dt <- dplyr::tibble(
