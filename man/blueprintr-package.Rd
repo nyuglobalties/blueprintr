@@ -6,6 +6,8 @@
 \alias{blueprintr-package}
 \title{blueprintr: Automagically document and test datasets using drake}
 \description{
+\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+
 Documents and tests datasets in a reproducible
     manner so that data lineage is easier to comprehend for
     in-memory data. Originally designed to aid data cleaning

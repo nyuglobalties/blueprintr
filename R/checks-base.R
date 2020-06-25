@@ -58,6 +58,14 @@ is_variable_check_func <- function(func) {
   identical(arg_ast$head, "$")
 }
 
+#' Evaluate all checks on a blueprint
+#'
+#' Runs all checks -- dataset and variable -- on a blueprint
+#' to determine if a built dataset passes all restrictions.
+#'
+#' @param ... All quoted check calls
+#' @param .env The environment in which the calls are evaluated
+#'
 #' @export
 eval_checks <- function(..., .env = parent.frame()) {
   checks_dt <- checks(...)
@@ -87,6 +95,9 @@ checks_error <- function(checks) {
   )
 }
 
+#' Create a quoted list of check calls
+#'
+#' @param ... A collection of calls to be used for checks
 #' @export
 check_list <- function(...) {
   if (missing(...)) {
