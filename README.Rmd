@@ -18,8 +18,6 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN status](https://www.r-pkg.org/badges/version/blueprintr)](https://CRAN.R-project.org/package=blueprintr)
-[![Travis build status](https://travis-ci.org/psanker/blueprintr.svg?branch=master)](https://travis-ci.org/psanker/blueprintr)
-[![Codecov test coverage](https://codecov.io/gh/psanker/blueprintr/branch/master/graph/badge.svg)](https://codecov.io/gh/psanker/blueprintr?branch=master)
 <!-- badges: end -->
 
 Over the course of a research project, many datasets could be used or generated, and sometimes it's tricky to effectively document each dataset with its own data dictionary and to comprehensively trace data lineage. With [`drake`](https://github.com/ropensci/drake), the data lineage part can be done manually, but with many datasets it can be cumbersome to define a target for each part in the data transformation process. `blueprintr` creates a project structure that builds into or modifies existing `drake` plans automatically.
@@ -27,36 +25,12 @@ Over the course of a research project, many datasets could be used or generated,
 
 ## Installation
 
-You can install the released version of blueprintr from [CRAN](https://CRAN.R-project.org) with:
+As `blueprintr` is not yet on CRAN, you must install the package from this repository:
 
 ``` r
-install.packages("blueprintr")
+install.packages("remotes")
+remotes::install_github("Global-TIES-for-Children/blueprintr")
 ```
-
-## Example
-
-This is a basic example which shows you how to solve a common problem:
-
-```{r example}
-library(blueprintr)
-## basic example code
-```
-
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!
 
 ## Contributing
 
