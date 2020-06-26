@@ -1,1 +1,5 @@
+template:
+  params:
+    bootswatch: pulse
+
 destination: docs
