@@ -30,14 +30,23 @@ jobs:
 
       - name: Install dependencies
         run: |
-          remotes::install_deps(dependencies = TRUE, type = "binary")
-          install.packages("rmarkdown")
+          remotes::install_deps(dependencies = TRUE)
+          remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
-      - name: Render README
+
+      - name: Install dependencies (Windows)
+        if: runner.os == 'Windows'
         run: |
-          devtools::install()
-          rmarkdown::render("README.Rmd")
+          remotes::install_deps(dependencies = TRUE, type = "binary")
+          remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
+
+      - name: Install package
+        run: R CMD INSTALL .
+
+      - name: Render README
+        run: Rscript -e 'rmarkdown::render("README.Rmd")'
+
       - name: Commit results
         run: |
           git commit README.md -m 'Re-build README.Rmd' || echo "No changes to commit"
