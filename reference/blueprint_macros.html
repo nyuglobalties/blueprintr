@@ -129,11 +129,11 @@ These macro functions signal a dependency to <code>blueprintr</code> and evaluat
 symbols to be analyzed in the <code>drake</code> plan.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>.TARGET</span>(<span class='kw'>bp_name</span>)
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/blueprintr/man/blueprint_macros.html'>.TARGET</a></span>(<span class='kw'>bp_name</span>)
 
-<span class='fu'>.BLUEPRINT</span>(<span class='kw'>bp_name</span>)
+<span class='fu'><a href='https://rdrr.io/pkg/blueprintr/man/blueprint_macros.html'>.BLUEPRINT</a></span>(<span class='kw'>bp_name</span>)
 
-<span class='fu'>.META</span>(<span class='kw'>bp_name</span>)</pre>
+<span class='fu'><a href='https://rdrr.io/pkg/blueprintr/man/blueprint_macros.html'>.META</a></span>(<span class='kw'>bp_name</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -164,32 +164,26 @@ understood in the context of a <code>drake</code> plan. The targets associated w
 symbols are generated when blueprints are attached to a plan.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>.TARGET</span>(<span class='st'>"example_dataset"</span>)</div><div class='output co'>#&gt; example_dataset</div><div class='input'><span class='fu'>.BLUEPRINT</span>(<span class='st'>"example_dataset"</span>)</div><div class='output co'>#&gt; example_dataset_blueprint</div><div class='input'><span class='fu'>.META</span>(<span class='st'>"example_dataset"</span>)</div><div class='output co'>#&gt; example_dataset_meta</div><div class='input'>
-<span class='fu'>blueprint</span>(
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/blueprintr/man/blueprint_macros.html'>.TARGET</a></span>(<span class='st'>"example_dataset"</span>)</div><div class='output co'>#&gt; example_dataset</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/blueprintr/man/blueprint_macros.html'>.BLUEPRINT</a></span>(<span class='st'>"example_dataset"</span>)</div><div class='output co'>#&gt; example_dataset_blueprint</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/blueprintr/man/blueprint_macros.html'>.META</a></span>(<span class='st'>"example_dataset"</span>)</div><div class='output co'>#&gt; example_dataset_meta</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/pkg/blueprintr/man/blueprint.html'>blueprint</a></span>(
   <span class='st'>"test_bp"</span>,
   description = <span class='st'>"Blueprint with dependencies"</span>,
   command =
-    <span class='fu'>.TARGET</span>(<span class='st'>"parent1"</span>) <span class='op'>%&gt;%</span>
-      <span class='fu'>left_join</span>(<span class='fu'>.TARGET</span>(<span class='st'>"parent2"</span>), by = <span class='st'>"id"</span>) <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='https://rdrr.io/pkg/blueprintr/man/blueprint_macros.html'>.TARGET</a></span>(<span class='st'>"parent1"</span>) <span class='op'>%&gt;%</span>
+      <span class='fu'>left_join</span>(<span class='fu'><a href='https://rdrr.io/pkg/blueprintr/man/blueprint_macros.html'>.TARGET</a></span>(<span class='st'>"parent2"</span>), by = <span class='st'>"id"</span>) <span class='op'>%&gt;%</span>
       <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span>(<span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='kw'>id</span>))
-)</div><div class='output co'>#&gt; $name
-#&gt; [1] "test_bp"
+)</div><div class='output co'>#&gt; &lt;blueprint: 'test_bp'&gt;
 #&gt; 
-#&gt; $command
+#&gt; Description: Blueprint with dependencies
+#&gt; Metadata location: '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpbNt2q6/file7b65375932e/blueprints/test_bp.csv'
+#&gt; 
+#&gt; -- Command --
+#&gt; Drake command:
+#&gt; parent1 %&gt;% left_join(parent2, by = "id") %&gt;% filter(!is.na(id))
+#&gt; 
+#&gt; Raw command:
 #&gt; .TARGET("parent1") %&gt;% left_join(.TARGET("parent2"), by = "id") %&gt;% 
-#&gt;     filter(!is.na(id))
-#&gt; 
-#&gt; $description
-#&gt; [1] "Blueprint with dependencies"
-#&gt; 
-#&gt; $export_metadata
-#&gt; [1] TRUE
-#&gt; 
-#&gt; $metadata_file_path
-#&gt; [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp5ntpce/file79367d84bb5/blueprints/test_bp.csv"
-#&gt; 
-#&gt; attr(,"class")
-#&gt; [1] "blueprint"</div></pre>
+#&gt;     filter(!is.na(id))</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

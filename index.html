@@ -83,12 +83,101 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>Over the course of a research project, many datasets could be used or generated, and sometimes it’s tricky to effectively document each dataset with its own data dictionary and to comprehensively trace data lineage. With <a href="https://github.com/ropensci/drake"><code>drake</code></a>, the data lineage part can be done manually, but with many datasets it can be cumbersome to define a target for each part in the data transformation process. <code>blueprintr</code> creates a project structure that builds into or modifies existing <code>drake</code> plans automatically.</p>
+<p>bluepintr is a plugin to <a href="https://github.com/ropensci/drake">drake</a> that adds automated steps for tabular dataset documentation and testing. Designed for social science research projects, this package creates a framework to build trust in your data and to prevent programming issues from affecting your analysis results.</p>
+<div id="usage" class="section level2">
+<h2 class="hasAnchor">
+<a href="#usage" class="anchor"></a>Usage</h2>
+<p>Define blueprints of your data using <code><a href="reference/blueprint.html">blueprint()</a></code>. Blueprints combine drake target commands with some extra metadata about the output tabular dataset, including the name and description of the data.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/Global-TIES-for-Children/blueprintr">blueprintr</a></span>)
+
+<span class="kw">blueprint1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/blueprint.html">blueprint</a></span>(
+  <span class="st">"blueprint1"</span>,
+  description = <span class="st">"My first blueprint"</span>,
+  command = {
+    <span class="co"># Put all code related to building this dataset here</span>
+    <span class="kw">mtcars</span>
+  }
+)
+
+<span class="kw">blueprint1</span>
+<span class="co">#&gt; &lt;blueprint: 'blueprint1'&gt;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Description: My first blueprint</span>
+<span class="co">#&gt; Metadata location: '/Users/patrickanker/dev/blueprintr/blueprints/blueprint1.csv'</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; -- Command --</span>
+<span class="co">#&gt; Drake command:</span>
+<span class="co">#&gt; {</span>
+<span class="co">#&gt;     mtcars</span>
+<span class="co">#&gt; }</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Raw command:</span>
+<span class="co">#&gt; {</span>
+<span class="co">#&gt;     mtcars</span>
+<span class="co">#&gt; }</span>
+</pre></div>
+<p>Refer to other datasets using <code><a href="reference/blueprint_macros.html">.TARGET()</a></code> to guarantee that parent datasets are also tested and documented. Run checks on the dataset entirely with the <code>checks</code> parameter and define variable tests in the metadata files.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="kw">no_missing_cyl</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">df</span>) {
+  <span class="fu"><a href="https://rdrr.io/r/base/all.html">all</a></span>(<span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="kw">df</span><span class="op">$</span><span class="kw">cyl</span>))
+}
+
+<span class="kw">blueprint2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/blueprint.html">blueprint</a></span>(
+  <span class="st">"blueprint2"</span>,
+  description = <span class="st">"My second blueprint that depends on another"</span>,
+  checks = <span class="fu"><a href="reference/check_list.html">check_list</a></span>(
+    <span class="fu">no_missing_cyl</span>()
+  ),
+  command =
+    <span class="fu"><a href="reference/blueprint_macros.html">.TARGET</a></span>(<span class="st">"blueprint1"</span>) <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="kw">cyl</span> <span class="op">==</span> <span class="fl">4</span>)
+)
+
+<span class="kw">blueprint2</span>
+<span class="co">#&gt; &lt;blueprint: 'blueprint2'&gt;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Description: My second blueprint that depends on another</span>
+<span class="co">#&gt; Metadata location: '/Users/patrickanker/dev/blueprintr/blueprints/blueprint2.csv'</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; -- Dataset content checks --</span>
+<span class="co">#&gt; &lt;check list&gt;</span>
+<span class="co">#&gt; no_missing_cyl()</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; -- Command --</span>
+<span class="co">#&gt; Drake command:</span>
+<span class="co">#&gt; blueprint1 %&gt;% filter(cyl == 4)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Raw command:</span>
+<span class="co">#&gt; .TARGET("blueprint1") %&gt;% filter(cyl == 4)</span>
+</pre></div>
+<p>Once all blueprints are defined, attach them to a plan so drake can run the needed tasks.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw">magrittr</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://docs.ropensci.org/drake">drake</a></span>)
+
+<span class="fu"><a href="reference/plan_from_blueprint.html">plan_from_blueprint</a></span>(<span class="kw">blueprint1</span>) <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="reference/attach_blueprints.html">attach_blueprint</a></span>(<span class="kw">blueprint2</span>)
+<span class="co">#&gt; # A tibble: 10 x 2</span>
+<span class="co">#&gt;    target            command                                                    </span>
+<span class="co">#&gt;    &lt;chr&gt;             &lt;expr&gt;                                                     </span>
+<span class="co">#&gt;  1 blueprint1_initi… {     mtcars }                                            …</span>
+<span class="co">#&gt;  2 blueprint1_bluep… blueprint(name = "blueprint1", command = {     mtcars }, d…</span>
+<span class="co">#&gt;  3 blueprint1_meta   create_metadata_file(blueprint1_initial, blueprint1_bluepr…</span>
+<span class="co">#&gt;  4 blueprint1_checks eval_checks(all_variables_present(blueprint1_initial, blue…</span>
+<span class="co">#&gt;  5 blueprint1        accept_content(blueprint1_checks, blueprint1_initial, blue…</span>
+<span class="co">#&gt;  6 blueprint2_initi… blueprint1 %&gt;% filter(cyl == 4)                           …</span>
+<span class="co">#&gt;  7 blueprint2_bluep… blueprint(name = "blueprint2", command = .TARGET("blueprin…</span>
+<span class="co">#&gt;  8 blueprint2_meta   create_metadata_file(blueprint2_initial, blueprint2_bluepr…</span>
+<span class="co">#&gt;  9 blueprint2_checks eval_checks(all_variables_present(blueprint2_initial, blue…</span>
+<span class="co">#&gt; 10 blueprint2        accept_content(blueprint2_checks, blueprint2_initial, blue…</span>
+</pre></div>
+</div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>As <code>blueprintr</code> is not yet on CRAN, you must install the package from this repository:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
+<div class="sourceCode" id="cb4"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"remotes"</span>)
 <span class="kw">remotes</span>::<span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"Global-TIES-for-Children/blueprintr"</span>)
 </pre></div>
