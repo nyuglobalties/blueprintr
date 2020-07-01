@@ -51,6 +51,36 @@ blueprint <- function(name,
   )
 }
 
+#' @export
+print.blueprint <- function(x, ...) {
+  cat_line("<blueprint: {ui_value(x$name)}>")
+  cat_line()
+
+  if (!is.null(x$description)) {
+    cat_line("Description: {x$description}")
+  } else {
+    cat_line("No description provided")
+  }
+
+  cat_line("Metadata location: {ui_value(metadata_path(x))}")
+  cat_line()
+
+  if (!is.null(x$checks)) {
+    cat_line("-- Dataset content checks --")
+    print(x$checks)
+    cat_line()
+  }
+
+  cat_line("-- Command --")
+  cat_line("Drake command:")
+  print(translate_macros(x$command))
+  cat_line()
+  cat_line("Raw command:")
+  print(x$command)
+
+  invisible(NULL)
+}
+
 capture_command <- function(quoted_statement) {
   if (identical(quote(.), node_car(quoted_statement))) {
     return(eval(node_cdr(quoted_statement)[[1]]))

@@ -81,9 +81,9 @@ eval_checks <- function(..., .env = parent.frame()) {
 
 checks_error <- function(checks) {
   false_funcs <-
-    checks %>% 
-    dplyr::filter(.data$.pass == FALSE) %>% 
-    dplyr::pull(.data$check_func) %>% 
+    checks %>%
+    dplyr::filter(.data$.pass == FALSE) %>%
+    dplyr::pull(.data$check_func) %>%
     vcapply(safe_deparse, collapse = " ", trim = TRUE)
 
   err_msgs <- glue("`{false_funcs}` is not TRUE")
@@ -110,6 +110,18 @@ check_list <- function(...) {
     lapply(dots, clean_check_command),
     class = "check_list"
   )
+}
+
+#' @export
+print.check_list <- function(x, ...) {
+  cat_line("<check list>")
+  stripped <- c(x)
+
+  for (check in stripped) {
+    print(check)
+  }
+
+  invisible(NULL)
 }
 
 clean_check_command <- function(check) {
