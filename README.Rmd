@@ -21,8 +21,57 @@ knitr::opts_chunk$set(
 [![R build status](https://github.com/Global-TIES-for-Children/blueprintr/workflows/R-CMD-check/badge.svg)](https://github.com/Global-TIES-for-Children/blueprintr/actions)
 <!-- badges: end -->
 
-Over the course of a research project, many datasets could be used or generated, and sometimes it's tricky to effectively document each dataset with its own data dictionary and to comprehensively trace data lineage. With [`drake`](https://github.com/ropensci/drake), the data lineage part can be done manually, but with many datasets it can be cumbersome to define a target for each part in the data transformation process. `blueprintr` creates a project structure that builds into or modifies existing `drake` plans automatically.
+bluepintr is a plugin to [drake](https://github.com/ropensci/drake) that adds automated steps for tabular dataset documentation and testing. Designed for social science research projects, this package creates a framework to build trust in your data and to prevent programming issues from affecting your analysis results.
 
+## Usage
+
+Define blueprints of your data using `blueprint()`. Blueprints combine drake target commands with some extra metadata about the output tabular dataset, including the name and description of the data.
+
+```{r}
+library(blueprintr)
+
+blueprint1 <- blueprint(
+  "blueprint1",
+  description = "My first blueprint",
+  command = {
+    # Put all code related to building this dataset here
+    mtcars
+  }
+)
+
+blueprint1
+```
+
+Refer to other datasets using `.TARGET()` to guarantee that parent datasets are also tested and documented. Run checks on the dataset entirely with the `checks` parameter and define variable tests in the metadata files.
+
+```{r}
+no_missing_cyl <- function(df) {
+  all(!is.na(df$cyl))
+}
+
+blueprint2 <- blueprint(
+  "blueprint2",
+  description = "My second blueprint that depends on another",
+  checks = check_list(
+    no_missing_cyl()
+  ),
+  command =
+    .TARGET("blueprint1") %>% 
+      filter(cyl == 4)
+)
+
+blueprint2
+```
+
+Once all blueprints are defined, attach them to a plan so drake can run the needed tasks.
+
+```{r}
+library(magrittr)
+library(drake)
+
+plan_from_blueprint(blueprint1) %>% 
+  attach_blueprint(blueprint2)
+```
 
 ## Installation
 
