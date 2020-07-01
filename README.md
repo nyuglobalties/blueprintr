@@ -9,6 +9,8 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/blueprintr)](https://CRAN.R-project.org/package=blueprintr)
+[![R build
+status](https://github.com/Global-TIES-for-Children/blueprintr/workflows/R-CMD-check/badge.svg)](https://github.com/Global-TIES-for-Children/blueprintr/actions)
 <!-- badges: end -->
 
 Over the course of a research project, many datasets could be used or
