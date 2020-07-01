@@ -59,6 +59,13 @@ is_macro_ast <- function(ast, .macro = ".TARGET") {
   ast$head %in% .macro
 }
 
+is_any_macro_ast <- function(ast) {
+  is_macro_ast(
+    ast,
+    .macro = c(".TARGET", ".BLUEPRINT", ".META")
+  )
+}
+
 is_target_ast <- function(ast) {
   is_macro_ast(ast)
 }
@@ -75,6 +82,12 @@ eval_ast <- function(ast, env = parent.frame()) {
   collapsed <- collapse_ast(ast)
 
   eval_tidy(collapsed, env = env)
+}
+
+translate_macros <- function(command) {
+  command_ast <- extract_ast(command)
+  command_ast <- modify_ast_if(command_ast, is_any_macro_ast, eval_ast)
+  collapse_ast(command_ast)
 }
 
 blueprint_deps <- function(blueprint) {
