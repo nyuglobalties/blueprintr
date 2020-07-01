@@ -4,7 +4,7 @@
 \name{blueprintr-package}
 \alias{blueprintr}
 \alias{blueprintr-package}
-\title{blueprintr: Automagically document and test datasets using drake}
+\title{blueprintr: Automagically Document and Test Datasets Using Drake}
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
