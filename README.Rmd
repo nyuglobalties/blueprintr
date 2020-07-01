@@ -44,7 +44,7 @@ blueprint1
 
 Refer to other datasets using `.TARGET()` to guarantee that parent datasets are also tested and documented. Run checks on the dataset entirely with the `checks` parameter and define variable tests in the metadata files.
 
-```{r}
+```{r, eval=FALSE}
 no_missing_cyl <- function(df) {
   all(!is.na(df$cyl))
 }
@@ -59,13 +59,11 @@ blueprint2 <- blueprint(
     .TARGET("blueprint1") %>% 
       filter(cyl == 4)
 )
-
-blueprint2
 ```
 
 Once all blueprints are defined, attach them to a plan using `attach_blueprint()` or `attach_blueprints()` so drake can run the needed tasks.
 
-```{r}
+```{r, eval=FALSE}
 library(magrittr)
 library(drake)
 
