@@ -41,7 +41,7 @@ blueprint1
 #> <blueprint: 'blueprint1'>
 #> 
 #> Description: My first blueprint
-#> Metadata location: '/Users/runner/runners/2.263.0/work/blueprintr/blueprintr/blueprints/blueprint1.csv'
+#> Metadata location: '/Users/patrickanker/dev/blueprintr/blueprints/blueprint1.csv'
 #> 
 #> -- Command --
 #> Drake command:
