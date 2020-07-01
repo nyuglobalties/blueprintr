@@ -19,7 +19,8 @@ Suggests:
     testthat (>= 2.1.0),
     covr,
     tidyr,
-    codetools
+    codetools,
+    devtools
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
