@@ -32,8 +32,8 @@ safe_deparse <- function(x, collapse = "\n", backtick = TRUE, trim = FALSE, ...)
   out
 }
 
-cat_line <- function(x = NULL) {
-  cat(x, "\n", sep = "")
+cat_line <- function(x = NULL, .envir = parent.frame()) {
+  cat(glue(x, .envir = .envir), "\n", sep = "")
 }
 
 ui_value <- function(x) {
