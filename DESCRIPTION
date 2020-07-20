@@ -11,9 +11,9 @@ Authors@R:
              role = c("cph")))
 Description: Documents and tests datasets in a reproducible
     manner so that data lineage is easier to comprehend for
-    in-memory data. Originally designed to aid data cleaning
-    tasks for humanitarian research houses, specifically
-    large-scale longitudinal studies.
+    small to medium tabular data. Originally designed to aid 
+    data cleaning tasks for humanitarian research groups, 
+    specifically large-scale longitudinal studies.
 License: GPL-3
 Suggests: 
     testthat (>= 2.1.0),
