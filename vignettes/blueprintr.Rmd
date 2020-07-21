@@ -1,0 +1,47 @@
+---
+title: "A Walkthrough of blueprintr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{blueprintr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+blueprintr is a companion to [drake](https://github.com/ropensci/drake) that focuses on documenting and testing tabular data. Whereas drake manages the workflow execution, blueprintr defines a collection of steps that need to be run in a drake workflow.
+
+# Basic Use
+
+The first, and recommended, step is to attach blueprintr to your R session with `library()`.
+
+```{r setup}
+library(blueprintr)
+```
+
+In a [drake project](https://books.ropensci.org/drake/projects.html), all packages that you want attached are declared in a `"packages.R"` file. This `library(blueprintr)` command should go there.
+
+blueprintr is built around "blueprints." Our first blueprint will be a blueprint for `mtcars`:
+
+```{r}
+blueprint(
+  "mtcars",
+  description = "The famous mtcars dataset",
+  command = {
+    mtcars
+  }
+)
+```
+
+All blueprints have
+
+* A name (the first argument) for the _target_ dataset.
+* A description or brief summary of what the target is. Can be `NULL`.
+* A command, which is a quoted statement that has the code for building this target.
+* A metadata location, which is a path to where the target metadata is saved.
+
