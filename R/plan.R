@@ -104,7 +104,7 @@ add_metadata_creation_target <- function(plan, blueprint) {
     as.name(blueprint_target_name(blueprint)),
     as.name(blueprint_reference_name(blueprint)),
     !!!deps_syms,
-    .file = bquote(file_out(metadata_path(blueprint)))
+    .file = bquote(file_out(.(metadata_path(blueprint))))
   )
 
   arglist <- list2(

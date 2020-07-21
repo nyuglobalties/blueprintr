@@ -10,9 +10,9 @@
 
 Documents and tests datasets in a reproducible
     manner so that data lineage is easier to comprehend for
-    in-memory data. Originally designed to aid data cleaning
-    tasks for humanitarian research houses, specifically
-    large-scale longitudinal studies.
+    small to medium tabular data. Originally designed to aid 
+    data cleaning tasks for humanitarian research groups, 
+    specifically large-scale longitudinal studies.
 }
 \seealso{
 Useful links:
@@ -31,3 +31,4 @@ Other contributors:
 }
 
 }
+\keyword{internal}
