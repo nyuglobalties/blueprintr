@@ -19,7 +19,9 @@ Suggests:
     testthat (>= 2.1.0),
     covr,
     tidyr,
-    codetools
+    codetools,
+    knitr,
+    rmarkdown
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
@@ -32,8 +34,9 @@ Imports:
     rlang,
     here,
     drake (>= 7.11.0),
-    data.table,
     glue,
     purrr,
     dplyr,
-    magrittr
+    magrittr,
+    readr
+VignetteBuilder: knitr
