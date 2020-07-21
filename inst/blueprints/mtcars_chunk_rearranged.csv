@@ -1,0 +1,12 @@
+"name","description","type","dropped"
+"cyl",,"double",
+"mpg",,"double",
+"disp",,"double",
+"hp",,"double",
+"drat",,"double",
+"wt",,"double",
+"qsec",,"double",TRUE
+"vs",,"double",TRUE
+"am",,"double",TRUE
+"gear",,"double",TRUE
+"carb",,"double",TRUE
