@@ -37,7 +37,7 @@ all_variables_present <- function(df, meta, blueprint) {
 
   if (length(new_vars) > 0) {
     message(
-      glue("Unexpected new variables: {glue_collapse(new_vars, ', ')}"),
+      glue("Unexpected new variables: [{glue_collapse(new_vars, ', ')}]. "),
       "Please edit documentation if this is intended."
     )
   }
@@ -64,29 +64,29 @@ all_types_match <- function(df, meta) {
     type = vcapply(df, typeof)
   )
 
-  df_types <- 
-    df_types %>% 
+  df_types <-
+    df_types %>%
     dplyr::left_join(
-      meta %>% 
+      meta %>%
         dplyr::select(.data$name, expected_type = .data$type),
       by = "name"
-    ) %>% 
+    ) %>%
     dplyr::mutate(issue = .data$expected_type != .data$type)
 
   if (any(df_types$issue, na.rm = TRUE)) {
     format <- "{name}: '{type}' found, '{expected_type}' expected"
 
     df_types <-
-      df_types %>% 
+      df_types %>%
       dplyr::mutate(.err = ifelse(
-        .data$issue == TRUE, 
-        glue(.data$format), 
+        .data$issue == TRUE,
+        glue(.data$format),
         NA_character_
       ))
 
-    errors <- 
-      df_types %>% 
-      dplyr::filter(.data$issue == TRUE) %>% 
+    errors <-
+      df_types %>%
+      dplyr::filter(.data$issue == TRUE) %>%
       dplyr::pull(.data$.err)
 
     for (.err in errors) {
