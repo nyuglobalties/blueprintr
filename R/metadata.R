@@ -1,6 +1,6 @@
 #' Convert an input dataframe into a metadata object
 #'
-#' @param df A dataframe that will be converted into a 
+#' @param df A dataframe that will be converted into a
 #'           metadata object, once content checks pass.
 #' @export
 metadata <- function(df) {
@@ -19,7 +19,7 @@ metadata <- function(df) {
   }
 
   if ("tests" %in% names(df) && !is.list(df$tests)) {
-    df$tests <- I(parse_tests(df$tests))
+    df <- dplyr::mutate(df, .parsed_tests = parse_tests(.data$tests))
   }
 
   structure(
@@ -41,7 +41,7 @@ parse_variable_tests <- function(x) {
 }
 
 parse_tests <- function(x) {
-  stopifnot(is.character(x))
+  stopifnot(is.character(x) || all(is.na(x)))
 
   lapply(x, parse_variable_tests)
 }
@@ -75,8 +75,8 @@ create_metadata_file <- function(df, blueprint, ..., .file = NULL) {
   stopifnot(is.data.frame(df))
 
   metadata_dt <- dplyr::tibble(
-    name = names(df), 
-    description = NA_character_, 
+    name = names(df),
+    description = NA_character_,
     type = vcapply(df, typeof)
   )
 
@@ -87,7 +87,7 @@ create_metadata_file <- function(df, blueprint, ..., .file = NULL) {
   }
 
   if (any(metadata_dt$type_issue, na.rm = TRUE)) {
-    data.table::fwrite(metadata_dt, file = metadata_path(blueprint))
+    write_meta_file(metadata_dt, metadata_path(blueprint))
 
     bp_err(c(
       "Type inconsistency between current and previous variables.\n",
@@ -95,11 +95,9 @@ create_metadata_file <- function(df, blueprint, ..., .file = NULL) {
     ))
   }
 
-  metadata_dt <- 
-    metadata_dt %>% 
-    dplyr::mutate(type_issue = NULL, deps_type = NULL)
+  metadata_dt <- dplyr::mutate(metadata_dt, type_issue = NULL, deps_type = NULL)
 
-  data.table::fwrite(metadata_dt, file = metadata_path(blueprint))
+  write_meta_file(metadata_dt, metadata_path(blueprint))
 
   if (any(duplicated(metadata_dt$name))) {
     bp_err(c(
@@ -114,16 +112,16 @@ create_metadata_file <- function(df, blueprint, ..., .file = NULL) {
 
 link_dependency_meta <- function(meta_dt, deps_metalist) {
   meta_dt <-
-    meta_dt %>% 
+    meta_dt %>%
     dplyr::select(.data$name, .data$type)
 
-  deps_meta_full <- 
-    dplyr::bind_rows(!!!deps_metalist) %>% 
+  deps_meta_full <-
+    dplyr::bind_rows(!!!deps_metalist) %>%
     dplyr::rename(deps_type = .data$type)
 
   meta_dt <-
-    meta_dt %>% 
-    dplyr::left_join(deps_meta_full, by = "name") %>% 
+    meta_dt %>%
+    dplyr::left_join(deps_meta_full, by = "name") %>%
     dplyr::mutate(type_issue = .data$type != .data$deps_type)
 
   meta_dt
@@ -134,7 +132,7 @@ load_metadata <- function(blueprint) {
     bp_err("No metadata exists to load for {blueprint$name}")
   }
 
-  metadata_df <- as.data.frame(data.table::fread(metadata_path(blueprint)))
+  metadata_df <- readr::read_csv(metadata_path(blueprint))
 
   metadata(metadata_df)
 }
@@ -145,4 +143,19 @@ metadata_target_name <- function(blueprint) {
 
 metadata_export_name <- function(blueprint) {
   paste0(blueprint_final_name(blueprint), "_metadata_export")
+}
+
+write_meta_file <- function(x, path) {
+  x <- remove_parsed_tests(x)
+  readr::write_csv(x, path, na = "")
+
+  invisible(x)
+}
+
+remove_parsed_tests <- function(x) {
+  if (".parsed_tests" %in% names(x)) {
+    x <- dplyr::select(x, -.data$.parsed_tests)
+  }
+
+  x
 }

@@ -152,9 +152,9 @@ add_content_checks <- function(plan, blueprint, meta = NULL) {
     blueprint_target_name(blueprint)
   )
 
-  if (!is.null(meta) && !is.null(meta$tests)) {
+  if (!is.null(meta) && ".parsed_tests" %in% names(meta)) {
     variable_checks <-  purrr::map2(
-      meta$tests,
+      meta$.parsed_tests,
       meta$name,
       function(.t, .n) {
         lapply(.t, interpret_raw_check, blueprint_target_name(blueprint), variable = .n)
