@@ -47,3 +47,25 @@ A blueprint object
 \description{
 Create a blueprint
 }
+\section{Cleanup Tasks}{
+blueprintr offers some post-check tasks that attempt to match datasets to the
+metadata as much as possible. There are two default tasks that run:
+\enumerate{
+\item Reorders variables to match metadata order.
+\item Drops variables marked with \code{dropped == TRUE} if the \code{dropped} variable
+exists in the metadata.
+}
+
+The remaining tasks have to be enabled by the user:
+\itemize{
+\item If \code{labelled = TRUE} in the \code{blueprint()} command, all columns will be
+converted to \link[haven:labelled]{labelled()} columns, provided that at
+least the \code{description} field is filled in. If the \code{coding} column is
+present in the metadata, then categorical levels as specified by a
+\link[rcoder:coding]{coding()} will be added to the column as well. In case
+the \code{description} field is used for detailed column descriptions, the
+\code{title} field can be added to the metadata to act as short titles for the
+columns.
+}
+}
+
