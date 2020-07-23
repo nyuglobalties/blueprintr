@@ -51,7 +51,7 @@ All blueprints have
 * A command, which is a quoted statement that has the code for building this target.
 * A metadata location, which is a path to where the target metadata is saved.
 
-> ⚠️ Warning: he blueprint name is "mtcars_dat" rather than "mtcars". If the two had the same name, drake would determine that the blueprint has a _circular dependency_ (it depends on itself). To avoid this, blueprints should not have the same names as global variables, like `mtcars`.
+> ⚠️ Warning: the blueprint name is "mtcars_dat" rather than "mtcars". If the two had the same name, drake would determine that the blueprint has a _circular dependency_ (it depends on itself). To avoid this, blueprints should not have the same names as global variables, like `mtcars`.
 
 To get this loaded into a drake plan, we need to _attach_ it to an already existing plan using
 
