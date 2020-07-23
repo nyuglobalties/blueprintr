@@ -129,7 +129,7 @@
 <li>A metadata location, which is a path to where the target metadata is saved.</li>
 </ul>
 <blockquote>
-<p>⚠️ Warning: he blueprint name is “mtcars_dat” rather than “mtcars”. If the two had the same name, drake would determine that the blueprint has a <em>circular dependency</em> (it depends on itself). To avoid this, blueprints should not have the same names as global variables, like <code>mtcars</code>.</p>
+<p>⚠️ Warning: the blueprint name is “mtcars_dat” rather than “mtcars”. If the two had the same name, drake would determine that the blueprint has a <em>circular dependency</em> (it depends on itself). To avoid this, blueprints should not have the same names as global variables, like <code>mtcars</code>.</p>
 </blockquote>
 <p>To get this loaded into a drake plan, we need to <em>attach</em> it to an already existing plan using</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
