@@ -17,7 +17,8 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="A Walkthrough of blueprintr">
+<script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="A Walkthrough of blueprintr">
 <meta property="og:description" content="blueprintr">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -87,6 +88,25 @@
 
     
     
+<style>
+div.vg-warning {
+  background-color:#FFFCE8;
+  padding:5px;
+}
+
+div.vg-warning span:before {
+  content: "⚠️ Warning: ";
+}
+
+div.vg-info {
+  background-color:#EBFBFF;
+  padding:5px;
+}
+
+div.vg-info span:before {
+  content: "💡 Note: ";
+}
+</style>
 <p>blueprintr is a companion to <a href="https://github.com/ropensci/drake">drake</a> that focuses on documenting and testing tabular data. Whereas drake manages the workflow execution, blueprintr defines a collection of steps that need to be run in a drake workflow.</p>
 <div id="basic-use" class="section level1">
 <h1 class="hasAnchor">
@@ -128,17 +148,17 @@
 <li>A command, which is a quoted statement that has the code for building this target.</li>
 <li>A metadata location, which is a path to where the target metadata is saved.</li>
 </ul>
-<blockquote>
-<p>⚠️ Warning: the blueprint name is “mtcars_dat” rather than “mtcars”. If the two had the same name, drake would determine that the blueprint has a <em>circular dependency</em> (it depends on itself). To avoid this, blueprints should not have the same names as global variables, like <code>mtcars</code>.</p>
-</blockquote>
+<div class="vg-warning">
+<span>the blueprint name is “mtcars_dat” rather than “mtcars”. If the two had the same name, drake would determine that the blueprint has a <em>circular dependency</em> (it depends on itself). To avoid this, blueprints should not have the same names as global variables, like <code>mtcars</code>.</span>
+</div>
 <p>To get this loaded into a drake plan, we need to <em>attach</em> it to an already existing plan using</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="fu"><a href="../reference/attach_blueprints.html">attach_blueprint</a></span>(<span class="kw">plan</span>, <span class="kw">blueprint</span>)
 <span class="fu"><a href="../reference/attach_blueprints.html">attach_blueprints</a></span>(<span class="kw">plan</span>, <span class="kw">...</span>)
 </pre></div>
-<blockquote>
-<p>💡 Note: <code>attach_blueprints</code> accepts “<a href="https://adv-r.hadley.nz/quasiquotation.html#tidy-dots">tidy dots</a>”, so if you have a <code><a href="https://rdrr.io/r/base/list.html">list()</a></code> of blueprints, you can “splat” all of those blueprints into <code>attach_blueprints</code> like <code><a href="../reference/attach_blueprints.html">attach_blueprints(plan, !!!list_of_blueprints)</a></code></p>
-</blockquote>
+<div class="vg-info">
+<span><code>attach_blueprints</code> accepts “<a href="https://adv-r.hadley.nz/quasiquotation.html#tidy-dots">tidy dots</a>”, so if you have a <code><a href="https://rdrr.io/r/base/list.html">list()</a></code> of blueprints, you can “splat” all of those blueprints into <code>attach_blueprints</code> like <code><a href="../reference/attach_blueprints.html">attach_blueprints(plan, !!!list_of_blueprints)</a></code></span>
+</div>
 <p>If you don’t have an existing plan, you can create one with</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
 <span class="fu"><a href="../reference/plan_from_blueprint.html">plan_from_blueprint</a></span>(<span class="kw">blueprint</span>)
@@ -201,9 +221,9 @@
 </tbody>
 </table>
 <p>At this point, you’re able to run <code><a href="https://docs.ropensci.org/drake/reference/make.html">drake::make()</a></code> on this plan!</p>
-<blockquote>
-<p>⚠️ Warning: when writing other targets in your plan, it is advised to <strong>not</strong> refer to the <code>{blueprint}_initial</code> step since it could have problems which are discovered in the <code>{blueprint}_checks</code> step.</p>
-</blockquote>
+<div class="vg-warning">
+<span>when writing other targets in your plan, it is advised to <strong>not</strong> refer to the <code>{blueprint}_initial</code> step since it could have problems which are discovered in the <code>{blueprint}_checks</code> step.</span>
+</div>
 </div>
   </div>
 
