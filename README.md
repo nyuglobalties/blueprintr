@@ -3,6 +3,12 @@
 
 # blueprintr <img src="man/figures/logo.png" align="right" height="139" />
 
+> blueprintr is a plugin to [drake](https://github.com/ropensci/drake)
+> that adds automated steps for tabular dataset documentation and
+> testing. Designed for social science research projects, this package
+> creates a framework to build trust in your data and to prevent
+> programming issues from affecting your analysis results.
+
 <!-- badges: start -->
 
 [![Lifecycle:
@@ -12,12 +18,6 @@ status](https://www.r-pkg.org/badges/version/blueprintr)](https://CRAN.R-project
 [![R build
 status](https://github.com/Global-TIES-for-Children/blueprintr/workflows/R-CMD-check/badge.svg)](https://github.com/Global-TIES-for-Children/blueprintr/actions)
 <!-- badges: end -->
-
-bluepintr is a plugin to [drake](https://github.com/ropensci/drake) that
-adds automated steps for tabular dataset documentation and testing.
-Designed for social science research projects, this package creates a
-framework to build trust in your data and to prevent programming issues
-from affecting your analysis results.
 
 ## Usage
 
@@ -41,7 +41,7 @@ blueprint1
 #> <blueprint: 'blueprint1'>
 #> 
 #> Description: My first blueprint
-#> Metadata location: '/Users/runner/runners/2.263.0/work/blueprintr/blueprintr/blueprints/blueprint1.csv'
+#> Metadata location: '/Users/patrickanker/dev/blueprintr/blueprints/blueprint1.csv'
 #> 
 #> -- Command --
 #> Drake command:
@@ -94,8 +94,8 @@ blueprintr.
 
 ## Installation
 
-As `blueprintr` is not yet on CRAN, you must install the package from
-this repository:
+As blueprintr is not yet on CRAN, you must install the package from this
+repository:
 
 ``` r
 install.packages("remotes")
