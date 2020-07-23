@@ -7,6 +7,26 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+<style>
+div.vg-warning {
+  background-color:#FFFCE8;
+  padding:5px;
+}
+
+div.vg-warning span:before {
+  content: "⚠️ Warning: ";
+}
+
+div.vg-info {
+  background-color:#EBFBFF;
+  padding:5px;
+}
+
+div.vg-info span:before {
+  content: "💡 Note: ";
+}
+</style>
+
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -51,7 +71,7 @@ All blueprints have
 * A command, which is a quoted statement that has the code for building this target.
 * A metadata location, which is a path to where the target metadata is saved.
 
-> ⚠️ Warning: the blueprint name is "mtcars_dat" rather than "mtcars". If the two had the same name, drake would determine that the blueprint has a _circular dependency_ (it depends on itself). To avoid this, blueprints should not have the same names as global variables, like `mtcars`.
+<div class="vg-warning"><span>the blueprint name is "mtcars_dat" rather than "mtcars". If the two had the same name, drake would determine that the blueprint has a _circular dependency_ (it depends on itself). To avoid this, blueprints should not have the same names as global variables, like `mtcars`.</span></div>
 
 To get this loaded into a drake plan, we need to _attach_ it to an already existing plan using
 
@@ -60,7 +80,7 @@ attach_blueprint(plan, blueprint)
 attach_blueprints(plan, ...)
 ```
 
-> 💡 Note: `attach_blueprints` accepts "[tidy dots](https://adv-r.hadley.nz/quasiquotation.html#tidy-dots)", so if you have a `list()` of blueprints, you can "splat" all of those blueprints into `attach_blueprints` like `attach_blueprints(plan, !!!list_of_blueprints)`
+<div class="vg-info"><span>`attach_blueprints` accepts "[tidy dots](https://adv-r.hadley.nz/quasiquotation.html#tidy-dots)", so if you have a `list()` of blueprints, you can "splat" all of those blueprints into `attach_blueprints` like `attach_blueprints(plan, !!!list_of_blueprints)`</span></div>
 
 If you don't have an existing plan, you can create one with
 
@@ -99,7 +119,7 @@ Target name             | Description
 
 At this point, you're able to run `drake::make()` on this plan!
 
-> ⚠️ Warning: when writing other targets in your plan, it is advised to **not** refer to the `{blueprint}_initial` step since it could have problems which are discovered in the `{blueprint}_checks` step.
+<div class="vg-warning"><span>when writing other targets in your plan, it is advised to **not** refer to the `{blueprint}_initial` step since it could have problems which are discovered in the `{blueprint}_checks` step.</span></div>
 
 ```{r delete_cache, include=FALSE}
 unlink(cache_location, recursive = TRUE)

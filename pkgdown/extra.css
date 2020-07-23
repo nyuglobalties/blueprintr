@@ -1,0 +1,13 @@
+/* Custom theme for Global TIES for Children */
+
+.navbar {
+  background-color: #56068C;
+}
+
+.navbar-default .navbar-nav > .active > a {
+  background-color: #8609D9;
+}
+
+span.version.label-default {
+  background-color: #2F034D;
+}
