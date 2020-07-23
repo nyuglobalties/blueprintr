@@ -99,16 +99,16 @@
 <p>blueprintr is built around “blueprints.” Our first blueprint will be a blueprint for <code>mtcars</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="fu"><a href="../reference/blueprint.html">blueprint</a></span>(
-  <span class="st">"mtcars"</span>,
+  <span class="st">"mtcars_dat"</span>,
   description = <span class="st">"The famous mtcars dataset"</span>,
   command = {
     <span class="kw">mtcars</span>
   }
 )
-<span class="co">#&gt; &lt;blueprint: 'mtcars'&gt;</span>
+<span class="co">#&gt; &lt;blueprint: 'mtcars_dat'&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Description: The famous mtcars dataset</span>
-<span class="co">#&gt; Metadata location: '/Users/runner/work/blueprintr/blueprintr/blueprints/mtcars.csv'</span>
+<span class="co">#&gt; Metadata location: '/Users/runner/work/blueprintr/blueprintr/blueprints/mtcars_dat.csv'</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; -- Command --</span>
 <span class="co">#&gt; Drake command:</span>
@@ -128,6 +128,82 @@
 <li>A command, which is a quoted statement that has the code for building this target.</li>
 <li>A metadata location, which is a path to where the target metadata is saved.</li>
 </ul>
+<blockquote>
+<p>⚠️ Warning: he blueprint name is “mtcars_dat” rather than “mtcars”. If the two had the same name, drake would determine that the blueprint has a <em>circular dependency</em> (it depends on itself). To avoid this, blueprints should not have the same names as global variables, like <code>mtcars</code>.</p>
+</blockquote>
+<p>To get this loaded into a drake plan, we need to <em>attach</em> it to an already existing plan using</p>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="fu"><a href="../reference/attach_blueprints.html">attach_blueprint</a></span>(<span class="kw">plan</span>, <span class="kw">blueprint</span>)
+<span class="fu"><a href="../reference/attach_blueprints.html">attach_blueprints</a></span>(<span class="kw">plan</span>, <span class="kw">...</span>)
+</pre></div>
+<blockquote>
+<p>💡 Note: <code>attach_blueprints</code> accepts “<a href="https://adv-r.hadley.nz/quasiquotation.html#tidy-dots">tidy dots</a>”, so if you have a <code><a href="https://rdrr.io/r/base/list.html">list()</a></code> of blueprints, you can “splat” all of those blueprints into <code>attach_blueprints</code> like <code><a href="../reference/attach_blueprints.html">attach_blueprints(plan, !!!list_of_blueprints)</a></code></p>
+</blockquote>
+<p>If you don’t have an existing plan, you can create one with</p>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="fu"><a href="../reference/plan_from_blueprint.html">plan_from_blueprint</a></span>(<span class="kw">blueprint</span>)
+</pre></div>
+<p>For now, we’ll use an already existing plan, which is probably what you’ll have most of the time.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="fu"><a href="../reference/attach_blueprints.html">attach_blueprint</a></span>(
+  <span class="kw">existing_plan</span>,
+  <span class="fu"><a href="../reference/blueprint.html">blueprint</a></span>(
+    <span class="st">"mtcars_dat"</span>,
+    description = <span class="st">"The famous mtcars dataset"</span>,
+    command = {
+      <span class="kw">mtcars</span>
+    }
+  )
+)
+<span class="co">#&gt; # A tibble: 7 x 2</span>
+<span class="co">#&gt;   target            command                                                     </span>
+<span class="co">#&gt;   &lt;chr&gt;             &lt;expr_lst&gt;                                                  </span>
+<span class="co">#&gt; 1 initial_vector    runif(1000)                                                …</span>
+<span class="co">#&gt; 2 squared           initial_vector^2                                           …</span>
+<span class="co">#&gt; 3 mtcars_dat_initi… {     mtcars }                                             …</span>
+<span class="co">#&gt; 4 mtcars_dat_bluep… blueprint(name = "mtcars_dat", command = {     mtcars }, de…</span>
+<span class="co">#&gt; 5 mtcars_dat_meta   create_metadata_file(mtcars_dat_initial, mtcars_dat_bluepri…</span>
+<span class="co">#&gt; 6 mtcars_dat_checks eval_checks(all_variables_present(mtcars_dat_initial, mtcar…</span>
+<span class="co">#&gt; 7 mtcars_dat        accept_content(mtcars_dat_checks, mtcars_dat_initial, mtcar…</span>
+</pre></div>
+<p>blueprintr creates five “steps” (targets) per blueprint:</p>
+<table class="table">
+<colgroup>
+<col width="63%">
+<col width="36%">
+</colgroup>
+<thead><tr class="header">
+<th>Target name</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>{blueprint}_initial</code></td>
+<td>The result of running the blueprint’s <code>command</code>
+</td>
+</tr>
+<tr class="even">
+<td><code>{blueprint}_blueprint</code></td>
+<td>A copy of the blueprint to be used throughout the plan</td>
+</tr>
+<tr class="odd">
+<td><code>{blueprint}_meta</code></td>
+<td>A copy of the dataset metadata — if the metadata file doesn’t exist, it will be created in this step</td>
+</tr>
+<tr class="even">
+<td><code>{blueprint}_checks</code></td>
+<td>Runs all checks on the <code>{blueprint}_initial</code> target</td>
+</tr>
+<tr class="odd">
+<td><code>{blueprint}</code></td>
+<td>The built dataset after running some cleanup tasks</td>
+</tr>
+</tbody>
+</table>
+<p>At this point, you’re able to run <code><a href="https://docs.ropensci.org/drake/reference/make.html">drake::make()</a></code> on this plan!</p>
+<blockquote>
+<p>⚠️ Warning: when writing other targets in your plan, it is advised to <strong>not</strong> refer to the <code>{blueprint}_initial</code> step since it could have problems which are discovered in the <code>{blueprint}_checks</code> step.</p>
+</blockquote>
 </div>
   </div>
 
