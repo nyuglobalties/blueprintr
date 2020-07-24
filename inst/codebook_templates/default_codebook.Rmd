@@ -1,0 +1,78 @@
+---
+title: "Codebook Demo"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+cat_line <- function(x = NULL) {
+  cat(glue::glue(glue::glue_collapse(x)), "\n", sep = "")
+}
+
+paragraph <- function(x) {
+  cat_line(x)
+  cat_line()
+}
+
+h_tag <- function(x, level) {
+  header_prefix <- paste0(rep("#", level))
+  
+  paragraph(c(header_prefix, " ", x))
+}
+
+h1 <- function(x) {
+  h_tag(x, 1)
+}
+
+h2 <- function(x) {
+  h_tag(x, 2)
+}
+
+h3 <- function(x) {
+  h_tag(x, 3)
+}
+
+echo_list <- function(x, ordered = FALSE) {
+  bullet <- if (ordered) "1. " else "* "
+  
+  x <- paste0(bullet, x, "\n")
+  paragraph(x)
+}
+
+unordered_list <- function(x) {
+  echo_list(x, ordered = FALSE)
+}
+
+ordered_list <- function(x) {
+  echo_list(x, ordered = TRUE)
+}
+
+blockquote <- function(x) {
+  paragraph(paste0("> ", x))
+}
+```
+
+```{r startup_checks, include=FALSE}
+stopifnot(is.data.frame(params$dataset) || is.null(params$dataset))
+stopifnot(inherits(params$blueprint, "blueprint")) 
+stopifnot(inherits(params$meta, "blueprint_metadata"))
+
+dataset <- params$dataset
+bp <- params$blueprint
+meta <- params$meta
+```
+
+
+```{r output}
+if (!is.null(bp$title)) {
+  h1(bp$title)
+} else {
+  h1(bp$name)
+}
+
+if (!is.null(bp$description)) {
+  blockquote(bp$description)
+}
+```
+
