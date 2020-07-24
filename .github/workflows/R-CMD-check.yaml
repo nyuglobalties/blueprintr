@@ -63,6 +63,7 @@ jobs:
       - name: Install dependencies (not Windows)
         if: runner.os != 'Windows'
         run: |
+          remotes::install_github("Global-TIES-for-Children/rcoder")
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
@@ -70,6 +71,7 @@ jobs:
       - name: Install dependencies (Windows)
         if: runner.os == 'Windows'
         run: |
+          remotes::install_github("Global-TIES-for-Children/rcoder")
           remotes::install_deps(dependencies = TRUE, type = "binary")
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
