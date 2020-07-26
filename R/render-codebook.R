@@ -6,14 +6,17 @@
 #' @param dataset If included, a `data.frame` to be used as a source for
 #'                summaries
 #' @param template Path to the knitr template
+#' @param ... Extra parameters passed to [rmarkdown::render()][rmarkdown::render()]
 #'
 #' @export
 #'
 render_codebook <- function(blueprint,
                             meta,
                             file,
+                            title = glue("{ui_value(blueprint$name)} Codebook"),
                             dataset = NULL,
-                            template = bp_path("codebook_templates/default_codebook.Rmd")) {
+                            template = bp_path("codebook_templates/default_codebook.Rmd"),
+                            ...) {
   bp_assert(inherits(blueprint, "blueprint"))
   bp_assert(inherits(meta, "blueprint_metadata"))
   bp_assert(is.data.frame(dataset) || is.null(dataset))
@@ -22,13 +25,23 @@ render_codebook <- function(blueprint,
     bp_err("rmarkdown must be installed to render codebooks")
   }
 
+  if (!requireNamespace("rcoder", quietly = TRUE)) {
+    bp_err("rcoder must be installed to render codebooks")
+  }
+
+  if (!requireNamespace("kableExtra", quietly = TRUE)) {
+    bp_err("rcoder must be installed to render codebooks")
+  }
+
   rmarkdown::render(
     template,
     output_file = file,
     params = list(
       blueprint = blueprint,
       meta = meta,
-      dataset = dataset
-    )
+      dataset = dataset,
+      title = title
+    ),
+    ...
   )
 }
