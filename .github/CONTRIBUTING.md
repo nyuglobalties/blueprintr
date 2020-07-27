@@ -21,8 +21,8 @@ bug, create an associated issue and illustrate the bug with a minimal
 
 ### Pull request process
 
-*  We recommend that you create a Git branch for each pull request (PR).  
-*  Look at the Travis and AppVeyor build status before and after making changes.
+*  We require that you create a Git branch for each pull request (PR).  
+*  Look at the R CMD check build status before and after making changes.
 The `README` should contain badges for any continuous integration services used
 by the package.  
 *  New code should follow the tidyverse [style guide](https://style.tidyverse.org).
@@ -43,6 +43,3 @@ GitHub username, and links to relevant issue(s)/PR(s).
 Please note that the blueprintr project is released with a
 [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By contributing to this
 project you agree to abide by its terms.
-
-### See tidyverse [development contributing guide](https://rstd.io/tidy-contrib)
-for further details.
