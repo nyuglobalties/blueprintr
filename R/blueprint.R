@@ -126,7 +126,7 @@ blueprint_target_name.default <- function(x, ...) {
 #' @rdname blueprint_target_name
 #' @export
 blueprint_target_name.character <- function(x, ...) {
-  paste0(x, "_initial")
+  paste0(blueprint_final_name(x), "_initial")
 }
 
 #' @rdname blueprint_target_name
@@ -150,7 +150,7 @@ blueprint_checks_name.default <- function(x, ...) {
 #' @rdname blueprint_target_name
 #' @export
 blueprint_checks_name.character <- function(x, ...) {
-  paste0(x, "_checks")
+  paste0(blueprint_final_name(x), "_checks")
 }
 
 #' @rdname blueprint_target_name
@@ -198,7 +198,7 @@ blueprint_reference_name.default <- function(x, ...) {
 #' @rdname blueprint_target_name
 #' @export
 blueprint_reference_name.character <- function(x, ...) {
-  paste0(x, "_blueprint")
+  paste0(blueprint_final_name(x), "_blueprint")
 }
 
 #' @rdname blueprint_target_name
