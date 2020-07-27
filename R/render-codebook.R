@@ -3,6 +3,7 @@
 #' @param blueprint A dataset blueprint
 #' @param meta A `blueprint_metadata` object related to the blueprint
 #' @param file Path to where the codebook should be saved
+#' @param title Title of the codebook
 #' @param dataset If included, a `data.frame` to be used as a source for
 #'                summaries
 #' @param template Path to the knitr template

@@ -21,6 +21,8 @@ render_codebook(
 
 \item{file}{Path to where the codebook should be saved}
 
+\item{title}{Title of the codebook}
+
 \item{dataset}{If included, a \code{data.frame} to be used as a source for
 summaries}
 
