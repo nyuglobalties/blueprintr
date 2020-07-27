@@ -2,16 +2,42 @@
 title: "A Walkthrough of blueprintr"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{blueprintr}
+  %\VignetteIndexEntry{A Walkthrough of blueprintr}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+
+<style>
+div.vg-warning {
+  background-color:#FFFCE8;
+  padding:5px;
+}
+
+div.vg-warning span:before {
+  content: "⚠️ Warning: ";
+}
+
+div.vg-info {
+  background-color:#EBFBFF;
+  padding:5px;
+}
+
+div.vg-info span:before {
+  content: "💡 Note: ";
+}
+</style>
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+set.seed(0x7bae)
+
+cache_location <- tempdir()
+
+drake::clean(cache = drake::drake_cache(cache_location))
 ```
 
 blueprintr is a companion to [drake](https://github.com/ropensci/drake) that focuses on documenting and testing tabular data. Whereas drake manages the workflow execution, blueprintr defines a collection of steps that need to be run in a drake workflow.
@@ -30,7 +56,7 @@ blueprintr is built around "blueprints." Our first blueprint will be a blueprint
 
 ```{r}
 blueprint(
-  "mtcars",
+  "mtcars_dat",
   description = "The famous mtcars dataset",
   command = {
     mtcars
@@ -44,4 +70,58 @@ All blueprints have
 * A description or brief summary of what the target is. Can be `NULL`.
 * A command, which is a quoted statement that has the code for building this target.
 * A metadata location, which is a path to where the target metadata is saved.
+
+<div class="vg-warning"><span>the blueprint name is "mtcars_dat" rather than "mtcars". If the two had the same name, drake would determine that the blueprint has a _circular dependency_ (it depends on itself). To avoid this, blueprints should not have the same names as global variables, like `mtcars`.</span></div>
+
+To get this loaded into a drake plan, we need to _attach_ it to an already existing plan using
+
+```r
+attach_blueprint(plan, blueprint)
+attach_blueprints(plan, ...)
+```
+
+<div class="vg-info"><span>`attach_blueprints` accepts "[tidy dots](https://adv-r.hadley.nz/quasiquotation.html#tidy-dots)", so if you have a `list()` of blueprints, you can "splat" all of those blueprints into `attach_blueprints` like `attach_blueprints(plan, !!!list_of_blueprints)`</span></div>
+
+If you don't have an existing plan, you can create one with
+
+```r
+plan_from_blueprint(blueprint)
+```
+
+For now, we'll use an already existing plan, which is probably what you'll have most of the time.
+
+```{r, include=FALSE}
+existing_plan <- drake::drake_plan(initial_vector = runif(1000), squared = initial_vector ^ 2)
+```
+
+```{r}
+attach_blueprint(
+  existing_plan,
+  blueprint(
+    "mtcars_dat",
+    description = "The famous mtcars dataset",
+    command = {
+      mtcars
+    }
+  )
+)
+```
+
+blueprintr creates five "steps" (targets) per blueprint:
+
+Target name             | Description
+------------------------|--------------
+`{blueprint}_initial`   | The result of running the blueprint's `command`
+`{blueprint}_blueprint` | A copy of the blueprint to be used throughout the plan
+`{blueprint}_meta`      | A copy of the dataset metadata --- if the metadata file doesn't exist, it will be created in this step
+`{blueprint}_checks`    | Runs all checks on the `{blueprint}_initial` target
+`{blueprint}`           | The built dataset after running some cleanup tasks
+
+At this point, you're able to run `drake::make()` on this plan!
+
+<div class="vg-warning"><span>when writing other targets in your plan, it is advised to **not** refer to the `{blueprint}_initial` step since it could have problems which are discovered in the `{blueprint}_checks` step.</span></div>
+
+```{r delete_cache, include=FALSE}
+unlink(cache_location, recursive = TRUE)
+```
 
