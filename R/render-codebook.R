@@ -33,6 +33,11 @@ render_codebook <- function(blueprint,
     bp_err("rcoder must be installed to render codebooks")
   }
 
+  if (!dir.exists(dirname(file))) {
+    dir.create(dirname(file), recursive = TRUE)
+    message(glue("Created '{dirname(value)}'"))
+  }
+
   rmarkdown::render(
     template,
     output_file = file,

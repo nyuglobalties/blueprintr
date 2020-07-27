@@ -8,8 +8,10 @@ render_codebook(
   blueprint,
   meta,
   file,
+  title = glue("{ui_value(blueprint$name)} Codebook"),
   dataset = NULL,
-  template = bp_path("codebook_templates/default_codebook.Rmd")
+  template = bp_path("codebook_templates/default_codebook.Rmd"),
+  ...
 )
 }
 \arguments{
@@ -23,6 +25,8 @@ render_codebook(
 summaries}
 
 \item{template}{Path to the knitr template}
+
+\item{...}{Extra parameters passed to \code{\link[rmarkdown:render]{rmarkdown::render()}}}
 }
 \description{
 Render codebooks for datasets

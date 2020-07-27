@@ -17,6 +17,10 @@
 \alias{blueprint_reference_name.default}
 \alias{blueprint_reference_name.character}
 \alias{blueprint_reference_name.blueprint}
+\alias{blueprint_codebook_name}
+\alias{blueprint_codebook_name.default}
+\alias{blueprint_codebook_name.character}
+\alias{blueprint_codebook_name.blueprint}
 \title{Blueprint drake target names}
 \usage{
 blueprint_target_name(x, ...)
@@ -50,6 +54,14 @@ blueprint_reference_name(x, ...)
 \method{blueprint_reference_name}{character}(x, ...)
 
 \method{blueprint_reference_name}{blueprint}(x, ...)
+
+blueprint_codebook_name(x, ...)
+
+\method{blueprint_codebook_name}{default}(x, ...)
+
+\method{blueprint_codebook_name}{character}(x, ...)
+
+\method{blueprint_codebook_name}{blueprint}(x, ...)
 }
 \arguments{
 \item{x}{A blueprint or string relating to a blueprint's name}
