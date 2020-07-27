@@ -188,3 +188,27 @@ blueprint_reference_name.character <- function(x, ...) {
 blueprint_reference_name.blueprint <- function(x, ...) {
   blueprint_reference_name(x$name)
 }
+
+#' @rdname blueprint_target_name
+#' @export
+blueprint_codebook_name <- function(x, ...) {
+  UseMethod("blueprint_codebook_name")
+}
+
+#' @rdname blueprint_target_name
+#' @export
+blueprint_codebook_name.default <- function(x, ...) {
+  bp_err("Not defined")
+}
+
+#' @rdname blueprint_target_name
+#' @export
+blueprint_codebook_name.character <- function(x, ...) {
+  paste0(blueprint_final_name(x), "_codebook")
+}
+
+#' @rdname blueprint_target_name
+#' @export
+blueprint_codebook_name.blueprint <- function(x, ...) {
+  blueprint_codebook_name(x$name)
+}

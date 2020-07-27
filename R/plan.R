@@ -57,6 +57,10 @@ attach_blueprint <- function(plan, blueprint) {
     plan <- add_blueprint_metadata(plan, blueprint, meta)
   }
 
+  if (isTRUE(blueprint$codebook_export)) {
+    plan <- add_codebook_export(plan, blueprint)
+  }
+
   add_content_checks(plan, blueprint, meta = meta)
 }
 
@@ -188,6 +192,33 @@ add_content_checks <- function(plan, blueprint, meta = NULL) {
 
   arglist <- list2(
     !!blueprint_final_name(blueprint) := command2
+  )
+
+  target_plan <- do.call(drake::drake_plan, arglist)
+  drake::bind_plans(plan, target_plan)
+}
+
+add_codebook_export <- function(plan, blueprint) {
+  default_codebook_file <- here::here("codebooks", paste0(blueprint$name, ".html"))
+  codebook_file <- blueprint$codebook_file %||% default_codebook_file
+  codebook_template <- blueprint$codebook_template %||% NULL
+
+  with_data <- blueprint$codebook_summaries %||% FALSE
+
+  command <- call2(
+    "render_codebook",
+    as.name(blueprint_reference_name(blueprint)),
+    as.name(metadata_target_name(blueprint)),
+    codebook_file,
+    dataset = if (with_data) as.name(blueprint_final_name(blueprint)) else NULL
+  )
+
+  if (!is.null(codebook_template)) {
+    command[["template"]] <- bquote(knitr_in(.(codebook_template)))
+  }
+
+  arglist <- list2(
+    !!blueprint_codebook_name(blueprint) := command
   )
 
   target_plan <- do.call(drake::drake_plan, arglist)

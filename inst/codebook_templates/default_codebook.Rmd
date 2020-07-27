@@ -1,0 +1,270 @@
+---
+title: "`r params$title`"
+output: 
+  html_document:
+    theme: journal
+    toc: true
+    toc_float: true
+params:
+  dataset: NULL
+  blueprint: NULL
+  meta: NULL
+  title: NULL
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+cat_line <- function(x = NULL) {
+  cat(glue::glue(glue::glue_collapse(x)), "\n", sep = "")
+}
+
+paragraph <- function(x) {
+  cat_line(x)
+  cat_line()
+}
+
+h_tag <- function(x, level) {
+  header_prefix <- paste0(rep("#", level))
+  
+  paragraph(c(header_prefix, " ", x))
+}
+
+h1 <- function(x) {
+  h_tag(x, 1)
+}
+
+h2 <- function(x) {
+  h_tag(x, 2)
+}
+
+h3 <- function(x) {
+  h_tag(x, 3)
+}
+
+echo_list <- function(x, ordered = FALSE) {
+  bullet <- if (ordered) "1. " else "* "
+  
+  x <- paste0(bullet, x, "\n")
+  paragraph(x)
+}
+
+unordered_list <- function(x) {
+  echo_list(x, ordered = FALSE)
+}
+
+ordered_list <- function(x) {
+  echo_list(x, ordered = TRUE)
+}
+
+blockquote <- function(x) {
+  paragraph(paste0("> ", x))
+}
+
+span_tag <- function(x, class = NULL) {
+  if (!is.null(class)) {
+    cat_line(glue('<span class="{class}">{x}</span>'))
+  } else{
+    cat_line(glue('<span>{x}</span>'))
+  }
+}
+
+badge <- function(x, type = "info") {
+  span_tag(x, class = paste0("label label-", type))
+}
+
+is_empty_text <- function(x) {
+  is.na(x) | x == ""
+}
+
+remove_dropped <- function(meta_dt) {
+  if ("dropped" %in% names(meta_dt)) {
+    meta_dt <- dplyr::filter(meta_dt, is.na(.data$dropped) | .data$dropped == FALSE)
+  }
+  
+  meta_dt
+}
+
+create_coding_list <- function(meta_dt) {
+  if ("coding" %in% names(meta_dt)) {
+    meta_dt <- dplyr::mutate(
+      meta_dt,
+      .evaluated_coding = rcoder::as_coding_list(.data$coding)
+    )
+  }
+  
+  meta_dt
+}
+
+arrange_by_sections <- function(meta_dt) {
+  meta <- dplyr::mutate(
+    meta_dt, 
+    section = ifelse(is_empty_text(.data$section), "Other", .data$section)
+  )
+  
+  meta_categorized <- dplyr::filter(meta, .data$section != "Other")
+  meta_uncategorized <- dplyr::filter(meta, .data$section == "Other")
+  
+  meta_categorized <- dplyr::mutate(
+    meta_categorized, 
+    .section_order = purrr::map_int(.data$section, ~ which(unique(.data$section) == .x))
+  )
+  meta_categorized <- dplyr::arrange(meta_categorized, .data$.section_order)
+  meta_categorized <- dplyr::mutate(meta_categorized, .section_order = NULL)
+  
+  dplyr::bind_rows(meta_categorized, meta_uncategorized)
+}
+
+variable_tags <- function(variable, meta_dt) {
+  var_tags <- dplyr::filter(meta_dt, .data$name == variable)[["tags"]]
+  
+  if (is.na(var_tags)) {
+    return(character())
+  }
+  
+  strsplit(var_tags, "\\,")[[1]]
+}
+
+coding_table <- function(coding) {
+  coding_df <- as.data.frame(coding)
+  coding_df <- dplyr::select(coding_df, .data$label, .data$value)
+  coding_df <- dplyr::filter(coding_df, !duplicated(.data$label))
+  
+  coding_df <- kableExtra::kable(coding_df)
+  coding_df <- kableExtra::kable_styling(
+    coding_df,
+    bootstrap_options = "striped",
+    full_width = FALSE,
+    position = "float_right"
+  )
+  
+  print(coding_df)
+}
+```
+
+```{css, echo=FALSE}
+.section hr {
+  float: none;
+  clear: both;
+}
+```
+
+```{r variable_output, include=FALSE}
+write_variable <- function(variable, meta, data) {
+  var_desc <- dplyr::filter(meta, .data$name == variable)[["description"]]
+  var_title <- NULL
+  
+  if ("title" %in% names(meta)) {
+    var_title <- dplyr::filter(meta, .data$name == variable)[["title"]]
+    
+    if (is_empty_text(var_title)) {
+      var_title <- NULL
+    }
+  }
+  
+  if ("coding" %in% names(meta)) {
+    var_coding <- dplyr::filter(meta, .data$name == variable)[[".evaluated_coding"]][[1]]
+    
+    if (rcoder::is_empty_coding(var_coding)) {
+      var_coding <- NULL
+    }
+  } else {
+    var_coding <- NULL
+  }
+  
+  
+  if (!is.null(var_title)) {
+    h3(paste0(variable, " --- ", var_title))
+  } else {
+    h3(variable)
+  }
+  
+  if (!is.null(var_coding)) {
+    coding_table(var_coding)
+  }
+  
+  if (!is_empty_text(var_desc)) {
+    blockquote(var_desc)
+  }
+  
+  if ("tags" %in% names(meta)) {
+    var_tags <- variable_tags(variable, meta)
+    
+    if (length(var_tags) > 0) {
+      for (tag in var_tags) {
+        badge(tag)
+      }
+      
+      cat_line()
+    }
+  }
+  
+  paragraph("---")
+  invisible(NULL)
+}
+
+write_section <- function(section, meta, data) {
+  meta <- meta[meta$section == section, ]
+  
+  if ("section_description" %in% names(meta)) {
+    section_description <- unique(meta$section_description)[1]
+    
+    if (is_empty_text(section_description)) {
+      section_description <- NULL
+    }
+  } else {
+    section_description <- NULL
+  }
+  
+  h2(section)
+  
+  if (!is.null(section_description)) {
+    paragraph(section_description)
+  }
+  
+  for (variable in meta$name) {
+    write_variable(variable, meta, data)
+  }
+}
+
+write_variables_only <- function(meta, data) {
+  meta <- remove_dropped(meta)
+  meta <- create_coding_list(meta)
+  
+  for (variable in meta$name) {
+    write_variable(variable, meta, data)
+  }
+}
+
+write_sections <- function(meta, data) {
+  meta <- remove_dropped(meta)
+  meta <- arrange_by_sections(meta)
+  meta <- create_coding_list(meta)
+  
+  for (section in unique(meta$section)) {
+    write_section(section, meta, data)
+  }
+}
+```
+
+```{r startup_checks, include=FALSE}
+stopifnot(is.data.frame(params$dataset) || is.null(params$dataset))
+stopifnot(inherits(params$blueprint, "blueprint")) 
+stopifnot(inherits(params$meta, "blueprint_metadata"))
+
+
+if (!requireNamespace("rcoder", quietly = TRUE)) {
+  bp_err("rcoder must be installed to render codebooks")
+}
+```
+
+```{r output, echo=FALSE, results='asis'}
+if (!is.null(params$blueprint$description)) {
+  blockquote(params$blueprint$description)
+}
+
+if ("section" %in% names(params$meta)) {
+  write_sections(params$meta, params$dataset)
+} else {
+  write_variables_only(params$meta, params$dataset)
+}
+```
+
