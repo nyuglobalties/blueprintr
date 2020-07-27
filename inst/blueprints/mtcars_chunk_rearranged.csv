@@ -1,12 +1,12 @@
-"name","description","type","dropped"
-"cyl",,"double",
-"mpg",,"double",
-"disp",,"double",
-"hp",,"double",
-"drat",,"double",
-"wt",,"double",
-"qsec",,"double",TRUE
-"vs",,"double",TRUE
-"am",,"double",TRUE
-"gear",,"double",TRUE
-"carb",,"double",TRUE
+"name","description","type","coding","dropped"
+"cyl","Number of cylinders","double","coding(code(""Four"", 4), code(""Six"", 6), code(""Eight"", 8))",
+"mpg","Gas mileage","double",,
+"disp",,"double",,
+"hp",,"double",,
+"drat",,"double",,
+"wt",,"double",,
+"qsec",,"double",,"TRUE"
+"vs",,"double",,"TRUE"
+"am",,"double",,"TRUE"
+"gear",,"double",,"TRUE"
+"carb",,"double",,"TRUE"

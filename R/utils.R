@@ -102,3 +102,23 @@ assert_pkg <- function(pkg, version = NULL, install = "install.packages") {
 
   invisible()
 }
+
+string_to_coding <- function(x) {
+  bp_assert(is.character(x) || is.logical(x))
+
+  if (!requireNamespace("rcoder", quietly = TRUE)) {
+    bp_err("`rcoder` is not installed. Cannot evaluate coding string.")
+  }
+
+  lapply(x, string_to_coding_single)
+}
+
+string_to_coding_single <- function(x) {
+  bp_assert(length(x) == 1)
+
+  if (x == "" || is.na(x)) {
+    return(rcoder::empty_coding())
+  }
+
+  rcoder::eval_coding(rlang::parse_expr(x))
+}

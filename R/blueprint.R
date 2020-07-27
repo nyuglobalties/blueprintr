@@ -15,6 +15,24 @@
 #' @param class A subclass of blueprint capability, for future work
 #'
 #' @return A blueprint object
+#'
+#' @details # Cleanup Tasks
+#' blueprintr offers some post-check tasks that attempt to match datasets to the
+#' metadata as much as possible. There are two default tasks that run:
+#'   1. Reorders variables to match metadata order.
+#'   1. Drops variables marked with `dropped == TRUE` if the `dropped` variable
+#'      exists in the metadata.
+#'
+#' The remaining tasks have to be enabled by the user:
+#'   * If `labelled = TRUE` in the `blueprint()` command, all columns will be
+#'     converted to [labelled()][haven::labelled()] columns, provided that at
+#'     least the `description` field is filled in. If the `coding` column is
+#'     present in the metadata, then categorical levels as specified by a
+#'     [coding()][rcoder::coding()] will be added to the column as well. In case
+#'     the `description` field is used for detailed column descriptions, the
+#'     `title` field can be added to the metadata to act as short titles for the
+#'     columns.
+#'
 #' @export
 blueprint <- function(name,
                       command,

@@ -12,6 +12,12 @@
 #'
 #' @export
 accept_content <- function(results, df, blueprint, meta) {
+  # Extended cleanup features
+  if (has_labelled_feature(blueprint)) {
+    df <- label_columns(df, blueprint, meta)
+  }
+
+  # Default cleanup features
   if (has_reorder_feature(blueprint, meta)) {
     df <- reorder_columns(df, blueprint, meta)
   }
@@ -21,18 +27,4 @@ accept_content <- function(results, df, blueprint, meta) {
   }
 
   df
-}
-
-drop_columns <- function(df, blueprint, meta) {
-  dropped_cols <- meta[!is.na(meta$dropped) & meta$dropped == TRUE, "name", drop = TRUE]
-
-  if (length(dropped_cols) > 0) {
-    df <- dplyr::select(df, -dropped_cols)
-  }
-
-  df
-}
-
-reorder_columns <- function(df, blueprint, meta) {
-  df[, meta$name]
 }
