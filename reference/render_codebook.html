@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Attach blueprints to a drake plan — attach_blueprints • blueprintr</title>
+<title>Render codebooks for datasets — render_codebook • blueprintr</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -48,11 +48,8 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Attach blueprints to a drake plan — attach_blueprints" />
-<meta property="og:description" content="Blueprints outline a sequence of checks and cleanup steps
-that come after a dataset is created. In order for these
-steps to be executed, the blueprint must be attached to
-a drake plan so that drake can run these steps properly." />
+<meta property="og:title" content="Render codebooks for datasets — render_codebook" />
+<meta property="og:description" content="Render codebooks for datasets" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -124,36 +121,56 @@ a drake plan so that drake can run these steps properly." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Attach blueprints to a drake plan</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Global-TIES-for-Children/blueprintr/blob/master/R/plan.R'><code>R/plan.R</code></a></small>
-    <div class="hidden name"><code>attach_blueprint.Rd</code></div>
+    <h1>Render codebooks for datasets</h1>
+    <small class="dont-index">Source: <a href='https://github.com/Global-TIES-for-Children/blueprintr/blob/master/R/render-codebook.R'><code>R/render-codebook.R</code></a></small>
+    <div class="hidden name"><code>render_codebook.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Blueprints outline a sequence of checks and cleanup steps
-that come after a dataset is created. In order for these
-steps to be executed, the blueprint must be attached to
-a drake plan so that drake can run these steps properly.</p>
+    <p>Render codebooks for datasets</p>
     </div>
 
-    <pre class="usage"><span class='fu'>attach_blueprints</span>(<span class='kw'>plan</span>, <span class='kw'>...</span>)
-
-<span class='fu'>attach_blueprint</span>(<span class='kw'>plan</span>, <span class='kw'>blueprint</span>)</pre>
+    <pre class="usage"><span class='fu'>render_codebook</span>(
+  <span class='kw'>blueprint</span>,
+  <span class='kw'>meta</span>,
+  <span class='kw'>file</span>,
+  title = <span class='fu'>glue</span>(<span class='st'>"{ui_value(blueprint$name)} Codebook"</span>),
+  dataset = <span class='kw'>NULL</span>,
+  template = <span class='fu'>bp_path</span>(<span class='st'>"codebook_templates/default_codebook.Rmd"</span>),
+  <span class='kw'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>plan</th>
-      <td><p>A drake plan</p></td>
+      <th>blueprint</th>
+      <td><p>A dataset blueprint</p></td>
+    </tr>
+    <tr>
+      <th>meta</th>
+      <td><p>A <code>blueprint_metadata</code> object related to the blueprint</p></td>
+    </tr>
+    <tr>
+      <th>file</th>
+      <td><p>Path to where the codebook should be saved</p></td>
+    </tr>
+    <tr>
+      <th>title</th>
+      <td><p>Title of the codebook</p></td>
+    </tr>
+    <tr>
+      <th>dataset</th>
+      <td><p>If included, a <code>data.frame</code> to be used as a source for
+summaries</p></td>
+    </tr>
+    <tr>
+      <th>template</th>
+      <td><p>Path to the knitr template</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Multiple blueprints</p></td>
-    </tr>
-    <tr>
-      <th>blueprint</th>
-      <td><p>A blueprint object</p></td>
+      <td><p>Extra parameters passed to <code><a href='https://rdrr.io/pkg/rmarkdown/man/render.html'>rmarkdown::render()</a></code></p></td>
     </tr>
     </table>
 
