@@ -194,6 +194,26 @@ if not NULL.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A blueprint object</p>
+    <h2 class="hasAnchor" id="cleanup-tasks"><a class="anchor" href="#cleanup-tasks"></a>Cleanup Tasks</h2>
+
+    <p>blueprintr offers some post-check tasks that attempt to match datasets to the
+metadata as much as possible. There are two default tasks that run:</p><ol>
+<li><p>Reorders variables to match metadata order.</p></li>
+<li><p>Drops variables marked with <code>dropped == TRUE</code> if the <code>dropped</code> variable
+exists in the metadata.</p></li>
+</ol>
+
+<p>The remaining tasks have to be enabled by the user:</p><ul>
+<li><p>If <code>labelled = TRUE</code> in the <code>blueprint()</code> command, all columns will be
+converted to <a href='https://haven.tidyverse.org/reference/labelled.html'>labelled()</a> columns, provided that at
+least the <code>description</code> field is filled in. If the <code>coding</code> column is
+present in the metadata, then categorical levels as specified by a
+<a href='https://rdrr.io/pkg/rcoder/man/coding.html'>coding()</a> will be added to the column as well. In case
+the <code>description</code> field is used for detailed column descriptions, the
+<code>title</code> field can be added to the metadata to act as short titles for the
+columns.</p></li>
+</ul>
+
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
