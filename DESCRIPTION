@@ -1,6 +1,6 @@
 Package: blueprintr
 Title: Automagically Document and Test Datasets Using Drake
-Version: 0.0.1.9000
+Version: 0.0.2
 Authors@R: 
     c(person(given = "Patrick",
              family = "Anker",
@@ -22,6 +22,7 @@ Suggests:
     codetools,
     knitr,
     rmarkdown,
+    kableExtra,
     rcoder,
     haven
 Encoding: UTF-8
