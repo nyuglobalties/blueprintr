@@ -36,7 +36,7 @@ render_codebook <- function(blueprint,
 
   if (!dir.exists(dirname(file))) {
     dir.create(dirname(file), recursive = TRUE)
-    message(glue("Created '{dirname(value)}'"))
+    message(glue("Created '{dirname(file)}'"))
   }
 
   rmarkdown::render(
