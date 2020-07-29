@@ -19,7 +19,7 @@ test_that("blueprint tests are run", {
       df$mpg <- NULL
       df
     },
-    metadata_file_path = 
+    metadata_file_path =
       file.path(
         bp_path("blueprints"),
         "mtcars_chunk.csv"
@@ -58,9 +58,9 @@ test_that("Dependencies are handled properly", {
         grade = c(4, 5, 5)
       )
 
-      demos %>% 
+      demos %>%
         dplyr::left_join(
-          ids %>% 
+          ids %>%
             dplyr::select(student_id, classroom_id),
           by = "student_id"
         )
@@ -72,6 +72,7 @@ test_that("Dependencies are handled properly", {
     unlink(metadata_path(student_demo_bp))
   }
 
+  expect_identical(blueprint_deps(id_bp), character())
   expect_identical(blueprint_deps(student_demo_bp), "id_vars")
 
   plan <- plan_from_blueprint(id_bp) %>%
