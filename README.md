@@ -99,7 +99,7 @@ repository:
 
 ``` r
 install.packages("remotes")
-remotes::install_github("Global-TIES-for-Children/blueprintr")
+remotes::install_github("nyuglobalties/blueprintr")
 ```
 
 ## Contributing
