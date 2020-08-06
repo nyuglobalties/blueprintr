@@ -1,1 +1,3 @@
-stata_transform <- function(blueprint)
+stata_transform <- function(blueprint) {
+
+}
