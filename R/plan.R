@@ -65,7 +65,7 @@ attach_blueprint <- function(plan, blueprint) {
 }
 
 add_blueprint_target <- function(plan, blueprint) {
-  translated_command <- translate_macros(blueprint$command)
+  translated_command <- translate_command(blueprint)
 
   arglist <- list2(!!blueprint_target_name(blueprint) := translated_command)
   target_plan <- do.call(drake::drake_plan, arglist)
