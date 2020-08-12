@@ -249,11 +249,6 @@ write_sections <- function(meta, data) {
 stopifnot(is.data.frame(params$dataset) || is.null(params$dataset))
 stopifnot(inherits(params$blueprint, "blueprint")) 
 stopifnot(inherits(params$meta, "blueprint_metadata"))
-
-
-if (!requireNamespace("rcoder", quietly = TRUE)) {
-  bp_err("rcoder must be installed to render codebooks")
-}
 ```
 
 ```{r output, echo=FALSE, results='asis'}
