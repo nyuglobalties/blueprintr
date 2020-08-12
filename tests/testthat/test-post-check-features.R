@@ -35,8 +35,8 @@ test_that("Variables are converted to labelled vectors correctly", {
 
   drake::loadd(mtcars_chunk_rearranged)
 
-  expect_true(haven::is.labelled(mtcars_chunk_rearranged$cyl))
-  expect_true(haven::is.labelled(mtcars_chunk_rearranged$mpg))
+  expect_true(labelled::is.labelled(mtcars_chunk_rearranged$cyl))
+  # mpg is _not_ "labelled" because it has double values
 
   variable_title <- function(x) {
     attr(x, "label", exact = TRUE)

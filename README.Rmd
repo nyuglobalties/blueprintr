@@ -79,7 +79,7 @@ As blueprintr is not yet on CRAN, you must install the package from this reposit
 
 ``` r
 install.packages("remotes")
-remotes::install_github("Global-TIES-for-Children/blueprintr")
+remotes::install_github("nyuglobalties/blueprintr")
 ```
 
 ## Contributing

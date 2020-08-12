@@ -31,7 +31,7 @@ render_codebook <- function(blueprint,
   }
 
   if (!requireNamespace("kableExtra", quietly = TRUE)) {
-    bp_err("rcoder must be installed to render codebooks")
+    bp_err("kableExtra must be installed to render codebooks")
   }
 
   if (!dir.exists(dirname(file))) {
