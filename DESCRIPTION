@@ -24,7 +24,7 @@ Suggests:
     rmarkdown,
     kableExtra,
     rcoder,
-    haven
+    labelled
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
