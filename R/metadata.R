@@ -132,7 +132,11 @@ load_metadata <- function(blueprint) {
     bp_err("No metadata exists to load for {blueprint$name}")
   }
 
-  metadata_df <- readr::read_csv(metadata_path(blueprint))
+  metadata_df <-
+    readr::read_csv(
+      metadata_path(blueprint),
+      col_types = readr::cols()
+    )
 
   metadata(metadata_df)
 }
