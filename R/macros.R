@@ -96,7 +96,7 @@ blueprint_deps <- function(blueprint) {
   command_ast <- extract_ast(blueprint$command)
 
   target_calls <- find_ast_if(command_ast, target_call_check)
-  target_names <- unlist(target_calls)
+  target_names <- flatten_deps_search_stack(target_calls)
 
   if (is.null(target_names)) {
     return(character())
@@ -111,4 +111,15 @@ target_call_check <- function(ast) {
   } else {
     FALSE
   }
+}
+
+flatten_deps_search_stack <- function(list_str) {
+  if (!is.list(list_str)) {
+    return(list_str)
+  }
+
+  list_els <- vlapply(list_str, is.list)
+
+  list_str[list_els] <- lapply(list_str[list_els], flatten_deps_search_stack)
+  unlist(list_str)
 }
