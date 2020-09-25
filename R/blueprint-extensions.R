@@ -39,6 +39,7 @@ bp_extend <- function(bp, ...) {
 #' @param blueprint A blueprint
 #' @param summaries Whether or not variable summaries should be included in codebook
 #' @param template A path to an RMarkdown template
+#' @param title Optional title of codebook
 #' @return An amended blueprint with the codebook export instructions
 #' @export
 #' @examples

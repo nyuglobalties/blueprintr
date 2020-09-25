@@ -4,7 +4,7 @@
 \alias{bp_export_codebook}
 \title{Instruct blueprint to export codebooks}
 \usage{
-bp_export_codebook(blueprint, summaries = FALSE, template = NULL)
+bp_export_codebook(blueprint, summaries = FALSE, template = NULL, title = NULL)
 }
 \arguments{
 \item{blueprint}{A blueprint}
@@ -12,6 +12,8 @@ bp_export_codebook(blueprint, summaries = FALSE, template = NULL)
 \item{summaries}{Whether or not variable summaries should be included in codebook}
 
 \item{template}{A path to an RMarkdown template}
+
+\item{title}{Optional title of codebook}
 }
 \value{
 An amended blueprint with the codebook export instructions
