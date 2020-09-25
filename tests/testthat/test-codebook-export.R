@@ -24,9 +24,9 @@ test_that("Codebook exports are added to plan correctly", {
     dplyr::pull(.data$command) %>%
     `[[`(1)
 
-  expect_true(!is.null(render_cmd[["dataset"]]))
+  expect_true(!is.null(render_cmd[[2]][["dataset"]]))
   expect_identical(
-    as.character(render_cmd[["dataset"]]),
+    as.character(render_cmd[[2]][["dataset"]]),
     blueprint_final_name(test_bp_1)
   )
 
@@ -47,7 +47,7 @@ test_that("Codebook exports are added to plan correctly", {
     `[[`(1)
 
   expect_identical(
-    render_cmd[["template"]],
+    render_cmd[[2]][["template"]],
     bquote(knitr_in(.(random_template_location)))
   )
 })

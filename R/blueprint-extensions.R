@@ -51,12 +51,18 @@ bp_extend <- function(bp, ...) {
 #'
 #' new_bp <- test_bp %>% bp_export_codebook()
 #' }
-bp_export_codebook <- function(blueprint, summaries = FALSE, template = NULL) {
+bp_export_codebook <- function(
+  blueprint,
+  summaries = FALSE,
+  template = NULL,
+  title = NULL
+) {
   bp_extend(
     blueprint,
     codebook_export = TRUE,
     codebook_summaries = summaries,
-    codebook_template = template
+    codebook_template = template,
+    codebook_title = title
   )
 }
 
