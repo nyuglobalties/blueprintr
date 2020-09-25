@@ -59,6 +59,12 @@ blockquote <- function(x) {
   paragraph(paste0("> ", x))
 }
 
+codeblock <- function(x) {
+  cat_line("```")
+  print(x)
+  paragraph("```")
+}
+
 span_tag <- function(x, class = NULL) {
   if (!is.null(class)) {
     cat_line(glue('<span class="{class}">{x}</span>'))
@@ -145,6 +151,10 @@ coding_table <- function(coding) {
   float: none;
   clear: both;
 }
+
+.table {
+  max-width: 38%;
+}
 ```
 
 ```{r variable_output, include=FALSE}
@@ -183,6 +193,12 @@ write_variable <- function(variable, meta, data) {
   
   if (!is_empty_text(var_desc)) {
     blockquote(var_desc)
+  }
+  
+  if (!is.null(data)) {
+    if (!is.character(data[[variable]])) {
+      codeblock(summary(data[[variable]]))
+    }
   }
   
   if ("tags" %in% names(meta)) {

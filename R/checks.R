@@ -80,7 +80,7 @@ all_types_match <- function(df, meta) {
       df_types %>%
       dplyr::mutate(.err = ifelse(
         .data$issue == TRUE,
-        glue(.data$format),
+        glue(format),
         NA_character_
       ))
 

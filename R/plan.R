@@ -202,6 +202,7 @@ add_codebook_export <- function(plan, blueprint) {
   default_codebook_file <- here::here("codebooks", paste0(blueprint$name, ".html"))
   codebook_file <- blueprint$codebook_file %||% default_codebook_file
   codebook_template <- blueprint$codebook_template %||% NULL
+  codebook_title <- blueprint$codebook_title %||% NULL
 
   with_data <- blueprint$codebook_summaries %||% FALSE
 
@@ -217,8 +218,20 @@ add_codebook_export <- function(plan, blueprint) {
     command[["template"]] <- bquote(knitr_in(.(codebook_template)))
   }
 
+  if (!is.null(codebook_title)) {
+    command[["title"]] <- codebook_title
+  }
+
+  command <- call2("{", command, codebook_file)
+  full_target <- bquote(
+    target(
+      command = .(command),
+      format = "file"
+    )
+  )
+
   arglist <- list2(
-    !!blueprint_codebook_name(blueprint) := command
+    !!blueprint_codebook_name(blueprint) := full_target
   )
 
   target_plan <- do.call(drake::drake_plan, arglist)
