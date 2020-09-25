@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • blueprintr</title>
+<title>Convert variables to labelled variables in cleanup stage — bp_label_variables • blueprintr</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -48,7 +48,13 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Convert variables to labelled variables in cleanup stage — bp_label_variables" />
+<meta property="og:description" content="The haven package has a handy tool called
+&quot;labeled vectors&quot;, which are like factors that can be interpreted in other
+statistical software like STATA and SPSS. See haven::labelled()
+for more information on the type. Running this on a blueprint will instruct
+the blueprint to convert all variables with non-NA title, description, or
+coding fields to labeled vectors." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -68,7 +74,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -115,132 +121,38 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Convert variables to labelled variables in cleanup stage</h1>
+    <small class="dont-index">Source: <a href='https://github.com/Global-TIES-for-Children/blueprintr/blob/master/R/blueprint-extensions.R'><code>R/blueprint-extensions.R</code></a></small>
+    <div class="hidden name"><code>bp_label_variables.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>The <a href='https://haven.tidyverse.org/'>haven</a> package has a handy tool called
+"labeled vectors", which are like factors that can be interpreted in other
+statistical software like STATA and SPSS. See <a href='https://haven.tidyverse.org/reference/labelled.html'>haven::labelled()</a>
+for more information on the type. Running this on a blueprint will instruct
+the blueprint to convert all variables with non-NA <code>title</code>, <code>description</code>, or
+<code>coding</code> fields to labeled vectors.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>bp_label_variables</span><span class='op'>(</span><span class='va'>blueprint</span><span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="accept_content.html">accept_content()</a></code> </p>
-        </td>
-        <td><p>Run clean-up tasks and return built dataset</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="attach_blueprint.html">attach_blueprints()</a></code> <code><a href="attach_blueprint.html">attach_blueprint()</a></code> </p>
-        </td>
-        <td><p>Attach blueprints to a drake plan</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="blueprint.html">blueprint()</a></code> </p>
-        </td>
-        <td><p>Create a blueprint</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="blueprint_macros.html">.TARGET()</a></code> <code><a href="blueprint_macros.html">.BLUEPRINT()</a></code> <code><a href="blueprint_macros.html">.META()</a></code> </p>
-        </td>
-        <td><p>Macros for blueprint authoring</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="blueprint_target_name.html">blueprint_target_name()</a></code> <code><a href="blueprint_target_name.html">blueprint_checks_name()</a></code> <code><a href="blueprint_target_name.html">blueprint_final_name()</a></code> <code><a href="blueprint_target_name.html">blueprint_reference_name()</a></code> <code><a href="blueprint_target_name.html">blueprint_codebook_name()</a></code> </p>
-        </td>
-        <td><p>Blueprint drake target names</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="bp_export_codebook.html">bp_export_codebook()</a></code> </p>
-        </td>
-        <td><p>Instruct blueprint to export codebooks</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="bp_label_variables.html">bp_label_variables()</a></code> </p>
-        </td>
-        <td><p>Convert variables to labelled variables in cleanup stage</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="check_list.html">check_list()</a></code> </p>
-        </td>
-        <td><p>Create a quoted list of check calls</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="checks.html">all_variables_present()</a></code> <code><a href="checks.html">all_types_match()</a></code> </p>
-        </td>
-        <td><p>Evaluate checks on the blueprint build output</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="create_metadata_file.html">create_metadata_file()</a></code> </p>
-        </td>
-        <td><p>Create a metadata file from a dataset</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="eval_checks.html">eval_checks()</a></code> </p>
-        </td>
-        <td><p>Evaluate all checks on a blueprint</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="in_set.html">in_set()</a></code> </p>
-        </td>
-        <td><p>Test if x is a subset of y</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="load_blueprint.html">load_blueprint()</a></code> <code><a href="load_blueprint.html">load_blueprints()</a></code> </p>
-        </td>
-        <td><p>Load a blueprint from a script file</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="metadata.html">metadata()</a></code> </p>
-        </td>
-        <td><p>Convert an input dataframe into a metadata object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="plan_from_blueprint.html">plan_from_blueprint()</a></code> </p>
-        </td>
-        <td><p>Create a drake plan from a blueprint</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="render_codebook.html">render_codebook()</a></code> </p>
-        </td>
-        <td><p>Render codebooks for datasets</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>blueprint</th>
+      <td><p>A blueprint</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An amended blueprint with variable labelling in the cleanup phase set</p>
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>

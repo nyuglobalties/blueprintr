@@ -91,12 +91,6 @@ symbols to be analyzed in the drake plan." />
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../articles/blueprintr.html">Get started</a>
 </li>
 <li>
@@ -137,11 +131,11 @@ These macro functions signal a dependency to <code>blueprintr</code> and evaluat
 symbols to be analyzed in the <code>drake</code> plan.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>.TARGET</span>(<span class='kw'>bp_name</span>)
+    <pre class="usage"><span class='fu'>.TARGET</span><span class='op'>(</span><span class='va'>bp_name</span><span class='op'>)</span>
 
-<span class='fu'>.BLUEPRINT</span>(<span class='kw'>bp_name</span>)
+<span class='fu'>.BLUEPRINT</span><span class='op'>(</span><span class='va'>bp_name</span><span class='op'>)</span>
 
-<span class='fu'>.META</span>(<span class='kw'>bp_name</span>)</pre>
+<span class='fu'>.META</span><span class='op'>(</span><span class='va'>bp_name</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,18 +166,22 @@ understood in the context of a <code>drake</code> plan. The targets associated w
 symbols are generated when blueprints are attached to a plan.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>.TARGET</span>(<span class='st'>"example_dataset"</span>)</div><div class='output co'>#&gt; example_dataset</div><div class='input'><span class='fu'>.BLUEPRINT</span>(<span class='st'>"example_dataset"</span>)</div><div class='output co'>#&gt; example_dataset_blueprint</div><div class='input'><span class='fu'>.META</span>(<span class='st'>"example_dataset"</span>)</div><div class='output co'>#&gt; example_dataset_meta</div><div class='input'>
-<span class='fu'><a href='blueprint.html'>blueprint</a></span>(
+    <pre class="examples"><div class='input'><span class='fu'>.TARGET</span><span class='op'>(</span><span class='st'>"example_dataset"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; example_dataset</div><div class='input'><span class='fu'>.BLUEPRINT</span><span class='op'>(</span><span class='st'>"example_dataset"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; example_dataset_blueprint</div><div class='input'><span class='fu'>.META</span><span class='op'>(</span><span class='st'>"example_dataset"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; example_dataset_meta</div><div class='input'>
+<span class='fu'><a href='blueprint.html'>blueprint</a></span><span class='op'>(</span>
   <span class='st'>"test_bp"</span>,
-  description = <span class='st'>"Blueprint with dependencies"</span>,
-  command =
-    <span class='fu'>.TARGET</span>(<span class='st'>"parent1"</span>) <span class='op'>%&gt;%</span>
-      <span class='fu'>left_join</span>(<span class='fu'>.TARGET</span>(<span class='st'>"parent2"</span>), by = <span class='st'>"id"</span>) <span class='op'>%&gt;%</span>
-      <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span>(<span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span>(<span class='kw'>id</span>))
-)</div><div class='output co'>#&gt; &lt;blueprint: 'test_bp'&gt;
+  description <span class='op'>=</span> <span class='st'>"Blueprint with dependencies"</span>,
+  command <span class='op'>=</span>
+    <span class='fu'>.TARGET</span><span class='op'>(</span><span class='st'>"parent1"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+      <span class='fu'>left_join</span><span class='op'>(</span><span class='fu'>.TARGET</span><span class='op'>(</span><span class='st'>"parent2"</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='st'>"id"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+      <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt; &lt;blueprint: 'test_bp'&gt;
 #&gt; 
 #&gt; Description: Blueprint with dependencies
-#&gt; Metadata location: '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp28gz5i/file7df66ae84f8/blueprints/test_bp.csv'
+#&gt; Metadata location: '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp9irRX7/file7f53444a353/blueprints/test_bp.csv'
 #&gt; 
 #&gt; -- Command --
 #&gt; Drake command:
@@ -207,7 +205,7 @@ symbols are generated when blueprints are attached to a plan.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

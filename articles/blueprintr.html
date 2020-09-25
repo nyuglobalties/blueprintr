@@ -46,12 +46,6 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../articles/blueprintr.html">Get started</a>
 </li>
 <li>
@@ -114,20 +108,19 @@ div.vg-info span:before {
 <div id="basic-use" class="section level1">
 <h1 class="hasAnchor">
 <a href="#basic-use" class="anchor"></a>Basic Use</h1>
-<p>The first, and recommended, step is to attach blueprintr to your R session with <code>library()</code>.</p>
+<p>The first, and recommended, step is to attach blueprintr to your R session with <code><a href="https://rdrr.io/r/base/library.html">library()</a></code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/Global-TIES-for-Children/blueprintr">blueprintr</a></span>)
-</pre></div>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Global-TIES-for-Children/blueprintr">blueprintr</a></span><span class="op">)</span></pre></div>
 <p>In a <a href="https://books.ropensci.org/drake/projects.html">drake project</a>, all packages that you want attached are declared in a <code>"packages.R"</code> file. This <code><a href="https://github.com/Global-TIES-for-Children/blueprintr">library(blueprintr)</a></code> command should go there.</p>
 <p>blueprintr is built around “blueprints.” Our first blueprint will be a blueprint for <code>mtcars</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="fu"><a href="../reference/blueprint.html">blueprint</a></span>(
+<span class="fu"><a href="../reference/blueprint.html">blueprint</a></span><span class="op">(</span>
   <span class="st">"mtcars_dat"</span>,
-  description = <span class="st">"The famous mtcars dataset"</span>,
-  command = {
-    <span class="kw">mtcars</span>
-  }
-)
+  description <span class="op">=</span> <span class="st">"The famous mtcars dataset"</span>,
+  command <span class="op">=</span> <span class="op">{</span>
+    <span class="va">mtcars</span>
+  <span class="op">}</span>
+<span class="op">)</span>
 <span class="co">#&gt; &lt;blueprint: 'mtcars_dat'&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Description: The famous mtcars dataset</span>
@@ -142,8 +135,7 @@ div.vg-info span:before {
 <span class="co">#&gt; Raw command:</span>
 <span class="co">#&gt; {</span>
 <span class="co">#&gt;     mtcars</span>
-<span class="co">#&gt; }</span>
-</pre></div>
+<span class="co">#&gt; }</span></pre></div>
 <p>All blueprints have</p>
 <ul>
 <li>A name (the first argument) for the <em>target</em> dataset.</li>
@@ -156,28 +148,26 @@ div.vg-info span:before {
 </div>
 <p>To get this loaded into a drake plan, we need to <em>attach</em> it to an already existing plan using</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu"><a href="../reference/attach_blueprints.html">attach_blueprint</a></span>(<span class="kw">plan</span>, <span class="kw">blueprint</span>)
-<span class="fu"><a href="../reference/attach_blueprints.html">attach_blueprints</a></span>(<span class="kw">plan</span>, <span class="kw">...</span>)
-</pre></div>
+<span class="fu"><a href="../reference/attach_blueprints.html">attach_blueprint</a></span><span class="op">(</span><span class="va">plan</span>, <span class="va">blueprint</span><span class="op">)</span>
+<span class="fu"><a href="../reference/attach_blueprints.html">attach_blueprints</a></span><span class="op">(</span><span class="va">plan</span>, <span class="va">...</span><span class="op">)</span></pre></div>
 <div class="vg-info">
 <span><code>attach_blueprints</code> accepts “<a href="https://adv-r.hadley.nz/quasiquotation.html#tidy-dots">tidy dots</a>”, so if you have a <code><a href="https://rdrr.io/r/base/list.html">list()</a></code> of blueprints, you can “splat” all of those blueprints into <code>attach_blueprints</code> like <code><a href="../reference/attach_blueprints.html">attach_blueprints(plan, !!!list_of_blueprints)</a></code></span>
 </div>
 <p>If you don’t have an existing plan, you can create one with</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="fu"><a href="../reference/plan_from_blueprint.html">plan_from_blueprint</a></span>(<span class="kw">blueprint</span>)
-</pre></div>
+<span class="fu"><a href="../reference/plan_from_blueprint.html">plan_from_blueprint</a></span><span class="op">(</span><span class="va">blueprint</span><span class="op">)</span></pre></div>
 <p>For now, we’ll use an already existing plan, which is probably what you’ll have most of the time.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="fu"><a href="../reference/attach_blueprints.html">attach_blueprint</a></span>(
-  <span class="kw">existing_plan</span>,
-  <span class="fu"><a href="../reference/blueprint.html">blueprint</a></span>(
+<span class="fu"><a href="../reference/attach_blueprints.html">attach_blueprint</a></span><span class="op">(</span>
+  <span class="va">existing_plan</span>,
+  <span class="fu"><a href="../reference/blueprint.html">blueprint</a></span><span class="op">(</span>
     <span class="st">"mtcars_dat"</span>,
-    description = <span class="st">"The famous mtcars dataset"</span>,
-    command = {
-      <span class="kw">mtcars</span>
-    }
-  )
-)
+    description <span class="op">=</span> <span class="st">"The famous mtcars dataset"</span>,
+    command <span class="op">=</span> <span class="op">{</span>
+      <span class="va">mtcars</span>
+    <span class="op">}</span>
+  <span class="op">)</span>
+<span class="op">)</span>
 <span class="co">#&gt; # A tibble: 7 x 2</span>
 <span class="co">#&gt;   target            command                                                     </span>
 <span class="co">#&gt;   &lt;chr&gt;             &lt;expr_lst&gt;                                                  </span>
@@ -187,8 +177,7 @@ div.vg-info span:before {
 <span class="co">#&gt; 4 mtcars_dat_bluep… blueprint(name = "mtcars_dat", command = {     mtcars }, de…</span>
 <span class="co">#&gt; 5 mtcars_dat_meta   create_metadata_file(mtcars_dat_initial, mtcars_dat_bluepri…</span>
 <span class="co">#&gt; 6 mtcars_dat_checks eval_checks(all_variables_present(mtcars_dat_initial, mtcar…</span>
-<span class="co">#&gt; 7 mtcars_dat        accept_content(mtcars_dat_checks, mtcars_dat_initial, mtcar…</span>
-</pre></div>
+<span class="co">#&gt; 7 mtcars_dat        accept_content(mtcars_dat_checks, mtcars_dat_initial, mtcar…</span></pre></div>
 <p>blueprintr creates five “steps” (targets) per blueprint:</p>
 <table class="table">
 <colgroup>
@@ -245,7 +234,7 @@ div.vg-info span:before {
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
