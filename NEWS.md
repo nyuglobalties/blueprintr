@@ -1,3 +1,5 @@
+# blueprintr 0.0.4
+
 # Development version (0.0.3.9000)
 
 * Added blueprint extension functions `bp_export_codebook()` and `bp_label_variables()` that create a pipe-able method of setting blueprint configuration.
