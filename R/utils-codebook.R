@@ -195,8 +195,8 @@ write_variable <- function(variable, meta, data, in_group = FALSE) {
   invisible(NULL)
 }
 
-write_group <- function(group, meta, data) {
-  meta <- dplyr::filter(meta, .data$group == group)
+write_group <- function(.group, meta, data) {
+  meta <- dplyr::filter(meta, .data$group == .group)
 
   if ("group_description" %in% names(meta)) {
     group_description <- unique(meta$group_description)[1]
@@ -208,10 +208,10 @@ write_group <- function(group, meta, data) {
     group_description <- NULL
   }
 
-  h3(group)
+  h3(.group)
 
   if (!is.null(group_description)) {
-    paragraph(group_description)
+    paragraph(paste0("*", group_description, "*"))
   }
 }
 
@@ -252,8 +252,8 @@ write_variables <- function(meta, data) {
   }
 }
 
-write_section <- function(section, meta, data) {
-  meta <- meta[meta$section == section, ]
+write_section <- function(.section, meta, data) {
+  meta <- meta[meta$section == .section, ]
 
   if ("section_description" %in% names(meta)) {
     section_description <- unique(meta$section_description)[1]
@@ -265,7 +265,7 @@ write_section <- function(section, meta, data) {
     section_description <- NULL
   }
 
-  h2(section)
+  h2(.section)
 
   if (!is.null(section_description)) {
     paragraph(section_description)
