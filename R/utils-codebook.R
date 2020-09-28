@@ -217,30 +217,28 @@ write_group <- function(group, meta, data) {
 
 write_grouped_variables <- function(meta, data) {
   # Iterate through rows instead of variable names
-  active_group <- ""
-  did_change <- FALSE
+  current_group <- ""
+  echoed <- FALSE
 
   for (i in 1:nrow(meta)) {
     variable <- meta[i, ][["name"]]
     group <- meta[i, ][["group"]]
 
-    if (is_empty_text(active_group) && !is_empty_text(group)) {
-      active_group <- group
-      did_change <- TRUE
-    } else if (!is_empty_text(active_group) && is_empty_text(group)) {
-      active_group <- group
-      did_change <- FALSE
+    if (!is_empty_text(group)) {
+      if (!identical(group, current_group)) {
+        echoed <- FALSE
+      }
     }
 
-    in_grp <- !is_empty_text(active_group)
+    current_group <- group
+    in_grp <- !is_empty_text(current_group)
 
-    if (in_grp && isTRUE(did_change)) {
-      write_group(active_group, meta, data)
+    if (in_grp && !isTRUE(echoed)) {
+      write_group(current_group, meta, data)
+      echoed <- TRUE
     }
 
     write_variable(variable, meta, data, in_group = in_grp)
-
-    did_change <- FALSE
   }
 }
 
