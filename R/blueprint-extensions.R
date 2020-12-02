@@ -38,6 +38,7 @@ bp_extend <- function(bp, ...) {
 #'
 #' @param blueprint A blueprint
 #' @param summaries Whether or not variable summaries should be included in codebook
+#' @param file Path to where the codebook should be saved
 #' @param template A path to an RMarkdown template
 #' @param title Optional title of codebook
 #' @return An amended blueprint with the codebook export instructions
@@ -55,6 +56,7 @@ bp_extend <- function(bp, ...) {
 bp_export_codebook <- function(
   blueprint,
   summaries = FALSE,
+  file = NULL,
   template = NULL,
   title = NULL
 ) {
@@ -62,6 +64,7 @@ bp_export_codebook <- function(
     blueprint,
     codebook_export = TRUE,
     codebook_summaries = summaries,
+    codebook_file = file,
     codebook_template = template,
     codebook_title = title
   )
