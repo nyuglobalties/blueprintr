@@ -1,8 +1,9 @@
-# blueprintr (development version)
+# Development version (0.0.4.9000)
 
-# blueprintr 0.0.4
+* Added capability to group variables together for shared descriptions in codebooks with `group` field
+* Add `file` parameter for `bp_export_codebook()` to access `codebook_file` parameter in blueprint
 
-# Development version (0.0.3.9000)
+# blueprintr 0.0.3
 
 * Added blueprint extension functions `bp_export_codebook()` and `bp_label_variables()` that create a pipe-able method of setting blueprint configuration.
 
