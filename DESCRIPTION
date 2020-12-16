@@ -24,7 +24,8 @@ Suggests:
     rmarkdown,
     kableExtra,
     rcoder,
-    labelled
+    labelled,
+    targets
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
