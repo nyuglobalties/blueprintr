@@ -1,3 +1,5 @@
+context("utils")
+
 test_that("Flattening behaves correctly", {
   test <- list(
     list(
