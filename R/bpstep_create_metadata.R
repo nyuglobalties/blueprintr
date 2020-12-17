@@ -4,15 +4,12 @@ bpstep_create_metadata <- function(assembler, bp, ...) {
 
 #' @export
 bpstep_create_metadata.drake_assembler <- function(assembler, bp, ...) {
-  arglist <- list(
-    bquote(target(
-      command = .(metadata_call(bp)),
-      format = "file"
-    ))
+  plan <- bpstep_payload(
+    assembler,
+    metadata_target_file_name(bp),
+    metadata_call(bp),
+    format = "file"
   )
-  names(arglist) <- metadata_target_file_name(bp)
-
-  plan <- do.call(drake::drake_plan, arglist)
 
   drake_bpstep(
     step = "create_metadata",

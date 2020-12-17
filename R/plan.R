@@ -52,8 +52,7 @@ attach_blueprint <- function(plan, blueprint) {
 }
 
 blueprint_plan <- function(bp) {
-  asm <- drake_assembler()
-  steps <- assembly_steps(asm, bp)
+  steps <- assembly_steps(drake_assembler(), bp)
 
   dplyr::bind_rows(!!!lapply(steps, function(step) step$payload))
 }

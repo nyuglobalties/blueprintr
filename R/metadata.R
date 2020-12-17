@@ -142,7 +142,16 @@ load_metadata <- function(blueprint) {
   read_metadata(metadata_path(blueprint))
 }
 
+#' Read the metadata file
+#'
+#' Reads the metadata from, found at a given path, and returns a `metadata()`
+#' object. This is mostly an internal function for the blueprint steps.
+#'
+#' @param metadata_file Path of metadata file. Currently only supports CSVs
+#' @return A `metadata()` object
+#'
 #' @export
+#' @keywords internal
 read_metadata <- function(metadata_file) {
   metadata_df <-
     readr::read_csv(
