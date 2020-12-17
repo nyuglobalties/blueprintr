@@ -84,31 +84,33 @@ create_metadata_file <- function(df, blueprint, ...) {
     metadata_dt <- link_dependency_meta(metadata_dt, deps_metalist)
   }
 
-  if ("type_issue" %in% names(metadata_dt)) {
-    if (any(metadata_dt$type_issue, na.rm = TRUE)) {
-      write_meta_file(metadata_dt, metadata_path(blueprint))
+  if (!file.exists(metadata_path(blueprint))) {
+    if ("type_issue" %in% names(metadata_dt)) {
+      if (any(metadata_dt$type_issue, na.rm = TRUE)) {
+        write_meta_file(metadata_dt, metadata_path(blueprint))
 
+        bp_err(c(
+          "Type inconsistency between current and previous variables.\n",
+          "Please edit the metadata file to resolve the issue and then rerun."
+        ))
+      }
+
+      metadata_dt <- dplyr::mutate(metadata_dt, type_issue = NULL)
+    }
+
+    if ("deps_type" %in% names(metadata_dt)) {
+      metadata_dt <- dplyr::mutate(metadata_dt, deps_type = NULL)
+    }
+
+    write_meta_file(metadata_dt, metadata_path(blueprint))
+
+    if (any(duplicated(metadata_dt$name))) {
       bp_err(c(
-        "Type inconsistency between current and previous variables.\n",
+        "Metadata for {ui_value(blueprint$name)} has duplicated variables.\n",
+        "This can happen if a variable in a dataset exists in multiple depencies.\n",
         "Please edit the metadata file to resolve the issue and then rerun."
       ))
     }
-
-    metadata_dt <- dplyr::mutate(metadata_dt, type_issue = NULL)
-  }
-
-  if ("deps_type" %in% names(metadata_dt)) {
-    metadata_dt <- dplyr::mutate(metadata_dt, deps_type = NULL)
-  }
-
-  write_meta_file(metadata_dt, metadata_path(blueprint))
-
-  if (any(duplicated(metadata_dt$name))) {
-    bp_err(c(
-      "Metadata for {ui_value(blueprint$name)} has duplicated variables.\n",
-      "This can happen if a variable in a dataset exists in multiple depencies.\n",
-      "Please edit the metadata file to resolve the issue and then rerun."
-    ))
   }
 
   metadata_path(blueprint)
