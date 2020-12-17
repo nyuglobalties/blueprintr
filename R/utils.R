@@ -124,3 +124,20 @@ string_to_coding_single <- function(x) {
 
   rcoder::eval_coding(rlang::parse_expr(x))
 }
+
+flatten <- function(x) {
+  stopifnot(is.list(x))
+
+  total_length <- sum(viapply(x, length))
+  flattened <- vector("list", total_length)
+  k <- 1
+
+  for (i in seq_along(x)) {
+    for (j in seq_along(x[[i]])) {
+      flattened[[k]] <- x[[i]][[j]]
+      k <- k + 1
+    }
+  }
+
+  flattened
+}
