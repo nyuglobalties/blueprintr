@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">blueprintr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.9000</span>
       </span>
     </div>
 
@@ -101,7 +101,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/Global-TIES-for-Children/blueprintr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -127,7 +127,13 @@
     <p>Instruct blueprint to export codebooks</p>
     </div>
 
-    <pre class="usage"><span class='fu'>bp_export_codebook</span><span class='op'>(</span><span class='va'>blueprint</span>, summaries <span class='op'>=</span> <span class='cn'>FALSE</span>, template <span class='op'>=</span> <span class='cn'>NULL</span>, title <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>bp_export_codebook</span><span class='op'>(</span>
+  <span class='va'>blueprint</span>,
+  summaries <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  file <span class='op'>=</span> <span class='cn'>NULL</span>,
+  template <span class='op'>=</span> <span class='cn'>NULL</span>,
+  title <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,6 +145,10 @@
     <tr>
       <th>summaries</th>
       <td><p>Whether or not variable summaries should be included in codebook</p></td>
+    </tr>
+    <tr>
+      <th>file</th>
+      <td><p>Path to where the codebook should be saved</p></td>
     </tr>
     <tr>
       <th>template</th>
