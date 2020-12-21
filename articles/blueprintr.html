@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">blueprintr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4</span>
       </span>
     </div>
 
@@ -168,16 +168,17 @@ div.vg-info span:before {
     <span class="op">}</span>
   <span class="op">)</span>
 <span class="op">)</span>
-<span class="co">#&gt; # A tibble: 7 x 2</span>
-<span class="co">#&gt;   target            command                                                     </span>
-<span class="co">#&gt;   &lt;chr&gt;             &lt;expr_lst&gt;                                                  </span>
-<span class="co">#&gt; 1 initial_vector    runif(1000)                                                …</span>
-<span class="co">#&gt; 2 squared           initial_vector^2                                           …</span>
-<span class="co">#&gt; 3 mtcars_dat_initi… {     mtcars }                                             …</span>
-<span class="co">#&gt; 4 mtcars_dat_bluep… blueprint(name = "mtcars_dat", command = {     mtcars }, de…</span>
-<span class="co">#&gt; 5 mtcars_dat_meta   create_metadata_file(mtcars_dat_initial, mtcars_dat_bluepri…</span>
-<span class="co">#&gt; 6 mtcars_dat_checks eval_checks(all_variables_present(mtcars_dat_initial, mtcar…</span>
-<span class="co">#&gt; 7 mtcars_dat        accept_content(mtcars_dat_checks, mtcars_dat_initial, mtcar…</span></code></pre></div>
+<span class="co">#&gt; # A tibble: 8 x 3</span>
+<span class="co">#&gt;   target           command                                                format</span>
+<span class="co">#&gt;   &lt;chr&gt;            &lt;expr_lst&gt;                                             &lt;chr&gt; </span>
+<span class="co">#&gt; 1 initial_vector   runif(1000)                                          … &lt;NA&gt;  </span>
+<span class="co">#&gt; 2 squared          initial_vector^2                                     … &lt;NA&gt;  </span>
+<span class="co">#&gt; 3 mtcars_dat_init… {     mtcars }                                       … &lt;NA&gt;  </span>
+<span class="co">#&gt; 4 mtcars_dat_blue… blueprintr::blueprint(name = "mtcars_dat", command = … &lt;NA&gt;  </span>
+<span class="co">#&gt; 5 mtcars_dat_meta… blueprintr::create_metadata_file(mtcars_dat_initial, … file  </span>
+<span class="co">#&gt; 6 mtcars_dat_meta  blueprintr::read_metadata(mtcars_dat_meta_path)      … &lt;NA&gt;  </span>
+<span class="co">#&gt; 7 mtcars_dat_chec… blueprintr::eval_checks(all_variables_present(mtcars_… &lt;NA&gt;  </span>
+<span class="co">#&gt; 8 mtcars_dat       blueprintr::accept_content(mtcars_dat_checks, mtcars_… &lt;NA&gt;</span></code></pre></div>
 <p>blueprintr creates five “steps” (targets) per blueprint:</p>
 <table class="table">
 <colgroup>

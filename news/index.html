@@ -81,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">blueprintr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4</span>
       </span>
     </div>
 
@@ -121,6 +121,17 @@
       <small>Source: <a href='https://github.com/Global-TIES-for-Children/blueprintr/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="blueprintr-004" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.4">
+<a href="#blueprintr-004" class="anchor"></a>blueprintr 0.0.4</h1>
+<ul>
+<li>Add targets support, with <code><a href="../reference/tar_blueprint.html">tar_blueprint()</a></code> and <code><a href="../reference/tar_blueprint.html">tar_blueprints()</a></code>
+</li>
+<li>Change <code><a href="../reference/create_metadata_file.html">create_metadata_file()</a></code> to return the metadata file path. To compensate, a new build step <code>*_meta_path</code> has been added that removes the metadata logic inconsistency. Target topology should be much cleaner and clearer.</li>
+<li>Added capability to group variables together for shared descriptions in codebooks with <code>group</code> field</li>
+<li>Add <code>file</code> parameter for <code><a href="../reference/bp_export_codebook.html">bp_export_codebook()</a></code> to access <code>codebook_file</code> parameter in blueprint</li>
+</ul>
+</div>
     <div id="blueprintr-003" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.3">
 <a href="#blueprintr-003" class="anchor"></a>blueprintr 0.0.3</h1>
