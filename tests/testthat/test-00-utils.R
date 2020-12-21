@@ -31,3 +31,14 @@ test_that("Flattening behaves correctly", {
 
   expect_identical(flatten(test), expect)
 })
+
+test_that("Custom conditions behave properly", {
+  err <- expect_error(bp_err("err"))
+  expect_true(inherits(err, "bp_error"))
+  expect_equiv(err$message, "err")
+
+  expect_warning(bp_warn("warn"))
+  warn <- capture_warning(bp_warn("warn"))
+  expect_true(inherits(warn, "bp_warning"))
+  expect_equiv(warn$message, "warn")
+})

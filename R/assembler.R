@@ -6,7 +6,7 @@ assembler <- function(executor, .class) {
 
   structure(
     executor,
-    class = c(.class, "bp_assembler")
+    class = c(.class, "bp_assembler", class(executor))
   )
 }
 

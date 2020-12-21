@@ -19,3 +19,15 @@ equivalent_plans <- function(out, exp) {
     )
   }
 }
+
+target_set_names <- function(obj) {
+  vcapply(obj, function(o) o$settings$name)
+}
+
+expect_equiv_target_set <- function(object, expected) {
+  expect_true(is.list(object))
+  expect_true(!inherits(object, "tar_target"))
+
+  expect_true(length(object) == length(expected))
+  expect_true(setequal(target_set_names(object), target_set_names(expected)))
+}

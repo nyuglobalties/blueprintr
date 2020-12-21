@@ -71,7 +71,7 @@ blueprint <- function(name,
 
 #' @export
 print.blueprint <- function(x, ...) {
-  cat_line("<blueprint: {ui_value(x$name)}>")
+  cat_line("<blueprint: {ui_value(x$name)}>") # nocov start
   cat_line()
 
   if (!is.null(x$description)) {
@@ -96,7 +96,7 @@ print.blueprint <- function(x, ...) {
   cat_line("Raw command:")
   print(x$command)
 
-  invisible(NULL)
+  invisible(x) # nocov end
 }
 
 is_blueprint <- function(x) {

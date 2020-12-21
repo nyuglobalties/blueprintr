@@ -31,7 +31,7 @@ bpstep <- function(step, bp, payload, ..., .class = NULL) {
 
 #' @export
 print.bpstep <- function(x, ...) {
-  cat_line("<blueprint assembly step>")
+  cat_line("<blueprint assembly step>") # nocov start
   cat_line("name: {x$step}", indent = 1)
   cat_line("blueprint: '{x$blueprint$name}'", indent = 1)
   cat_line("class: '{class(x)[1]}'", indent = 1)
@@ -39,7 +39,7 @@ print.bpstep <- function(x, ...) {
   cat_line("payload:")
   print(x$payload)
 
-  invisible(x)
+  invisible(x) # nocov end
 }
 
 drake_bpstep <- function(step, bp, payload, ...) {
