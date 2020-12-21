@@ -1,4 +1,6 @@
-# Development version (0.0.4.9000)
+# Development version (0.0.5.9000)
+
+# blueprintr 0.0.4
 
 * Add targets support, with `tar_blueprint()` and `tar_blueprints()`
 * Change `create_metadata_file()` to return the metadata file path. To compensate, a new build step `*_meta_path` has been added that removes the metadata logic inconsistency. Target topology should be much cleaner and clearer.
