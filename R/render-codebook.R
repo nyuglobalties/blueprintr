@@ -48,6 +48,7 @@ render_codebook <- function(blueprint,
       dataset = dataset,
       title = title
     ),
+    quiet = TRUE,
     ...
   )
 }

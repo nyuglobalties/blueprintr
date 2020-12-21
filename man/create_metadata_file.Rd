@@ -4,7 +4,7 @@
 \alias{create_metadata_file}
 \title{Create a metadata file from a dataset}
 \usage{
-create_metadata_file(df, blueprint, ..., .file = NULL)
+create_metadata_file(df, blueprint, ...)
 }
 \arguments{
 \item{df}{A dataframe that the metadata table describes}
@@ -13,9 +13,6 @@ create_metadata_file(df, blueprint, ..., .file = NULL)
 
 \item{...}{A variable list of metadata tables on which this
 metadata table depends}
-
-\item{.file}{A dummy parameter that allows drake to monitor
-the metadata file output using \code{file_out()}}
 }
 \description{
 One of the targets in the blueprint drake target chain.

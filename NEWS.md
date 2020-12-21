@@ -1,5 +1,7 @@
 # Development version (0.0.4.9000)
 
+* Add targets support, with `tar_blueprint()` and `tar_blueprints()`
+* Change `create_metadata_file()` to return the metadata file path. To compensate, a new build step `*_meta_path` has been added that removes the metadata logic inconsistency. Target topology should be much cleaner and clearer.
 * Added capability to group variables together for shared descriptions in codebooks with `group` field
 * Add `file` parameter for `bp_export_codebook()` to access `codebook_file` parameter in blueprint
 
