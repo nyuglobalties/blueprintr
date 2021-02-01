@@ -23,6 +23,16 @@ load_blueprint <- function(plan, file) {
 load_blueprints <- function(plan, directory = here::here("blueprints")) {
   bp_assert(inherits(plan, "drake_plan"))
 
+  bp_list <- fetch_blueprint_files(directory)
+
+  if (is.null(bp_list)) {
+    return(plan)
+  }
+
+  attach_blueprints(plan, !!!bp_list)
+}
+
+fetch_blueprint_files <- function(directory) {
   if (!dir.exists(directory)) {
     bp_err("Blueprint directory '{directory}' does not exist")
   }
@@ -32,11 +42,10 @@ load_blueprints <- function(plan, directory = here::here("blueprints")) {
 
   if (length(bp_scripts) == 0L) {
     bp_warn("No blueprint scripts found in '{directory}'")
-    return(plan)
+    return(NULL)
   }
 
-  bp_list <- lapply(bp_scripts, import_blueprint_file)
-  attach_blueprints(plan, !!!bp_list)
+  lapply(bp_scripts, import_blueprint_file)
 }
 
 import_blueprint_file <- function(bp_file, env = parent.frame()) {

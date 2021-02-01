@@ -20,14 +20,11 @@ jobs:
         config:
           - {os: windows-latest, r: 'release'}
           - {os: macOS-latest,   r: 'release'}
-          # TODO: Bring this back once r-lib/actions#140 is fixed
-          # - {os: macOS-latest, r: 'devel'}
+          - {os: macOS-latest,   r: 'devel'}
           - {os: ubuntu-16.04,   r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
           - {os: ubuntu-16.04,   r: '4.0', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
           - {os: ubuntu-16.04,   r: '3.6', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
           - {os: ubuntu-16.04,   r: '3.5', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-          - {os: ubuntu-16.04,   r: '3.4', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-          - {os: ubuntu-16.04,   r: '3.3', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -70,6 +67,7 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           remotes::install_github("Global-TIES-for-Children/rcoder")
+          remotes::install_github("wlandau/targets")
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
@@ -78,6 +76,7 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           remotes::install_github("Global-TIES-for-Children/rcoder")
+          remotes::install_github("wlandau/targets")
           remotes::install_deps(dependencies = TRUE, type = "binary")
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}

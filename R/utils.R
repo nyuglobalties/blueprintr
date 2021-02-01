@@ -32,8 +32,10 @@ safe_deparse <- function(x, collapse = "\n", backtick = TRUE, trim = FALSE, ...)
   out
 }
 
-cat_line <- function(x = NULL, .envir = parent.frame()) {
-  cat(glue(glue_collapse(x), .envir = .envir), "\n", sep = "")
+cat_line <- function(x = NULL, indent = 0, .envir = parent.frame()) {
+  ws <- rep("  ", indent)
+
+  cat(ws, glue(glue_collapse(x), .envir = .envir), "\n", sep = "")
 }
 
 ui_value <- function(x) {
@@ -121,4 +123,21 @@ string_to_coding_single <- function(x) {
   }
 
   rcoder::eval_coding(rlang::parse_expr(x))
+}
+
+flatten <- function(x) {
+  stopifnot(is.list(x))
+
+  total_length <- sum(viapply(x, length))
+  flattened <- vector("list", total_length)
+  k <- 1
+
+  for (i in seq_along(x)) {
+    for (j in seq_along(x[[i]])) {
+      flattened[[k]] <- x[[i]][[j]]
+      k <- k + 1
+    }
+  }
+
+  flattened
 }

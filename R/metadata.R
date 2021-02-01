@@ -68,10 +68,8 @@ metadata_file_exists <- function(blueprint) {
 #' @param blueprint The original blueprint for the dataframe
 #' @param ... A variable list of metadata tables on which this
 #'            metadata table depends
-#' @param .file A dummy parameter that allows drake to monitor
-#'              the metadata file output using `file_out()`
 #' @export
-create_metadata_file <- function(df, blueprint, ..., .file = NULL) {
+create_metadata_file <- function(df, blueprint, ...) {
   stopifnot(is.data.frame(df))
 
   metadata_dt <- dplyr::tibble(
@@ -86,28 +84,36 @@ create_metadata_file <- function(df, blueprint, ..., .file = NULL) {
     metadata_dt <- link_dependency_meta(metadata_dt, deps_metalist)
   }
 
-  if (any(metadata_dt$type_issue, na.rm = TRUE)) {
+  if (!file.exists(metadata_path(blueprint))) {
+    if ("type_issue" %in% names(metadata_dt)) {
+      if (any(metadata_dt$type_issue, na.rm = TRUE)) {
+        write_meta_file(metadata_dt, metadata_path(blueprint))
+
+        bp_err(c(
+          "Type inconsistency between current and previous variables.\n",
+          "Please edit the metadata file to resolve the issue and then rerun."
+        ))
+      }
+
+      metadata_dt <- dplyr::mutate(metadata_dt, type_issue = NULL)
+    }
+
+    if ("deps_type" %in% names(metadata_dt)) {
+      metadata_dt <- dplyr::mutate(metadata_dt, deps_type = NULL)
+    }
+
     write_meta_file(metadata_dt, metadata_path(blueprint))
 
-    bp_err(c(
-      "Type inconsistency between current and previous variables.\n",
-      "Please edit the metadata file to resolve the issue and then rerun."
-    ))
+    if (any(duplicated(metadata_dt$name))) {
+      bp_err(c(
+        "Metadata for {ui_value(blueprint$name)} has duplicated variables.\n",
+        "This can happen if a variable in a dataset exists in multiple depencies.\n",
+        "Please edit the metadata file to resolve the issue and then rerun."
+      ))
+    }
   }
 
-  metadata_dt <- dplyr::mutate(metadata_dt, type_issue = NULL, deps_type = NULL)
-
-  write_meta_file(metadata_dt, metadata_path(blueprint))
-
-  if (any(duplicated(metadata_dt$name))) {
-    bp_err(c(
-      "Metadata for {ui_value(blueprint$name)} has duplicated variables.\n",
-      "This can happen if a variable in a dataset exists in multiple depencies.\n",
-      "Please edit the metadata file to resolve the issue and then rerun."
-    ))
-  }
-
-  metadata(metadata_dt)
+  metadata_path(blueprint)
 }
 
 link_dependency_meta <- function(meta_dt, deps_metalist) {
@@ -132,9 +138,24 @@ load_metadata <- function(blueprint) {
     bp_err("No metadata exists to load for {blueprint$name}")
   }
 
+
+  read_metadata(metadata_path(blueprint))
+}
+
+#' Read the metadata file
+#'
+#' Reads the metadata from, found at a given path, and returns a `metadata()`
+#' object. This is mostly an internal function for the blueprint steps.
+#'
+#' @param metadata_file Path of metadata file. Currently only supports CSVs
+#' @return A `metadata()` object
+#'
+#' @export
+#' @keywords internal
+read_metadata <- function(metadata_file) {
   metadata_df <-
     readr::read_csv(
-      metadata_path(blueprint),
+      metadata_file,
       col_types = readr::cols()
     )
 
@@ -143,6 +164,10 @@ load_metadata <- function(blueprint) {
 
 metadata_target_name <- function(blueprint) {
   paste0(blueprint_final_name(blueprint), "_meta")
+}
+
+metadata_target_file_name <- function(blueprint) {
+  paste0(blueprint_final_name(blueprint), "_meta_path")
 }
 
 metadata_export_name <- function(blueprint) {

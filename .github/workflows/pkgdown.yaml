@@ -1,6 +1,7 @@
 on:
   push:
-    branches: main
+    tags:
+      - v*
 
 name: pkgdown
 
@@ -33,6 +34,7 @@ jobs:
       - name: Install dependencies
         run: |
           install.packages("remotes")
+          remotes::install_github("nyuglobalties/rcoder")
           remotes::install_deps(dependencies = TRUE)
           remotes::install_dev("pkgdown")
         shell: Rscript {0}

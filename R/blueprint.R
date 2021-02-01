@@ -71,7 +71,7 @@ blueprint <- function(name,
 
 #' @export
 print.blueprint <- function(x, ...) {
-  cat_line("<blueprint: {ui_value(x$name)}>")
+  cat_line("<blueprint: {ui_value(x$name)}>") # nocov start
   cat_line()
 
   if (!is.null(x$description)) {
@@ -96,7 +96,11 @@ print.blueprint <- function(x, ...) {
   cat_line("Raw command:")
   print(x$command)
 
-  invisible(NULL)
+  invisible(x) # nocov end
+}
+
+is_blueprint <- function(x) {
+  inherits(x, "blueprint")
 }
 
 capture_command <- function(quoted_statement) {
@@ -107,125 +111,96 @@ capture_command <- function(quoted_statement) {
   quoted_statement
 }
 
-#' Blueprint drake target names
-#'
-#' @param x A blueprint or string relating to a blueprint's name
-#' @param ... Unused for now
-#'
-#' @export
 blueprint_target_name <- function(x, ...) {
   UseMethod("blueprint_target_name")
 }
 
-#' @rdname blueprint_target_name
 #' @export
 blueprint_target_name.default <- function(x, ...) {
   bp_err("Not defined")
 }
 
-#' @rdname blueprint_target_name
 #' @export
 blueprint_target_name.character <- function(x, ...) {
   paste0(blueprint_final_name(x), "_initial")
 }
 
-#' @rdname blueprint_target_name
 #' @export
 blueprint_target_name.blueprint <- function(x, ...) {
   blueprint_target_name(x$name)
 }
 
-#' @rdname blueprint_target_name
-#' @export
 blueprint_checks_name <- function(x, ...) {
   UseMethod("blueprint_checks_name")
 }
 
-#' @rdname blueprint_target_name
 #' @export
 blueprint_checks_name.default <- function(x, ...) {
   bp_err("Not defined")
 }
 
-#' @rdname blueprint_target_name
 #' @export
 blueprint_checks_name.character <- function(x, ...) {
   paste0(blueprint_final_name(x), "_checks")
 }
 
-#' @rdname blueprint_target_name
 #' @export
 blueprint_checks_name.blueprint <- function(x, ...) {
   blueprint_checks_name(x$name)
 }
 
-#' @rdname blueprint_target_name
-#' @export
 blueprint_final_name <- function(x, ...) {
   UseMethod("blueprint_final_name")
 }
 
-#' @rdname blueprint_target_name
 #' @export
 blueprint_final_name.default <- function(x, ...) {
   bp_err("Not defined")
 }
 
-#' @rdname blueprint_target_name
 #' @export
 blueprint_final_name.character <- function(x, ...) {
   x
 }
 
-#' @rdname blueprint_target_name
 #' @export
 blueprint_final_name.blueprint <- function(x, ...) {
   blueprint_final_name(x$name)
 }
 
-#' @rdname blueprint_target_name
-#' @export
 blueprint_reference_name <- function(x, ...) {
   UseMethod("blueprint_reference_name")
 }
 
-#' @rdname blueprint_target_name
 #' @export
 blueprint_reference_name.default <- function(x, ...) {
   bp_err("Not defined")
 }
 
-#' @rdname blueprint_target_name
 #' @export
 blueprint_reference_name.character <- function(x, ...) {
   paste0(blueprint_final_name(x), "_blueprint")
 }
 
-#' @rdname blueprint_target_name
 #' @export
 blueprint_reference_name.blueprint <- function(x, ...) {
   blueprint_reference_name(x$name)
 }
 
-#' @rdname blueprint_target_name
-#' @export
 blueprint_codebook_name <- function(x, ...) {
   UseMethod("blueprint_codebook_name")
 }
 
-#' @rdname blueprint_target_name
 #' @export
 blueprint_codebook_name.default <- function(x, ...) {
   bp_err("Not defined")
 }
 
-#' @rdname blueprint_target_name
 #' @export
 blueprint_codebook_name.character <- function(x, ...) {
   paste0(blueprint_final_name(x), "_codebook")
 }
 
-#' @rdname blueprint_target_name
 #' @export
 blueprint_codebook_name.blueprint <- function(x, ...) {
   blueprint_codebook_name(x$name)
