@@ -1,5 +1,7 @@
 # Development version (0.0.5.9000)
 
+* Fix bug that would not translate anonymous functions and formulae correctly (#22 and #29)
+
 # blueprintr 0.0.4
 
 * Add targets support, with `tar_blueprint()` and `tar_blueprints()`
