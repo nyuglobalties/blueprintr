@@ -1,4 +1,6 @@
-# Development version (0.0.5.9000)
+# Development version (0.0.6.9000)
+
+# blueprintr 0.0.5
 
 * Fixed bug that would not translate anonymous functions and formulae correctly (#22 and #29)
 
