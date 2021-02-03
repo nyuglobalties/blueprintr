@@ -20,6 +20,7 @@ test_that("extract_ast and collapse_ast are inverses", {
   expr8  <- quote(dplyr:::abort_glue(words))
   expr9  <- quote(stuff@hidden_function(words))
   expr10 <- quote(stuff$thing(words))
+  expr11 <- quote(func(function(.x) ifelse(is.na(.x), 0, .x)))
 
   ast_ident <- function(e) collapse_ast(extract_ast(e))
 
@@ -33,6 +34,7 @@ test_that("extract_ast and collapse_ast are inverses", {
   expect_equal(ast_ident(expr8), expr8)
   expect_equal(ast_ident(expr9), expr9)
   expect_equal(ast_ident(expr10), expr10)
+  expect_equal(ast_ident(expr11), expr11)
 })
 
 test_that("Corner cases are covered", {

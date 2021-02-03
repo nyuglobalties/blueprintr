@@ -37,3 +37,9 @@ collapse_ast.function_ast <- function(ex) {
   ex$fargs[mutable_fargs(ex)] <- lapply(ex$fargs[mutable_fargs(ex)], collapse_ast)
   call2("function", as.pairlist(ex$fargs), collapsed_body)
 }
+
+#' @export
+collapse_ast.formula_ast <- function(ex) {
+  form <- collapse_ast(ex$args)
+  bquote(~ .(form))
+}
