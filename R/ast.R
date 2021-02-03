@@ -99,7 +99,7 @@ qualified_ast <- function(.call) {
 
   structure(
     list(
-      head = call_name(.call),
+      head = call_name_(.call),
       qual_head = qual_head,
       qual_sym = qual_sym,
       ns = namespace,
@@ -107,6 +107,22 @@ qualified_ast <- function(.call) {
     ),
     class = c("qualified_ast", "ast")
   )
+}
+
+call_name_ <- function(.call) {
+  out <- call_name(.call)
+
+  if (!is.null(out)) {
+    return(out)
+  }
+
+  out <- node_cdar(.call)[[2]]
+
+  if (!is_symbol(out)) {
+    bp_err("Cannot identify head symbol: {safe_deparse(.call)}")
+  }
+
+  as.character(out)
 }
 
 is_language <- function(x) {

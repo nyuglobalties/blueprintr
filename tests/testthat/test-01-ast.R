@@ -13,11 +13,13 @@ test_that("extract_ast and collapse_ast are inverses", {
   })
   expr3 <- bquote(codetools::showTree(expr1))
 
-  expr4 <- quote(func(function(.x) .x, param = "test"))
-  expr5 <- quote(func(function(.x, .p = "word") .x, param = "test"))
-  expr6 <- quote(~ .x)
-  expr7 <- quote(function(.x) { .x + 1 })
-  expr8 <- quote(pack:::hidden_function(words))
+  expr4  <- quote(func(function(.x) .x, param = "test"))
+  expr5  <- quote(func(function(.x, .p = "word") .x, param = "test"))
+  expr6  <- quote(~ .x)
+  expr7  <- quote(function(.x) { .x + 1 })
+  expr8  <- quote(pack:::hidden_function(words))
+  expr9  <- quote(stuff@hidden_function(words))
+  expr10 <- quote(stuff$thing(words))
 
   ast_ident <- function(e) collapse_ast(extract_ast(e))
 
@@ -29,6 +31,8 @@ test_that("extract_ast and collapse_ast are inverses", {
   expect_equal(ast_ident(expr6), expr6)
   expect_equal(ast_ident(expr7), expr7)
   expect_equal(ast_ident(expr8), expr8)
+  expect_equal(ast_ident(expr9), expr9)
+  expect_equal(ast_ident(expr10), expr10)
 })
 
 test_that("Corner cases are covered", {
