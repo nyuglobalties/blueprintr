@@ -15,8 +15,8 @@ modify_ast_if <- function(ast, .p, .f, ..., recurse = TRUE) {
     if (isTRUE(recurse) && is_ast(out)) {
       if (is_function_ast(out)) {
         if (any(mutable_fargs(out))) {
-          mutable_fargs(out) <-
-            lapply(mutable_fargs(out$fargs), modify_ast_if, .p, .f, ...)
+          out$fargs[mutable_fargs(out)] <-
+            lapply(out$fargs[mutable_fargs(out)], modify_ast_if, .p, .f, ...)
         }
       }
 

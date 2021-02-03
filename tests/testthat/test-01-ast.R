@@ -17,7 +17,7 @@ test_that("extract_ast and collapse_ast are inverses", {
   expr5  <- quote(func(function(.x, .p = "word") .x, param = "test"))
   expr6  <- quote(~ .x)
   expr7  <- quote(function(.x) { .x + 1 })
-  expr8  <- quote(pack:::hidden_function(words))
+  expr8  <- quote(dplyr:::abort_glue(words))
   expr9  <- quote(stuff@hidden_function(words))
   expr10 <- quote(stuff$thing(words))
 
