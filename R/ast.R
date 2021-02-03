@@ -1,28 +1,3 @@
-extract_ast <- function(expr) {
-  if (identical(expr, bquote())) {
-    return(expr)
-  }
-
-  # Base cases
-  if (is_syntactic_literal(expr) || is_symbol(expr)) {
-    return(expr)
-  }
-
-  # Handle translation of AST
-  if (is_ast(expr)) {
-    if (is_function_ast(expr)) {
-      expr$fargs <- lapply(expr$fargs, extract_ast)
-    }
-
-    expr$args <- lapply(expr$args, extract_ast)
-    return(expr)
-  } else if (!is.language(expr)) {
-    bp_err("extract_ast only handles expressions and ast objects.")
-  }
-
-  extract_ast(ast(expr))
-}
-
 modify_ast_if <- function(ast, .p, .f, ..., recurse = TRUE) {
   if (!is_ast(ast)) {
     if (isTRUE(.p(ast))) {
@@ -39,7 +14,10 @@ modify_ast_if <- function(ast, .p, .f, ..., recurse = TRUE) {
 
     if (isTRUE(recurse) && is_ast(out)) {
       if (is_function_ast(out)) {
-        out$fargs <- lapply(out$fargs, modify_ast_if, .p, .f, ...)
+        if (any(mutable_fargs(out))) {
+          out$fargs[mutable_fargs(out)] <-
+            lapply(out$fargs[mutable_fargs(out)], modify_ast_if, .p, .f, ...)
+        }
       }
 
       out$args <- lapply(out$args, modify_ast_if, .p, .f, ...)
@@ -72,114 +50,117 @@ find_ast_if <- function(ast, .p, recurse = TRUE) {
 
 }
 
-collapse_ast <- function(ast) {
-  if (!is_ast(ast)) {
-    return(ast)
+ast <- function(.call) {
+  if (is_leaf(.call)) {
+    return(.call)
   }
 
-  if (is_function_ast(ast)) {
-    fargs <- lapply(ast$fargs, collapse_ast)
-    body <- collapse_ast(ast$args)
-
-    return(call(ast$head, as.pairlist(fargs), body))
-  }
-
-  collapsed_args <- lapply(ast$args, collapse_ast)
-
-  if (is_namespaced_ast(ast)) {
-    return(call2(ast$head, !!!collapsed_args, .ns = ast$ns))
-  }
-
-  if (is_qualified_ast(ast)) {
-    browser()
-  }
-
-  call2(ast$head, !!!collapsed_args)
-}
-
-collapse_qualified_ast <- function(ast) {
-  collapsed_args <- lapply(ast$args, collapse_ast)
-
-  if (!is.null(ast$ns)) {
-    calling_cmd <- expr((!!ast$qual_sym)(!!as.name(ast$ns), !!as.name(ast$head)))
-
-    expr((!!calling_cmd)(!!!collapsed_args))
+  if (!head_is_symbol(.call)) {
+    if (is_qualified_call(.call)) {
+      qualified_ast(.call)
+    } else {
+      bp_err("Unknown call structure: {safe_deparse(.call)}")
+    }
   } else {
-
+    switch(
+      head_sym_chr(.call),
+      "~" = formula_ast(.call),
+      "function" = function_ast(.call),
+      structure(
+        list(
+          head = call_name(.call),
+          args = as.list(.call)[-1]
+        ),
+        class = "ast"
+      )
+    )
   }
 }
 
-ast <- function(call) {
-  if (identical(call_name(call), "function")) {
-    return(function_ast(call)) 
-  }
+head_is_symbol <- function(.call) {
+  is_symbol(node_car(.call))
+}
 
-  if (is_qualified_call(call)) {
-    return(qualified_ast(call))
+head_sym_chr <- function(.call) {
+  stopifnot(head_is_symbol(.call))
+
+  as.character(node_car(.call))
+}
+
+qualified_ast <- function(.call) {
+  qual_sym <- qualifier(.call)
+  qual_head <- qualified_head(.call)
+
+  if (is_namespaced_call(.call)) {
+    namespace <- call_ns(.call)
+  } else {
+    namespace <- NULL
   }
 
   structure(
     list(
-      head = call_name(call),
-      args = as.list(call)[-1]
-    ),
-    class = "ast"
-  )
-}
-
-qualified_ast <- function(call) {
-  qual_sym <- qualifier(call)
-  qual_head <- qualified_head(call)
-  namespace <- if (is_namespaced_call(call)) {
-    call_ns(call)
-  } else {
-    NULL
-  }
-
-  structure(
-    list(
-      head = call_name(call),
+      head = call_name_(.call),
       qual_head = qual_head,
       qual_sym = qual_sym,
       ns = namespace,
-      args = as.list(call)[-1]
+      args = as.list(.call)[-1]
     ),
-    class = c("ast", "qualified_ast")
+    class = c("qualified_ast", "ast")
   )
+}
+
+call_name_ <- function(.call) {
+  out <- call_name(.call)
+
+  if (!is.null(out)) {
+    return(out)
+  }
+
+  out <- node_cdar(.call)[[2]]
+
+  if (!is_symbol(out)) {
+    bp_err("Cannot identify head symbol: {safe_deparse(.call)}")
+  }
+
+  as.character(out)
 }
 
 is_language <- function(x) {
   identical(typeof(x), "language")
 }
 
-qualifier <- function(call) {
-  stopifnot(is_language(call))
-
-  node_caar(call)
+is_leaf <- function(x) {
+  is_syntactic_literal(x) || is_symbol(x)
 }
 
-qualified_head <- function(call) {
-  stopifnot(is_language(call))
+qualifier <- function(.call) {
+  stopifnot(is_language(.call))
 
-  extract_ast(node_car(node_cdar(call)))
+  node_caar(.call)
 }
 
-is_qualified_call <- function(call) {
-  if (!is_language(call)) {
+qualified_head <- function(.call) {
+  stopifnot(is_language(.call))
+
+  extract_ast(node_car(node_cdar(.call)))
+}
+
+is_qualified_call <- function(.call) {
+  if (!is_language(.call)) {
     return(FALSE)
   }
 
-  if (!is_language(node_car(call))) {
+  if (!is_language(node_car(.call))) {
     return(FALSE)
   }
 
-  call_cmd <- node_car(call)
+  call_cmd <- node_car(.call)
 
   if (!is_symbol(node_cadr(node_cdr(call_cmd)))) {
     return(FALSE)
   }
 
-  qual_sym <- qualifier(call)
+  qual_sym <- qualifier(.call)
 
   identical(qual_sym, quote(`::`)) ||
     identical(qual_sym, quote(`:::`)) ||
@@ -187,32 +168,48 @@ is_qualified_call <- function(call) {
     identical(qual_sym, quote(`@`))
 }
 
-is_namespaced_call <- function(call) {
-  if (!is_qualified_call(call)) {
+is_namespaced_call <- function(.call) {
+  if (!is_qualified_call(.call)) {
     return(FALSE)
   }
 
-  qual_sym <- qualifier(call)
+  qual_sym <- qualifier(.call)
 
   identical(qual_sym, quote(`::`)) ||
     identical(qual_sym, quote(`:::`))
 }
 
-function_ast <- function(call) {
-  call_list <- as.list(call)
+formula_ast <- function(.call) {
+  call_list <- as.list(.call)
 
   structure(
     list(
-      head = call_name(call),
-      fargs = as.list(call_list[[2]]),
-      args = ast(call_list[[3]])
+      head = "~",
+      args = call_list[[2]]
     ),
-    class = c("ast", "function_ast")
+    class = c("formula_ast", "ast")
+  )
+}
+
+function_ast <- function(.call) {
+  call_list <- as.list(.call)
+
+  structure(
+    list(
+      head = call_name(.call),
+      fargs = as.list(call_list[[2]]),
+      args = call_list[[3]]
+    ),
+    class = c("function_ast", "ast")
   )
 }
 
 is_ast <- function(x) {
   inherits(x, "ast")
+}
+
+is_function_ast <- function(x) {
+  inherits(x, "formula_ast")
 }
 
 is_function_ast <- function(x) {
@@ -229,4 +226,10 @@ is_namespaced_ast <- function(x) {
   }
 
   !is.null(x$ns)
+}
+
+mutable_fargs <- function(ex) {
+  stopifnot(is_function_ast(ex))
+
+  vlapply(ex$fargs, function(x) !(is_symbol(x) && identical(as.character(x), "")))
 }
