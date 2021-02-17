@@ -88,3 +88,24 @@ bp_label_variables <- function(blueprint) {
     labelled = TRUE
   )
 }
+
+#' Include panelcleaner mapping on metadata creation
+#' 
+#' [panelcleaner](https://nyuglobalties.github.io/panelcleaner/]) defines
+#' a mapping structure used for data import of panel, or more generally
+#' longitudinal, surveys / data which can be used as a source for some
+#' kinds of metadata (currently, only categorical coding information).
+#' If the blueprint constructs a `mapped_df` object, then this extension
+#' will signal to blueprintr to extract the mapping information and
+#' include it.
+#' 
+#' @param blueprint A blueprint that may create a `mapped_df` data.frame
+#' @return An amended blueprint with `mapped_df` metadata extraction set
+#'         for metadata creation
+#' @export 
+bp_include_panelcleaner_meta <- function(blueprint) {
+  bp_extend(
+    blueprint,
+    import_mdf_meta = TRUE
+  )
+}

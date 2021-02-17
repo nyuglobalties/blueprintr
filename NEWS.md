@@ -1,5 +1,8 @@
 # Development version (0.0.6.9000)
 
+* Integration with `panelcleaner` to import homogenized codings if target data.frame is a `mapped_df`
+* Adds a new `bp_include_panelcleaner_meta()` extension to signal blueprintr to add `mapped_df` meta
+
 # blueprintr 0.0.5
 
 * Fixed bug that would not translate anonymous functions and formulae correctly (#22 and #29)
