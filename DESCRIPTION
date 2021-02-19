@@ -1,6 +1,6 @@
 Package: blueprintr
 Title: Automagically Document and Test Datasets Using Drake
-Version: 0.0.6.9000
+Version: 0.0.6
 Authors@R: 
     c(person(given = "Patrick",
              family = "Anker",
