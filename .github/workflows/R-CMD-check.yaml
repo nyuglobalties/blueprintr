@@ -51,8 +51,8 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-2-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-2-
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
@@ -66,8 +66,9 @@ jobs:
       - name: Install dependencies (not Windows)
         if: runner.os != 'Windows'
         run: |
-          remotes::install_github("Global-TIES-for-Children/rcoder")
-          remotes::install_github("wlandau/targets")
+          remotes::install_github("nyuglobalties/rcoder")
+          remotes::install_github("nyuglobalties/panelcleaner")
+          remotes::install_github("ropensci/targets")
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
@@ -75,8 +76,9 @@ jobs:
       - name: Install dependencies (Windows)
         if: runner.os == 'Windows'
         run: |
-          remotes::install_github("Global-TIES-for-Children/rcoder")
-          remotes::install_github("wlandau/targets")
+          remotes::install_github("nyuglobalties/rcoder")
+          remotes::install_github("nyuglobalties/panelcleaner")
+          remotes::install_github("ropensci/targets")
           remotes::install_deps(dependencies = TRUE, type = "binary")
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}

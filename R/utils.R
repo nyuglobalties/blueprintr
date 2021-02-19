@@ -141,3 +141,21 @@ flatten <- function(x) {
 
   flattened
 }
+
+get_attr <- function(obj, attrib) {
+  attr(obj, attrib, exact = TRUE)
+}
+
+set_attrs <- function(obj, ...) {
+  dots <- rlang::dots_list(...)
+
+  if (is.null(names(dots)) || any(names(dots) == "")) {
+    bp_err("All attribs must have names")
+  }
+
+  for (d in names(dots)) {
+    attr(obj, d) <- dots[[d]]
+  }
+
+  obj
+}
