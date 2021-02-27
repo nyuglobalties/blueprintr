@@ -67,4 +67,25 @@ test_that("Chunk comprehension works", {
   modified_3 <- modify_ast_if(extracted_3, is_target_ast, eval_ast)
 
   expect_equal(collapse_ast(modified_3), answer_3)
+
+  command_4 <- quote(
+    .TARGET("dataset") %>%
+      processing$process(param = TRUE) %>% 
+      mutate(
+        var = processing$func(variable)
+      )
+  )
+
+  answer_4 <- quote(
+    dataset %>%
+      processing$process(param = TRUE) %>% 
+      mutate(
+        var = processing$func(variable)
+      )
+  )
+
+  extracted_4 <- extract_ast(command_4)
+  modified_4 <- modify_ast_if(extracted_4, is_target_ast, eval_ast)
+
+  expect_equal(collapse_ast(modified_4), answer_4)
 })
