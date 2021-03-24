@@ -17,8 +17,8 @@ Documents and tests datasets in a reproducible
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/Global-TIES-for-Children/blueprintr}
-  \item Report bugs at \url{https://github.com/Global-TIES-for-Children/blueprintr/issues}
+  \item \url{https://github.com/nyuglobalties/blueprintr}
+  \item Report bugs at \url{https://github.com/nyuglobalties/blueprintr/issues}
 }
 
 }

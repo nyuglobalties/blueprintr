@@ -5,6 +5,7 @@
 #' @param directory A path to a directory with script files that are blueprints.
 #'                  Defaults to the "blueprints" directory at the root of the
 #'                  current R project.
+#' @param recurse Recursively loads blueprints from a directory if `TRUE`
 #'
 #' @return A drake_plan with attached blueprints
 #' @export
@@ -20,10 +21,15 @@ load_blueprint <- function(plan, file) {
 
 #' @rdname load_blueprint
 #' @export
-load_blueprints <- function(plan, directory = here::here("blueprints")) {
+load_blueprints <- function(
+  plan, 
+  directory = here::here("blueprints"), 
+  recurse = FALSE
+) {
   bp_assert(inherits(plan, "drake_plan"))
 
-  bp_list <- fetch_blueprint_files(directory)
+  dirs <- load_dirs_recurse(directory, recurse)
+  bp_list <- fetch_blueprints_from_dir(dirs)
 
   if (is.null(bp_list)) {
     return(plan)
@@ -32,20 +38,36 @@ load_blueprints <- function(plan, directory = here::here("blueprints")) {
   attach_blueprints(plan, !!!bp_list)
 }
 
+fetch_blueprints_from_dir <- function(dirs) {
+  bp_list <- unlist(lapply(dirs, fetch_blueprint_files))
+  lapply(bp_list, import_blueprint_file)
+}
+
+load_dirs_recurse <- function(dir, recurse) {
+  subdirs <- fs::dir_ls(dir, type = "d", recurse = TRUE)
+
+  if (length(subdirs) > 0 && isTRUE(recurse)) {
+    dirs <- c(dir, subdirs)
+  } else {
+    dirs <- dir
+  }
+
+  dirs
+}
+
 fetch_blueprint_files <- function(directory) {
   if (!dir.exists(directory)) {
     bp_err("Blueprint directory '{directory}' does not exist")
   }
 
-  bp_scripts <- grep("\\.[Rr]$", list.files(directory), value = TRUE)
-  bp_scripts <- file.path(directory, bp_scripts)
+  bp_scripts <- fs::dir_ls(directory, regexp = "\\.[Rr]$")
 
   if (length(bp_scripts) == 0L) {
     bp_warn("No blueprint scripts found in '{directory}'")
     return(NULL)
   }
 
-  lapply(bp_scripts, import_blueprint_file)
+  bp_scripts
 }
 
 import_blueprint_file <- function(bp_file, env = parent.frame()) {

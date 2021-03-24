@@ -1,3 +1,7 @@
+# blueprintr 0.0.7
+
+* Adds `recurse` parameter to `load_blueprints()` and `tar_blueprints()` to recursively load blueprints from the provided `directory`
+
 # blueprintr 0.0.6
 
 * Integration with `panelcleaner` to import homogenized codings if target data.frame is a `mapped_df`

@@ -7,13 +7,15 @@
 \usage{
 tar_blueprint(...)
 
-tar_blueprints(directory = here::here("blueprints"))
+tar_blueprints(directory = here::here("blueprints"), recurse = FALSE)
 }
 \arguments{
 \item{...}{Arguments passed to \code{blueprint()}}
 
 \item{directory}{A folder containing R scripts that evaluate to \code{blueprint()}
 objects}
+
+\item{recurse}{Recursively loads blueprints from a directory if \code{TRUE}}
 }
 \value{
 A \code{list()} of \code{tar_target} objects
