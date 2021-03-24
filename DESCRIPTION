@@ -1,6 +1,6 @@
 Package: blueprintr
 Title: Automagically Document and Test Datasets Using Drake
-Version: 0.0.6
+Version: 0.0.7
 Authors@R: 
     c(person(given = "Patrick",
              family = "Anker",
@@ -43,5 +43,6 @@ Imports:
     purrr,
     dplyr,
     magrittr,
-    readr
+    readr,
+    fs
 VignetteBuilder: knitr
