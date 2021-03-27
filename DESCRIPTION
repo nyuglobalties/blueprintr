@@ -18,7 +18,6 @@ License: GPL-3
 Suggests: 
     testthat (>= 2.1.0),
     covr,
-    tidyr,
     codetools,
     knitr,
     rmarkdown,
@@ -43,5 +42,6 @@ Imports:
     purrr,
     dplyr,
     magrittr,
-    readr
+    readr,
+    tidyr
 VignetteBuilder: knitr

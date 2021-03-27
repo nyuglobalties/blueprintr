@@ -51,3 +51,32 @@ test_that("Variables are converted to labelled vectors correctly", {
 
   expect_equivalent(variable_levels(mtcars_chunk_rearranged$cyl), c(Four = 4, Six = 6, Eight = 8))
 })
+
+test_that("Variables are decorated correctly", {
+  mtcars_rearranged_bp <- blueprint(
+    "mtcars_chunk_rearranged",
+    command = mtcars,
+    metadata_directory = bp_path("blueprints"),
+    labelled = TRUE,
+    annotate = TRUE
+  )
+
+  plan <- plan_from_blueprint(mtcars_rearranged_bp)
+
+  drake::clean()
+  drake::make(plan)
+
+  drake::loadd(mtcars_chunk_rearranged)
+
+  expect_true(
+    has_annotation(mtcars_chunk_rearranged$cyl, "description")
+  )
+
+  expect_true(
+    has_annotation(mtcars_chunk_rearranged$mpg, "description")
+  )
+
+  expect_true(
+    has_annotation(mtcars_chunk_rearranged$cyl, "coding")
+  )
+})

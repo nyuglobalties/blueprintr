@@ -33,7 +33,7 @@ bpstep_cleanup.targets_assembler <- function(assembler, bp, ...) {
 }
 
 cleanup_call <- function(bp) {
-  bquote(blueprintr::accept_content(
+  bquote(blueprintr::cleanup(
     .(as.name(blueprint_checks_name(bp))),
     .(as.name(blueprint_target_name(bp))),
     .(as.name(blueprint_reference_name(bp))),

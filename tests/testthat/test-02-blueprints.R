@@ -80,4 +80,16 @@ test_that("Dependencies are handled properly", {
 
   drake::clean()
   drake::make(plan)
+
+  student_demo_meta <- drake::readd(student_demographics_meta)
+  id_vars_meta <- drake::readd(id_vars_meta)
+
+  expect_identical(
+    student_demo_meta %>%
+      dplyr::filter(.data$name == "student_id") %>%
+      dplyr::pull(.data$description),
+    id_vars_meta %>%
+      dplyr::filter(.data$name == "student_id") %>%
+      dplyr::pull(.data$description)
+  )
 })
