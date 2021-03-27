@@ -1,4 +1,7 @@
-# blueprintr (development version)
+# blueprintr 0.0.7
+
+* Adds "annotations", a variable attribute system that makes it easier to propagate metadata provenance, rather than depending on variable naming from `.TARGET()` calls.
+* Adds `mutate_annotation()` and `mutate_annotation_across()` which allows runtime transformation of metadata. Useful for batch transformations before metadata creation.
 
 # blueprintr 0.0.6
 

@@ -19,7 +19,7 @@ create_metadata_file <- function(df, blueprint, ...) {
   metadata_dt <- initial_metadata_dt(df)
   deps_metalist <- dots_list(...)
 
-  metadata_dt <- propegate_metadata(metadata_dt, df, deps_metalist)
+  metadata_dt <- propagate_metadata(metadata_dt, df, deps_metalist)
 
   # panelcleaner interop
   if (isTRUE(blueprint$import_mdf_meta)) {
@@ -41,7 +41,7 @@ initial_metadata_dt <- function(df) {
   )
 }
 
-propegate_metadata <- function(metadata_dt, df, deps_metalist) {
+propagate_metadata <- function(metadata_dt, df, deps_metalist) {
   decs_dt <- link_annotation_meta(metadata_dt, df)
 
   if (length(deps_metalist) > 0) {
