@@ -1,5 +1,3 @@
-context("Post-check features")
-
 test_that("Variables are reordered and dropped correctly", {
   mtcars_rearranged_bp <- blueprint(
     "mtcars_chunk_rearranged",
@@ -52,7 +50,7 @@ test_that("Variables are converted to labelled vectors correctly", {
   expect_equivalent(variable_levels(mtcars_chunk_rearranged$cyl), c(Four = 4, Six = 6, Eight = 8))
 })
 
-test_that("Variables are decorated correctly", {
+test_that("Variables are annotated correctly", {
   mtcars_rearranged_bp <- blueprint(
     "mtcars_chunk_rearranged",
     command = mtcars,
