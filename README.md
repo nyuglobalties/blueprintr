@@ -12,7 +12,7 @@
 <!-- badges: start -->
 
 [![Lifecycle:
-maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/blueprintr)](https://CRAN.R-project.org/package=blueprintr)
 [![R build
@@ -41,7 +41,7 @@ blueprint1
 #> <blueprint: 'blueprint1'>
 #> 
 #> Description: My first blueprint
-#> Metadata location: '/Users/patrickanker/dev/blueprintr/blueprints/blueprint1.csv'
+#> Metadata location: '/Users/runner/work/blueprintr/blueprintr/blueprints/blueprint1.csv'
 #> 
 #> -- Command --
 #> Drake command:

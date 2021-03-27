@@ -1,5 +1,29 @@
 `%||%` <- function(x, y) if (is.null(x)) y else x
 
+`%if_missing_str%` <- function(x, y) {
+  stopifnot(length(x) == 1)
+  stopifnot(is.character(x))
+
+  if (is_missing(x)) y else x
+}
+
+is_missing <- function(x) {
+  UseMethod("is_missing", x)
+}
+
+is_missing.default <- function(x) {
+  if (is.null(x)) {
+    return(TRUE)
+  }
+
+  all(is.na(x))
+}
+
+#' @export
+is_missing.character <- function(x) {
+  all(is.na(x) | x == "")
+}
+
 viapply <- function(.x, .f, ...) vapply(.x, .f, integer(1L), ...)
 vcapply <- function(.x, .f, ...) vapply(.x, .f, character(1L), ...)
 vlapply <- function(.x, .f, ...) vapply(.x, .f, logical(1L), ...)
@@ -56,6 +80,12 @@ bp_warn <- function(x, .envir = parent.frame()) {
   msg <- glue(glue_collapse(x), .envir = .envir)
 
   rlang::warn(.subclass = "bp_warning", message = msg)
+}
+
+bp_msg <- function(x, .envir = parent.frame()) {
+  msg <- glue(glue_collapse(x), .envir = .envir)
+
+  message(msg)
 }
 
 bp_assert <- function(x, msg = NULL, .envir = parent.frame()) {
@@ -146,6 +176,11 @@ get_attr <- function(obj, attrib) {
   attr(obj, attrib, exact = TRUE)
 }
 
+set_attr <- function(obj, key, value) {
+  attr(obj, key) <- value
+  obj
+}
+
 set_attrs <- function(obj, ...) {
   dots <- rlang::dots_list(...)
 
@@ -154,8 +189,18 @@ set_attrs <- function(obj, ...) {
   }
 
   for (d in names(dots)) {
-    attr(obj, d) <- dots[[d]]
+    obj <- set_attr(obj, d, dots[[d]])
   }
 
   obj
+}
+
+unique_val <- function(x) {
+  ux <- unique(x)
+
+  if (length(ux[!is.na(ux)]) > 0L) {
+    ux[!is.na(ux)]
+  } else {
+    ux[is.na(ux)]
+  }
 }

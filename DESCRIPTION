@@ -1,6 +1,6 @@
 Package: blueprintr
-Title: Automagically Document and Test Datasets Using Drake
-Version: 0.0.7
+Title: Automagically Document and Test Datasets Using Targets Or Drake
+Version: 0.0.8
 Authors@R: 
     c(person(given = "Patrick",
              family = "Anker",
@@ -14,11 +14,10 @@ Description: Documents and tests datasets in a reproducible
     small to medium tabular data. Originally designed to aid 
     data cleaning tasks for humanitarian research groups, 
     specifically large-scale longitudinal studies.
-License: GPL-3
+License: MIT + file LICENSE
 Suggests: 
     testthat (>= 2.1.0),
     covr,
-    tidyr,
     codetools,
     knitr,
     rmarkdown,
@@ -44,5 +43,6 @@ Imports:
     dplyr,
     magrittr,
     readr,
+    tidyr,
     fs
 VignetteBuilder: knitr
