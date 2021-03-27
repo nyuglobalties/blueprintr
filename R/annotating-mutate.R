@@ -9,7 +9,7 @@ mutate_annotation <- function(.data, .field, ..., .overwrite = TRUE) {
     if (!var %in% names(.data)) {
       bp_err(c(
         "'{var}' not found in `{substitute(.data)}`. ",
-        "Cannot modify meta decoration '{.field}' on it."
+        "Cannot modify annotation '{.field}' on it."
       ))
     }
 

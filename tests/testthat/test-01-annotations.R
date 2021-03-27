@@ -34,12 +34,18 @@ test_that("Annotations behave as expected", {
 })
 
 test_that("Mutate synonyms behave as expected", {
-  expect_error(mutate_annotation(dat, c("wrong", "style"), cyl = "thing"))
-
   dat <- mutate_annotation(
-    mtcars, "field", 
+    mtcars, "field",
     cyl = sum(1:5), mpg = "value",
     vs = sum(vs), wt = mean(wt)
+  )
+
+  expect_error(mutate_annotation(dat, c("wrong", "style"), cyl = "thing"))
+  err <- expect_error(mutate_annotation(dat, "field", baz = "thing"))
+
+  expect_equal(
+    err$message,
+    "'baz' not found in `dat`. Cannot modify annotation 'field' on it."
   )
 
   expect_true(has_annotation(dat$mpg, "field"))

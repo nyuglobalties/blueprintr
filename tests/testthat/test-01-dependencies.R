@@ -72,9 +72,9 @@ test_that("Annotation dependency tables render correctly", {
 
 test_that("Coalescing annotation vs. metafile deps works", {
   foo <- dplyr::tribble(
-    ~name, ~type, ~description,
-    "x", "integer", "An integer",
-    "y", "character", "A string"
+    ~name, ~type, ~description, ~extra,
+    "x", "integer", "An integer", "not be seen",
+    "y", "character", "A string", NA
   )
 
   bar <- dplyr::tribble(
@@ -95,6 +95,7 @@ test_that("Coalescing annotation vs. metafile deps works", {
   )
 
   dat$x <- add_annotation(dat$x, "class", "ordinal")
+  dat$x <- add_annotation(dat$x, "extra", "will be seen")
   dat$y <- add_annotation(dat$y, "class", "continuous")
 
   meta_dt <- initial_metadata_dt(dat)
@@ -102,4 +103,42 @@ test_that("Coalescing annotation vs. metafile deps works", {
   meta_dt_bad <- link_dependency_meta(baz, list(foo, bar))
 
   reconciled <- reconcile_dependencies(linked, meta_dt_bad)
+
+  # Demontrates that the actual variables found in the
+  # dataset are preserved
+  expect_true(
+    setequal(reconciled$name, c("x", "y"))
+  )
+
+  # Demontrates that the actual type information of
+  # the underlying is preserved
+  expect_identical(
+    reconciled$type[[1]],
+    "integer"
+  )
+
+  # Demonstrates proper ordering during coalescing
+  expect_identical(
+    reconciled$extra[[1]],
+    "will be seen"
+  )
+
+  # Demonstrates the identification of type conflict
+  # in metafile-based dependency linkage
+  expect_identical(
+    reconciled$deps_type[[1]],
+    "integer|character"
+  )
+
+  # Demonstrates that fields not in metafile-type
+  # dependencies are kept
+  expect_identical(
+    reconciled$class[[1]],
+    "ordinal"
+  )
+
+  expect_identical(
+    reconciled$class[[2]],
+    "continuous"
+  )
 })
