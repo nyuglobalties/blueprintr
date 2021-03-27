@@ -7,7 +7,7 @@
 \usage{
 load_blueprint(plan, file)
 
-load_blueprints(plan, directory = here::here("blueprints"))
+load_blueprints(plan, directory = here::here("blueprints"), recurse = FALSE)
 }
 \arguments{
 \item{plan}{A drake plan}
@@ -17,6 +17,8 @@ load_blueprints(plan, directory = here::here("blueprints"))
 \item{directory}{A path to a directory with script files that are blueprints.
 Defaults to the "blueprints" directory at the root of the
 current R project.}
+
+\item{recurse}{Recursively loads blueprints from a directory if \code{TRUE}}
 }
 \value{
 A drake_plan with attached blueprints

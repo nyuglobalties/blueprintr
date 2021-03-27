@@ -10,6 +10,7 @@
 #' @param ... Arguments passed to `blueprint()`
 #' @param directory A folder containing R scripts that evaluate to `blueprint()`
 #'                  objects
+#' @param recurse Recursively loads blueprints from a directory if `TRUE`
 #' @return A `list()` of `tar_target` objects
 #'
 #' @export
@@ -22,8 +23,12 @@ tar_blueprint <- function(...) {
 
 #' @rdname tar_blueprint
 #' @export
-tar_blueprints <- function(directory = here::here("blueprints")) {
-  bp_list <- fetch_blueprint_files(directory)
+tar_blueprints <- function(
+  directory = here::here("blueprints"),
+  recurse = FALSE
+) {
+  dirs <- load_dirs_recurse(directory, recurse)
+  bp_list <- fetch_blueprints_from_dir(dirs)
 
   if (is.null(bp_list)) {
     return(list())

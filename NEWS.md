@@ -1,7 +1,11 @@
-# blueprintr 0.0.7
+# blueprintr 0.0.8
 
 * Adds "annotations", a variable attribute system that makes it easier to propagate metadata provenance, rather than depending on variable naming from `.TARGET()` calls.
 * Adds `mutate_annotation()` and `mutate_annotation_across()` which allows runtime transformation of metadata. Useful for batch transformations before metadata creation.
+
+# blueprintr 0.0.7
+
+* Adds `recurse` parameter to `load_blueprints()` and `tar_blueprints()` to recursively load blueprints from the provided `directory`
 
 # blueprintr 0.0.6
 

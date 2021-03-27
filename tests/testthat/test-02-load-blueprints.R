@@ -23,8 +23,11 @@ test_that("blueprint file fetching works correctly", {
     command = mtcars
   )
 
-  bps <- fetch_blueprint_files(bp_path("blueprints"))
-  expect_true(is.list(bps))
+  bp_files <- fetch_blueprint_files(bp_path("blueprints"))
+  expect_true(is.character(bp_files))
+
+  bps <- lapply(bp_files, import_blueprint_file)
+
   expect_true(!inherits(bps, "blueprint"))
   expect_true(all(vlapply(bps, is_blueprint)))
 
@@ -51,4 +54,20 @@ test_that("Loading from directory works", {
 
   expect_true("test_blueprint_initial" %in% plan$target)
   expect_true("test_blueprint" %in% plan$target)
+})
+
+test_that("Recursively loading from directory works", {
+  plan <- drake::drake_plan(dummy = 1:5)
+
+  plan <-
+    plan %>%
+    load_blueprints(
+      directory = bp_path("blueprints"),
+      recurse = TRUE
+    )
+
+  expect_true("test_blueprint_initial" %in% plan$target)
+  expect_true("test_blueprint" %in% plan$target)
+  expect_true("test_subdir_blueprint_initial" %in% plan$target)
+  expect_true("test_subdir_blueprint" %in% plan$target)
 })
