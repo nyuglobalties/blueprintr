@@ -14,7 +14,7 @@ Description: Documents and tests datasets in a reproducible
     small to medium tabular data. Originally designed to aid 
     data cleaning tasks for humanitarian research groups, 
     specifically large-scale longitudinal studies.
-License: GPL-3
+License: MIT + file LICENSE
 Suggests: 
     testthat (>= 2.1.0),
     covr,
