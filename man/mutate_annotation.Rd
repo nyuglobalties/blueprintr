@@ -21,15 +21,12 @@ mutate_annotation_across(
 
 \item{.field}{The name of the annotation field that you wish to modify}
 
-\item{...}{\itemize{
-\item For \code{mutate_annotation}, named parameters that contain the annotation
+\item{...}{For \code{mutate_annotation}, named parameters that contain the annotation
 values. Like \code{dplyr::mutate}, each parameter name is a variable
 (that must already exist!), and each parameter value is an R expression,
 evaluated with \code{.data} as a data mask.
-\itemize{
-\item For \code{mutate_annotation_across}, extra arguments passed to \code{.fn}
-}
-}}
+
+For \code{mutate_annotation_across}, extra arguments passed to \code{.fn}}
 
 \item{.overwrite}{If \code{TRUE}, overwrites existing annotation values.
 Annotations have an overwriting guard by default, but since these functions

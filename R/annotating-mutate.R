@@ -10,11 +10,12 @@
 #' @param .data A `data.frame`
 #' @param .field The name of the annotation field that you wish to modify
 #' @param ... 
-#'   * For `mutate_annotation`, named parameters that contain the annotation 
+#'   For `mutate_annotation`, named parameters that contain the annotation 
 #'     values. Like `dplyr::mutate`, each parameter name is a variable 
 #'     (that must already exist!), and each parameter value is an R expression, 
 #'     evaluated with `.data` as a data mask.
-#'   * For `mutate_annotation_across`, extra arguments passed to `.fn`
+#' 
+#'   For `mutate_annotation_across`, extra arguments passed to `.fn`
 #' @param .fn A function that takes in a vector, the currently selected variable
 #' @param .cols A tidyselect-compatible selection of variables to be edited
 #' @param .overwrite If `TRUE`, overwrites existing annotation values.
