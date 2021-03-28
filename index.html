@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Automagically Document and Test Datasets Using Drake • blueprintr</title>
+<title>Automagically Document and Test Datasets Using Targets Or Drake • blueprintr</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
-<meta property="og:title" content="Automagically Document and Test Datasets Using Drake">
+<meta property="og:title" content="Automagically Document and Test Datasets Using Targets Or Drake">
 <meta property="og:description" content="Documents and tests datasets in a reproducible
     manner so that data lineage is easier to comprehend for
     small to medium tabular data. Originally designed to aid 
@@ -31,6 +31,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -43,7 +45,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">blueprintr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9</span>
       </span>
     </div>
 
@@ -61,7 +63,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/Global-TIES-for-Children/blueprintr/">
+  <a href="https://github.com/nyuglobalties/blueprintr/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -83,16 +85,16 @@
 <a href="#blueprintr-" class="anchor"></a>blueprintr <img src="reference/figures/logo.png" align="right" height="139">
 </h1></div>
 <blockquote>
-<p>blueprintr is a plugin to <a href="https://github.com/ropensci/drake">drake</a> that adds automated steps for tabular dataset documentation and testing. Designed for social science research projects, this package creates a framework to build trust in your data and to prevent programming issues from affecting your analysis results.</p>
+<p>blueprintr is a plugin to <a href="https://github.com/ropensci/drake" class="external-link">drake</a> that adds automated steps for tabular dataset documentation and testing. Designed for social science research projects, this package creates a framework to build trust in your data and to prevent programming issues from affecting your analysis results.</p>
 </blockquote>
 <!-- badges: start -->
-<p><a href="https://www.tidyverse.org/lifecycle/#maturing"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="Lifecycle: maturing"></a> <a href="https://CRAN.R-project.org/package=blueprintr"><img src="https://www.r-pkg.org/badges/version/blueprintr" alt="CRAN status"></a> <a href="https://github.com/Global-TIES-for-Children/blueprintr/actions"><img src="https://github.com/Global-TIES-for-Children/blueprintr/workflows/R-CMD-check/badge.svg" alt="R build status"></a> <!-- badges: end --></p>
+<p><a href="https://www.tidyverse.org/lifecycle/#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a> <a href="https://CRAN.R-project.org/package=blueprintr" class="external-link"><img src="https://www.r-pkg.org/badges/version/blueprintr" alt="CRAN status"></a> <a href="https://github.com/Global-TIES-for-Children/blueprintr/actions" class="external-link"><img src="https://github.com/Global-TIES-for-Children/blueprintr/workflows/R-CMD-check/badge.svg" alt="R build status"></a> <!-- badges: end --></p>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
 <p>Define blueprints of your data using <code><a href="reference/blueprint.html">blueprint()</a></code>. Blueprints combine drake target commands with some extra metadata about the output tabular dataset, including the name and description of the data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Global-TIES-for-Children/blueprintr">blueprintr</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/nyuglobalties/blueprintr" class="external-link">blueprintr</a></span><span class="op">)</span>
 
 <span class="va">blueprint1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/blueprint.html">blueprint</a></span><span class="op">(</span>
   <span class="st">"blueprint1"</span>,
@@ -107,7 +109,7 @@
 <span class="co">#&gt; &lt;blueprint: 'blueprint1'&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Description: My first blueprint</span>
-<span class="co">#&gt; Metadata location: '/Users/patrickanker/dev/blueprintr/blueprints/blueprint1.csv'</span>
+<span class="co">#&gt; Metadata location: '/Users/runner/work/blueprintr/blueprintr/blueprints/blueprint1.csv'</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; -- Command --</span>
 <span class="co">#&gt; Drake command:</span>
@@ -122,7 +124,7 @@
 <p>Refer to other datasets using <code><a href="reference/blueprint_macros.html">.TARGET()</a></code> to guarantee that parent datasets are also tested and documented. Run checks on the dataset entirely with the <code>checks</code> parameter and define variable tests in the metadata files.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">no_missing_cyl</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/all.html">all</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span><span class="op">)</span>
 <span class="op">}</span>
 
 <span class="va">blueprint2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/blueprint.html">blueprint</a></span><span class="op">(</span>
@@ -133,15 +135,15 @@
   <span class="op">)</span>,
   command <span class="op">=</span>
     <span class="fu"><a href="reference/blueprint_macros.html">.TARGET</a></span><span class="op">(</span><span class="st">"blueprint1"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-      <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">cyl</span> <span class="op">==</span> <span class="fl">4</span><span class="op">)</span>
+      <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">cyl</span> <span class="op">==</span> <span class="fl">4</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
-<p>Once all blueprints are defined, attach them to a plan using <code><a href="reference/attach_blueprints.html">attach_blueprint()</a></code> or <code><a href="reference/attach_blueprints.html">attach_blueprints()</a></code> so drake can run the needed tasks.</p>
+<p>Once all blueprints are defined, attach them to a plan using <code><a href="reference/attach_blueprint.html">attach_blueprint()</a></code> or <code><a href="reference/attach_blueprint.html">attach_blueprints()</a></code> so drake can run the needed tasks.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org">magrittr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/drake">drake</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/drake" class="external-link">drake</a></span><span class="op">)</span>
 
 <span class="fu"><a href="reference/plan_from_blueprint.html">plan_from_blueprint</a></span><span class="op">(</span><span class="va">blueprint1</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="reference/attach_blueprints.html">attach_blueprint</a></span><span class="op">(</span><span class="va">blueprint2</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="reference/attach_blueprint.html">attach_blueprint</a></span><span class="op">(</span><span class="va">blueprint2</span><span class="op">)</span></code></pre></div>
 <p>drake handles the code execution based on the targets generated by blueprintr.</p>
 </div>
 <div id="installation" class="section level2">
@@ -149,8 +151,8 @@
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>As blueprintr is not yet on CRAN, you must install the package from this repository:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"nyuglobalties/blueprintr"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"nyuglobalties/blueprintr"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="contributing" class="section level2">
 <h2 class="hasAnchor">
@@ -162,46 +164,53 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/Global-TIES-for-Children/blueprintr/">https://​github.com/​Global-TIES-for-Children/​blueprintr/​</a>
+<li>Browse source code at <br><a href="https://github.com/nyuglobalties/blueprintr/">https://​github.com/​nyuglobalties/​blueprintr/​</a>
 </li>
-<li>Report a bug at <br><a href="https://github.com/Global-TIES-for-Children/blueprintr/issues">https://​github.com/​Global-TIES-for-Children/​blueprintr/​issues</a>
+<li>Report a bug at <br><a href="https://github.com/nyuglobalties/blueprintr/issues">https://​github.com/​nyuglobalties/​blueprintr/​issues</a>
 </li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></small></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
+
 <div class="community">
-<h2>Community</h2>
+<h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CONTRIBUTING.html">Contributing guide</a></li>
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
 </ul>
 </div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Patrick Anker <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-2302-0445" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html">More on authors...</a></li>
 </ul>
 </div>
+
+
 
   </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Patrick Anker.</p>
+  <p></p>
+<p>Developed by Patrick Anker.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p>
 </div>
 
       </footer>
@@ -209,6 +218,8 @@
 
   
 
+
+  
 
   </body>
 </html>

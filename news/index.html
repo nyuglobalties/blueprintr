@@ -67,9 +67,16 @@
 
 
 
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -83,7 +90,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">blueprintr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9</span>
       </span>
     </div>
 
@@ -101,7 +108,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/Global-TIES-for-Children/blueprintr/">
+  <a href="https://github.com/nyuglobalties/blueprintr/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -120,14 +127,47 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/Global-TIES-for-Children/blueprintr/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+      <small>Source: <a href='https://github.com/nyuglobalties/blueprintr/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="blueprintr-009" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.9">
+<a href="#blueprintr-009" class="anchor"></a>blueprintr 0.0.9</h1>
+<ul>
+<li>Bugfix to ensure the “description” field is present in the event that parent, annotated datasets don’t have the “description” field filled in at all</li>
+<li>Bugfix that didn’t specify a join column, causing nuisance noise</li>
+</ul>
+</div>
+    <div id="blueprintr-008" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.8">
+<a href="#blueprintr-008" class="anchor"></a>blueprintr 0.0.8</h1>
+<ul>
+<li>Adds “annotations”, a variable attribute system that makes it easier to propagate metadata provenance, rather than depending on variable naming from <code><a href="../reference/blueprint_macros.html">.TARGET()</a></code> calls.</li>
+<li>Adds <code><a href="../reference/mutate_annotation.html">mutate_annotation()</a></code> and <code><a href="../reference/mutate_annotation.html">mutate_annotation_across()</a></code> which allows runtime transformation of metadata. Useful for batch transformations before metadata creation.</li>
+</ul>
+</div>
+    <div id="blueprintr-007" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.7">
+<a href="#blueprintr-007" class="anchor"></a>blueprintr 0.0.7</h1>
+<ul>
+<li>Adds <code>recurse</code> parameter to <code><a href="../reference/load_blueprint.html">load_blueprints()</a></code> and <code><a href="../reference/tar_blueprint.html">tar_blueprints()</a></code> to recursively load blueprints from the provided <code>directory</code>
+</li>
+</ul>
+</div>
+    <div id="blueprintr-006" class="section level1">
+<h1 class="page-header" data-toc-text="0.0.6">
+<a href="#blueprintr-006" class="anchor"></a>blueprintr 0.0.6</h1>
+<ul>
+<li>Integration with <code>panelcleaner</code> to import homogenized codings if target data.frame is a <code>mapped_df</code>
+</li>
+<li>Adds a new <code><a href="../reference/bp_include_panelcleaner_meta.html">bp_include_panelcleaner_meta()</a></code> extension to signal blueprintr to add <code>mapped_df</code> meta</li>
+</ul>
+</div>
     <div id="blueprintr-005" class="section level1">
 <h1 class="page-header" data-toc-text="0.0.5">
 <a href="#blueprintr-005" class="anchor"></a>blueprintr 0.0.5</h1>
 <ul>
-<li>Fixed bug that would not translate anonymous functions and formulae correctly (<a href='https://github.com/Global-TIES-for-Children/blueprintr/issues/22'>#22</a> and <a href='https://github.com/Global-TIES-for-Children/blueprintr/issues/29'>#29</a>)</li>
+<li>Fixed bug that would not translate anonymous functions and formulae correctly (<a href='https://github.com/nyuglobalties/blueprintr/issues/22'>#22</a> and <a href='https://github.com/nyuglobalties/blueprintr/issues/29'>#29</a>)</li>
 </ul>
 </div>
     <div id="blueprintr-004" class="section level1">
@@ -152,9 +192,9 @@
 <h1 class="page-header" data-toc-text="0.0.2">
 <a href="#blueprintr-002" class="anchor"></a>blueprintr 0.0.2</h1>
 <ul>
-<li>Created codebook export feature with <code><a href="../reference/render_codebook.html">render_codebook()</a></code> (<a href='https://github.com/Global-TIES-for-Children/blueprintr/issues/3'>#3</a>)</li>
+<li>Created codebook export feature with <code><a href="../reference/render_codebook.html">render_codebook()</a></code> (<a href='https://github.com/nyuglobalties/blueprintr/issues/3'>#3</a>)</li>
 <li>Allow labelled dataset generation with <code><a href="../reference/blueprint.html">blueprint(..., labelled = TRUE)</a></code>. Handy to have when making datasets intended to be used in a STATA or SPSS environment.</li>
-<li>Load blueprints from file or folder using <code><a href="../reference/load_blueprint.html">load_blueprint()</a></code> or <code><a href="../reference/load_blueprint.html">load_blueprints()</a></code> (<a href='https://github.com/Global-TIES-for-Children/blueprintr/issues/10'>#10</a>)</li>
+<li>Load blueprints from file or folder using <code><a href="../reference/load_blueprint.html">load_blueprint()</a></code> or <code><a href="../reference/load_blueprint.html">load_blueprints()</a></code> (<a href='https://github.com/nyuglobalties/blueprintr/issues/10'>#10</a>)</li>
 </ul>
 </div>
   </div>
@@ -170,11 +210,11 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Patrick Anker.</p>
+  <p><p>Developed by Patrick Anker.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -182,6 +222,8 @@
 
   
 
+
+  
 
   </body>
 </html>

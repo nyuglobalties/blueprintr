@@ -67,9 +67,16 @@
 
 
 
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-index">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -83,7 +90,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">blueprintr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9</span>
       </span>
     </div>
 
@@ -101,7 +108,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/Global-TIES-for-Children/blueprintr/">
+  <a href="https://github.com/nyuglobalties/blueprintr/">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -145,9 +152,9 @@
       <tr>
         
         <td>
-          <p><code><a href="accept_content.html">accept_content()</a></code> </p>
+          <p><code><a href="annotations.html">annotations()</a></code> <code><a href="annotations.html">annotation_names()</a></code> <code><a href="annotations.html">annotation()</a></code> <code><a href="annotations.html">has_annotation()</a></code> <code><a href="annotations.html">add_annotation()</a></code> </p>
         </td>
-        <td><p>Run clean-up tasks and return built dataset</p></td>
+        <td><p>Access the blueprintr metadata at runtime</p></td>
       </tr><tr>
         
         <td>
@@ -175,6 +182,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="bp_include_panelcleaner_meta.html">bp_include_panelcleaner_meta()</a></code> </p>
+        </td>
+        <td><p>Include panelcleaner mapping on metadata creation</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="bp_label_variables.html">bp_label_variables()</a></code> </p>
         </td>
         <td><p>Convert variables to labelled variables in cleanup stage</p></td>
@@ -190,6 +203,12 @@
           <p><code><a href="checks.html">all_variables_present()</a></code> <code><a href="checks.html">all_types_match()</a></code> </p>
         </td>
         <td><p>Evaluate checks on the blueprint build output</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="cleanup.html">cleanup()</a></code> </p>
+        </td>
+        <td><p>Run clean-up tasks and return built dataset</p></td>
       </tr><tr>
         
         <td>
@@ -223,6 +242,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="mutate_annotation.html">mutate_annotation()</a></code> <code><a href="mutate_annotation.html">mutate_annotation_across()</a></code> </p>
+        </td>
+        <td><p>Modify dataset variable annotations</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="plan_from_blueprint.html">plan_from_blueprint()</a></code> </p>
         </td>
         <td><p>Create a drake plan from a blueprint</p></td>
@@ -253,11 +278,11 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Patrick Anker.</p>
+  <p><p>Developed by Patrick Anker.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -265,6 +290,8 @@
 
   
 
+
+  
 
   </body>
 </html>

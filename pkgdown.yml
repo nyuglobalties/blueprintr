@@ -1,7 +1,7 @@
 pandoc: 2.7.3
-pkgdown: 1.6.1.9000
-pkgdown_sha: c931fe24c135c6ca704ae9f300470e9c66d8bfe7
+pkgdown: 1.6.1.9001
+pkgdown_sha: 58807eede312d522d04834d8efebe784a8b7229a
 articles:
   blueprintr: blueprintr.html
-last_built: 2021-02-03T22:54Z
+last_built: 2021-03-28T05:16Z
 
