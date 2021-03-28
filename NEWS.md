@@ -1,3 +1,8 @@
+# blueprintr 0.0.9
+
+* Bugfix to ensure the "description" field is present in the event that parent, annotated datasets don't have the "description" field filled in at all
+* Bugfix that didn't specify a join column, causing nuisance noise
+
 # blueprintr 0.0.8
 
 * Adds "annotations", a variable attribute system that makes it easier to propagate metadata provenance, rather than depending on variable naming from `.TARGET()` calls.

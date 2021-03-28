@@ -142,3 +142,16 @@ test_that("Coalescing annotation vs. metafile deps works", {
     "continuous"
   )
 })
+
+test_that("Metadata propagation corner cases are covered", {
+  # 1. No dependencies being provided doesn't leave behind
+  #    ".origin" column
+  # 2. "description" field always exists
+  mtcars_meta <- initial_metadata_dt(mtcars)
+  meta_dt <- propagate_metadata(mtcars_meta, mtcars, list())
+
+  expect_true(!".origin" %in% names(meta_dt))
+  expect_true(all(
+    c("name", "type", "description") %in% names(meta_dt)
+  ))
+})

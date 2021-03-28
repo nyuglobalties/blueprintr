@@ -51,6 +51,16 @@ propagate_metadata <- function(metadata_dt, df, deps_metalist) {
     metadata_dt <- decs_dt
   }
 
+  # Remove .origin if no reconciliation happened
+  if (".origin" %in% names(metadata_dt)) {
+    metadata_dt[[".origin"]] <- NULL
+  }
+
+  # Ensure "description" is available for metadata reqs
+  if (!"description" %in% names(metadata_dt)) {
+    metadata_dt[["description"]] <- NA_character_
+  }
+
   metadata_dt
 }
 
@@ -93,7 +103,8 @@ link_annotation_meta <- function(meta_dt, df) {
   meta_dt <- dplyr::select(meta_dt, .data$name, .data$type)
   meta_dt <- dplyr::left_join(
     meta_dt,
-    annotation_table_df(df)
+    annotation_table_df(df),
+    by = "name"
   )
   dplyr::mutate(
     meta_dt,
