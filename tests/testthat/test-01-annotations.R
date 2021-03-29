@@ -64,4 +64,13 @@ test_that("Mutate synonyms behave as expected", {
     expect_true(has_annotation(dat2[[vn]], "means"))
     expect_identical(annotation(dat2[[vn]], "means"), mean(dat2[[vn]]))
   }
+
+  # Demonstrates that variable names are successfully passed in
+  dat3 <- mutate_annotation_across(
+    mtcars, "title", .fn = function(x, nx) nx, .with_names = TRUE
+  )
+
+  for (vn in names(dat3)) {
+    expect_identical(vn, annotation(dat3[[vn]], "title"))
+  }
 })
