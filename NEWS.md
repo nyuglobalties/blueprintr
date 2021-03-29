@@ -1,3 +1,7 @@
+# blueprintr 0.0.10
+
+* Adds a `.with_names` parameter to `mutate_annotation_across` that, when `TRUE`, sends a column and its name as arguments to `.fn`.
+
 # blueprintr 0.0.9
 
 * Bugfix to ensure the "description" field is present in the event that parent, annotated datasets don't have the "description" field filled in at all

@@ -16,8 +16,12 @@
 #'     evaluated with `.data` as a data mask.
 #' 
 #'   For `mutate_annotation_across`, extra arguments passed to `.fn`
-#' @param .fn A function that takes in a vector, the currently selected variable
+#' @param .fn A function that takes in a vector and arbitrary arguments `...`
+#'   If `.with_names` is `TRUE`, then `.fn` will be passed the vector *and*
+#'   the name of the vector, since it's often useful to compute on the metadata.
 #' @param .cols A tidyselect-compatible selection of variables to be edited
+#' @param .with_names If `TRUE`, passes a column *and* its name as arguments to
+#'   `.fn`
 #' @param .overwrite If `TRUE`, overwrites existing annotation values.
 #'   Annotations have an overwriting guard by default, but since these functions
 #'   are intentionally modifying the annotations, this parameter 
@@ -25,6 +29,20 @@
 #' @return A `data.frame` with annotated columns
 #' 
 #' @name mutate_annotation
+#' @examples 
+#' # Adds a "mean" annotation to 'mpg'
+#' mutate_annotation(mtcars, "mean", mpg = mean(mpg))
+#' 
+#' # Adds a "mean" annotation to all variables in `mtcars`
+#' mutate_annotation_across(mtcars, "mean", .fn = mean)
+#' 
+#' # Adds a "title" annotation that copies the column name
+#' mutate_annotation_across(
+#'   mtcars,
+#'   "title",
+#'   .fn = function(x, nx) nx,
+#'   .with_names = TRUE
+#' )
 #' @export
 NULL
 
@@ -63,10 +81,11 @@ mutate_annotation <- function(.data, .field, ..., .overwrite = TRUE) {
 #' @rdname mutate_annotation
 #' @export
 mutate_annotation_across <- function(
-  .data, 
+  .data,
   .field,
   .fn,
   .cols = dplyr::everything(),
+  .with_names = FALSE,
   ...,
   .overwrite = TRUE
 ) {
@@ -77,7 +96,11 @@ mutate_annotation_across <- function(
   vars <- names(dplyr::select(.data, {{ .cols }}))
 
   for (var in vars) {
-    evald <- .fn(.data[[var]], ...)
+    if (isTRUE(.with_names)) {
+      evald <- .fn(.data[[var]], var, ...)
+    } else {
+      evald <- .fn(.data[[var]], ...)
+    }
 
     .data[[var]] <- add_annotation(
       .data[[var]],

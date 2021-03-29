@@ -12,6 +12,7 @@ mutate_annotation_across(
   .field,
   .fn,
   .cols = dplyr::everything(),
+  .with_names = FALSE,
   ...,
   .overwrite = TRUE
 )
@@ -33,9 +34,14 @@ Annotations have an overwriting guard by default, but since these functions
 are intentionally modifying the annotations, this parameter
 defaults to \code{TRUE}.}
 
-\item{.fn}{A function that takes in a vector, the currently selected variable}
+\item{.fn}{A function that takes in a vector and arbitrary arguments \code{...}
+If \code{.with_names} is \code{TRUE}, then \code{.fn} will be passed the vector \emph{and}
+the name of the vector, since it's often useful to compute on the metadata.}
 
 \item{.cols}{A tidyselect-compatible selection of variables to be edited}
+
+\item{.with_names}{If \code{TRUE}, passes a column \emph{and} its name as arguments to
+\code{.fn}}
 }
 \value{
 A \code{data.frame} with annotated columns
@@ -47,4 +53,19 @@ However, in the course of data aggregation, it can be common to
 perform massive transformations that would be cumbersome to
 document manually. This exposes a metadata-manipulation framework
 prior to metadata file creation, in the style of \code{dplyr::mutate}.
+}
+\examples{
+# Adds a "mean" annotation to 'mpg'
+mutate_annotation(mtcars, "mean", mpg = mean(mpg))
+
+# Adds a "mean" annotation to all variables in `mtcars`
+mutate_annotation_across(mtcars, "mean", .fn = mean)
+
+# Adds a "title" annotation that copies the column name
+mutate_annotation_across(
+  mtcars,
+  "title",
+  .fn = function(x, nx) nx,
+  .with_names = TRUE
+)
 }
