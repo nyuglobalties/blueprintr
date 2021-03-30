@@ -115,6 +115,9 @@ link_annotation_meta <- function(meta_dt, df) {
 reconcile_dependencies <- function(dec_dt, meta_dt) {
   all_meta <- dplyr::bind_rows(dec_dt, meta_dt)
   fields <- setdiff(names(all_meta), c("name", ".origin"))
+  
+  # Don't include internal fields
+  fields <- grep("^\\.", fields, value = TRUE)
 
   wide_meta <- tidyr::pivot_wider(
     all_meta,
