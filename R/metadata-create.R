@@ -113,11 +113,23 @@ link_annotation_meta <- function(meta_dt, df) {
 }
 
 reconcile_dependencies <- function(dec_dt, meta_dt) {
+  # Don't include internal fields
+  accepted_vars <- unique(c(names(dec_dt), names(meta_dt)))
+  accepted_vars <- accepted_vars[!grepl("^\\.", accepted_vars)]
+  accepted_vars <- c(accepted_vars, ".origin")
+
+  dec_dt <- dplyr::select(
+    dec_dt,
+    dplyr::any_of(accepted_vars)
+  )
+
+  meta_dt <- dplyr::select(
+    meta_dt,
+    dplyr::any_of(accepted_vars)
+  )
+
   all_meta <- dplyr::bind_rows(dec_dt, meta_dt)
   fields <- setdiff(names(all_meta), c("name", ".origin"))
-  
-  # Don't include internal fields
-  fields <- grep("^\\.", fields, value = TRUE)
 
   wide_meta <- tidyr::pivot_wider(
     all_meta,
