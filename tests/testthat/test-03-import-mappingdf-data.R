@@ -56,6 +56,8 @@ test_that("mdf_keep_panel() works", {
 })
 
 test_that("mapped_df import works correctly", {
+  skip_if_not_installed("panelcleaner")
+
   # Make sure mdf_import_meta only runs on mapped_dfs
   meta_dt <- initial_metadata_dt(datasets::mtcars)
   expect_identical(

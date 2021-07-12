@@ -19,6 +19,8 @@ test_that("Variables are reordered and dropped correctly", {
 })
 
 test_that("Variables are converted to labelled vectors correctly", {
+  skip_if_not_installed("labelled")
+
   mtcars_rearranged_bp <- blueprint(
     "mtcars_chunk_rearranged",
     command = mtcars,
