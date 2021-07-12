@@ -71,7 +71,7 @@ fetch_blueprint_files <- function(directory) {
 }
 
 import_blueprint_file <- function(bp_file, env = parent.frame()) {
-  exprs <- rlang::parse_exprs(file(bp_file))
+  exprs <- rlang::parse_exprs(file(bp_file, encoding = "UTF-8"))
   vals <- lapply(exprs, eval_tidy, env = env)
 
   if (length(vals) < 1) {
