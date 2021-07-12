@@ -15,6 +15,7 @@ annotate_variables <- function(df, bp, meta) {
 annotate_variable <- function(x, varname, meta, overwrite) {
   meta <- dplyr::filter(meta, .data$name == varname)
   fields <- setdiff(names(meta), c("name", "type", "dropped"))
+  fields <- fields[!grepl("^\\.", fields)]
 
   for (f in fields) {
     x <- add_annotation(x, f, meta[[f]], overwrite)
