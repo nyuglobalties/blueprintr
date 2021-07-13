@@ -1,3 +1,7 @@
+# blueprintr 0.0.11
+* Uses UTF-8 encoding when parsing blueprint files (#41)
+* Ignores private (dot-prefixed) metadata fields during variable annotation (#40)
+
 # blueprintr 0.0.10
 
 * Adds a `.with_names` parameter to `mutate_annotation_across` that, when `TRUE`, sends a column and its name as arguments to `.fn`.
