@@ -53,6 +53,8 @@ test_that("Codebook exports are added to plan correctly", {
 })
 
 test_that("Codebooks are rendered safely", {
+  skip_if_not_installed("labelled")
+
   test_bp <- blueprint(
     "mtcars_chunk_rearranged",
     command = mtcars,

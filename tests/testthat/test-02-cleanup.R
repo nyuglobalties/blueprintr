@@ -19,6 +19,8 @@ test_that("Variables are reordered and dropped correctly", {
 })
 
 test_that("Variables are converted to labelled vectors correctly", {
+  skip_if_not_installed("labelled")
+
   mtcars_rearranged_bp <- blueprint(
     "mtcars_chunk_rearranged",
     command = mtcars,
@@ -52,10 +54,9 @@ test_that("Variables are converted to labelled vectors correctly", {
 
 test_that("Variables are annotated correctly", {
   mtcars_rearranged_bp <- blueprint(
-    "mtcars_chunk_rearranged",
+    "mtcars_chunk_rearranged_copy",
     command = mtcars,
     metadata_directory = bp_path("blueprints"),
-    labelled = TRUE,
     annotate = TRUE
   )
 
@@ -64,17 +65,21 @@ test_that("Variables are annotated correctly", {
   drake::clean()
   drake::make(plan)
 
-  drake::loadd(mtcars_chunk_rearranged)
+  drake::loadd(mtcars_chunk_rearranged_copy)
 
   expect_true(
-    has_annotation(mtcars_chunk_rearranged$cyl, "description")
+    has_annotation(mtcars_chunk_rearranged_copy$cyl, "description")
   )
 
   expect_true(
-    has_annotation(mtcars_chunk_rearranged$mpg, "description")
+    has_annotation(mtcars_chunk_rearranged_copy$mpg, "description")
   )
 
   expect_true(
-    has_annotation(mtcars_chunk_rearranged$cyl, "coding")
+    has_annotation(mtcars_chunk_rearranged_copy$cyl, "coding")
+  )
+
+  expect_false(
+    has_annotation(mtcars_chunk_rearranged_copy$cyl, ".parsed_tests")
   )
 })
