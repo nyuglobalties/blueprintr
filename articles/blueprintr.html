@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">blueprintr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.11</span>
       </span>
     </div>
 
@@ -109,7 +109,7 @@ div.vg-info span:before {
 <p>blueprintr is a companion to <a href="https://github.com/ropensci/drake" class="external-link">drake</a> that focuses on documenting and testing tabular data. Whereas drake manages the workflow execution, blueprintr defines a collection of steps that need to be run in a drake workflow.</p>
 <div id="basic-use" class="section level1">
 <h1 class="hasAnchor">
-<a href="#basic-use" class="anchor"></a>Basic Use</h1>
+<a href="#basic-use" class="anchor" aria-hidden="true"></a>Basic Use</h1>
 <p>The first, and recommended, step is to attach blueprintr to your R session with <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/nyuglobalties/blueprintr" class="external-link">blueprintr</a></span><span class="op">)</span></code></pre></div>
@@ -154,7 +154,7 @@ div.vg-info span:before {
 <code class="sourceCode R"><span class="fu"><a href="../reference/attach_blueprint.html">attach_blueprint</a></span><span class="op">(</span><span class="va">plan</span>, <span class="va">blueprint</span><span class="op">)</span>
 <span class="fu"><a href="../reference/attach_blueprint.html">attach_blueprints</a></span><span class="op">(</span><span class="va">plan</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
 <div class="vg-info">
-<span><code>attach_blueprints</code> accepts “<a href="https://adv-r.hadley.nz/quasiquotation.html#tidy-dots" class="external-link">tidy dots</a>”, so if you have a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> of blueprints, you can “splat” all of those blueprints into <code>attach_blueprints</code> like <code><a href="../reference/attach_blueprint.html">attach_blueprints(plan, !!!list_of_blueprints)</a></code></span>
+<span><code>attach_blueprints</code> accepts “<a href="https://adv-r.hadley.nz/quasiquotation.html#tidy-dots" class="external-link">tidy dots</a>”, so if you have a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> of blueprints, you can “splat” all of those blueprints into <code>attach_blueprints</code> like <code>attach_blueprints(plan, !!!list_of_blueprints)</code></span>
 </div>
 <p>If you don’t have an existing plan, you can create one with</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">

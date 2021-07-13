@@ -70,9 +70,6 @@ symbols to be analyzed in the drake plan." />
 
 
 
-<!-- dependencies from examples -->
-
-
   
 
   
@@ -95,7 +92,7 @@ symbols to be analyzed in the drake plan." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">blueprintr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.11</span>
       </span>
     </div>
 
@@ -142,11 +139,11 @@ These macro functions signal a dependency to <code>blueprintr</code> and evaluat
 symbols to be analyzed in the <code>drake</code> plan.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>.TARGET</span><span class='op'>(</span><span class='va'>bp_name</span><span class='op'>)</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>.TARGET</span><span class='op'>(</span><span class='va'>bp_name</span><span class='op'>)</span>
 
 <span class='fu'>.BLUEPRINT</span><span class='op'>(</span><span class='va'>bp_name</span><span class='op'>)</span>
 
-<span class='fu'>.META</span><span class='op'>(</span><span class='va'>bp_name</span><span class='op'>)</span></pre>
+<span class='fu'>.META</span><span class='op'>(</span><span class='va'>bp_name</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -177,31 +174,35 @@ understood in the context of a <code>drake</code> plan. The targets associated w
 symbols are generated when blueprints are attached to a plan.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>.TARGET</span><span class='op'>(</span><span class='st'>"example_dataset"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; example_dataset</div><div class='input'><span class='fu'>.BLUEPRINT</span><span class='op'>(</span><span class='st'>"example_dataset"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; example_dataset_blueprint</div><div class='input'><span class='fu'>.META</span><span class='op'>(</span><span class='st'>"example_dataset"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; example_dataset_meta</div><div class='input'>
-<span class='fu'><a href='blueprint.html'>blueprint</a></span><span class='op'>(</span>
-  <span class='st'>"test_bp"</span>,
-  description <span class='op'>=</span> <span class='st'>"Blueprint with dependencies"</span>,
-  command <span class='op'>=</span>
-    <span class='fu'>.TARGET</span><span class='op'>(</span><span class='st'>"parent1"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-      <span class='fu'>left_join</span><span class='op'>(</span><span class='fu'>.TARGET</span><span class='op'>(</span><span class='st'>"parent2"</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='st'>"id"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-      <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; &lt;blueprint: 'test_bp'&gt;
-#&gt; 
-#&gt; Description: Blueprint with dependencies
-#&gt; Annotations: DISABLED
-#&gt; Metadata location: '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpQKjQMO/file19f064f1c27b/blueprints/test_bp.csv'
-#&gt; 
-#&gt; -- Command --
-#&gt; Drake command:
-#&gt; parent1 %&gt;% left_join(parent2, by = "id") %&gt;% filter(!is.na(id))
-#&gt; 
-#&gt; Raw command:
-#&gt; .TARGET("parent1") %&gt;% left_join(.TARGET("parent2"), by = "id") %&gt;% 
-#&gt;     filter(!is.na(id))</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='fu'>.TARGET</span><span class='op'>(</span><span class='st'>"example_dataset"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> example_dataset</span>
+<span class='r-in'><span class='fu'>.BLUEPRINT</span><span class='op'>(</span><span class='st'>"example_dataset"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> example_dataset_blueprint</span>
+<span class='r-in'><span class='fu'>.META</span><span class='op'>(</span><span class='st'>"example_dataset"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> example_dataset_meta</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='blueprint.html'>blueprint</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='st'>"test_bp"</span>,</span>
+<span class='r-in'>  description <span class='op'>=</span> <span class='st'>"Blueprint with dependencies"</span>,</span>
+<span class='r-in'>  command <span class='op'>=</span></span>
+<span class='r-in'>    <span class='fu'>.TARGET</span><span class='op'>(</span><span class='st'>"parent1"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>      <span class='fu'>left_join</span><span class='op'>(</span><span class='fu'>.TARGET</span><span class='op'>(</span><span class='st'>"parent2"</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='st'>"id"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>      <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;blueprint: 'test_bp'&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Description: Blueprint with dependencies</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Annotations: DISABLED</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Metadata location: '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp5U2cqb/file8567e425601/blueprints/test_bp.csv'</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -- Command --</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Drake command:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> parent1 %&gt;% left_join(parent2, by = "id") %&gt;% filter(!is.na(id))</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Raw command:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> .TARGET("parent1") %&gt;% left_join(.TARGET("parent2"), by = "id") %&gt;% </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     filter(!is.na(id))</span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
