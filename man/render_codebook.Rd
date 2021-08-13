@@ -11,6 +11,7 @@ render_codebook(
   title = glue("{ui_value(blueprint$name)} Codebook"),
   dataset = NULL,
   template = bp_path("codebook_templates/default_codebook.Rmd"),
+  verbose = FALSE,
   ...
 )
 }
@@ -27,6 +28,9 @@ render_codebook(
 summaries}
 
 \item{template}{Path to the knitr template}
+
+\item{verbose}{If \code{TRUE}, displays log messages during codebook render.
+Helpful during debugging.}
 
 \item{...}{Extra parameters passed to \code{\link[rmarkdown:render]{rmarkdown::render()}}}
 }

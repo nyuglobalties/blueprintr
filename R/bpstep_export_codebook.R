@@ -44,6 +44,7 @@ codebook_export_call <- function(bp) {
   codebook_template <- bp$codebook_template %||% NULL
   codebook_title <- bp$codebook_title %||% NULL
   with_data <- bp$codebook_summaries %||% FALSE
+  verbose <- bp$codebook_verbose %||% FALSE
 
   command <- call2(
     "render_codebook",
@@ -51,6 +52,7 @@ codebook_export_call <- function(bp) {
     as.name(metadata_target_name(bp)),
     codebook_file,
     dataset = if (with_data) as.name(blueprint_final_name(bp)) else NULL,
+    verbose = verbose,
     .ns = "blueprintr"
   )
 

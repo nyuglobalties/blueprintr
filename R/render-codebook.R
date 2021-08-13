@@ -7,6 +7,8 @@
 #' @param dataset If included, a `data.frame` to be used as a source for
 #'                summaries
 #' @param template Path to the knitr template
+#' @param verbose If `TRUE`, displays log messages during codebook render.
+#'   Helpful during debugging.
 #' @param ... Extra parameters passed to [rmarkdown::render()][rmarkdown::render()]
 #'
 #' @export

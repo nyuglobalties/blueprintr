@@ -41,6 +41,8 @@ bp_extend <- function(bp, ...) {
 #' @param file Path to where the codebook should be saved
 #' @param template A path to an RMarkdown template
 #' @param title Optional title of codebook
+#' @param verbose If `TRUE`, logging messages during codebook render are displayed.
+#'   Helpful during debugging.
 #' @return An amended blueprint with the codebook export instructions
 #' @export
 #' @examples
@@ -58,7 +60,8 @@ bp_export_codebook <- function(
   summaries = FALSE,
   file = NULL,
   template = NULL,
-  title = NULL
+  title = NULL,
+  verbose = FALSE
 ) {
   bp_extend(
     blueprint,
@@ -66,7 +69,8 @@ bp_export_codebook <- function(
     codebook_summaries = summaries,
     codebook_file = file,
     codebook_template = template,
-    codebook_title = title
+    codebook_title = title,
+    codebook_verbose = verbose
   )
 }
 

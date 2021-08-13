@@ -9,7 +9,8 @@ bp_export_codebook(
   summaries = FALSE,
   file = NULL,
   template = NULL,
-  title = NULL
+  title = NULL,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -22,6 +23,9 @@ bp_export_codebook(
 \item{template}{A path to an RMarkdown template}
 
 \item{title}{Optional title of codebook}
+
+\item{verbose}{If \code{TRUE}, logging messages during codebook render are displayed.
+Helpful during debugging.}
 }
 \value{
 An amended blueprint with the codebook export instructions
