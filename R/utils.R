@@ -88,6 +88,12 @@ bp_msg <- function(x, .envir = parent.frame()) {
   message(msg)
 }
 
+bp_msg_verbose <- function(verbose, x, .envir = parent.frame()) {
+  if (isTRUE(verbose)) {
+    bp_msg(x, .envir = .envir)
+  }
+}
+
 bp_assert <- function(x, msg = NULL, .envir = parent.frame()) {
   if (is.null(msg)) {
     deparsed <- safe_deparse(substitute(x))

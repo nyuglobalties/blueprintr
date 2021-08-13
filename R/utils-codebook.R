@@ -131,7 +131,7 @@ coding_table <- function(coding) {
   print(coding_df)
 }
 
-write_variable <- function(variable, meta, data, in_group = FALSE) {
+write_variable <- function(variable, meta, data, in_group = FALSE, verbose = FALSE) {
   var_desc <- dplyr::filter(meta, .data$name == variable)[["description"]]
   var_title <- NULL
 
@@ -159,6 +159,8 @@ write_variable <- function(variable, meta, data, in_group = FALSE) {
     h_level <- h3
   }
 
+  bp_msg_verbose(verbose, "Writing variable '{variable}' (grouped: {isTRUE(in_group)})")
+
   if (!is.null(var_title)) {
     h_level(paste0(variable, " --- ", var_title))
   } else {
@@ -166,15 +168,18 @@ write_variable <- function(variable, meta, data, in_group = FALSE) {
   }
 
   if (!is.null(var_coding)) {
+    bp_msg_verbose(verbose, "Writing coding for '{variable}'")
     coding_table(var_coding)
   }
 
   if (!is_empty_text(var_desc)) {
+    bp_msg_verbose(verbose, "Writing description for '{variable}'")
     blockquote(var_desc)
   }
 
   if (!is.null(data)) {
     if (!is.character(data[[variable]])) {
+      bp_msg_verbose(verbose, "Writing summary stats for '{variable}' (non-character)")
       codeblock(summary(data[[variable]]))
     }
   }
@@ -183,6 +188,7 @@ write_variable <- function(variable, meta, data, in_group = FALSE) {
     var_tags <- variable_tags(variable, meta)
 
     if (length(var_tags) > 0) {
+      bp_msg_verbose(verbose, "Writing tags for '{variable}'")
       for (tag in var_tags) {
         badge(tag)
       }
@@ -195,7 +201,7 @@ write_variable <- function(variable, meta, data, in_group = FALSE) {
   invisible(NULL)
 }
 
-write_group <- function(.group, meta, data) {
+write_group <- function(.group, meta, data, verbose = FALSE) {
   meta <- dplyr::filter(meta, .data$group == .group)
 
   if ("group_description" %in% names(meta)) {
@@ -208,14 +214,16 @@ write_group <- function(.group, meta, data) {
     group_description <- NULL
   }
 
+  bp_msg_verbose(verbose, "Writing group '{.group}'")
   h3(.group)
 
   if (!is.null(group_description)) {
+    bp_msg_verbose(verbose, "Writing description for group '{.group}'")
     paragraph(paste0("*", group_description, "*"))
   }
 }
 
-write_grouped_variables <- function(meta, data) {
+write_grouped_variables <- function(meta, data, verbose = FALSE) {
   # Iterate through rows instead of variable names
   current_group <- ""
   echoed <- FALSE
@@ -234,25 +242,25 @@ write_grouped_variables <- function(meta, data) {
     in_grp <- !is_empty_text(current_group)
 
     if (in_grp && !isTRUE(echoed)) {
-      write_group(current_group, meta, data)
+      write_group(current_group, meta, data, verbose = verbose)
       echoed <- TRUE
     }
 
-    write_variable(variable, meta, data, in_group = in_grp)
+    write_variable(variable, meta, data, in_group = in_grp, verbose = verbose)
   }
 }
 
-write_variables <- function(meta, data) {
+write_variables <- function(meta, data, verbose = FALSE) {
   if ("group" %in% names(meta)) {
-    write_grouped_variables(meta, data)
+    write_grouped_variables(meta, data, verbose = verbose)
   } else {
     for (variable in meta$name) {
-      write_variable(variable, meta, data)
+      write_variable(variable, meta, data, verbose = verbose)
     }
   }
 }
 
-write_section <- function(.section, meta, data) {
+write_section <- function(.section, meta, data, verbose = FALSE) {
   meta <- meta[meta$section == .section, ]
 
   if ("section_description" %in% names(meta)) {
@@ -265,28 +273,30 @@ write_section <- function(.section, meta, data) {
     section_description <- NULL
   }
 
+  bp_msg_verbose(verbose, "Writing section '{.section}'")
   h2(.section)
 
   if (!is.null(section_description)) {
+    bp_msg_verbose(verbose, "Writing description for section '{.section}'")
     paragraph(section_description)
   }
 
-  write_variables(meta, data)
+  write_variables(meta, data, verbose = verbose)
 }
 
-write_variables_only <- function(meta, data) {
+write_variables_only <- function(meta, data, verbose = FALSE) {
   meta <- remove_dropped(meta)
   meta <- create_coding_list(meta)
 
-  write_variables(meta, data)
+  write_variables(meta, data, verbose = verbose)
 }
 
-write_sections <- function(meta, data) {
+write_sections <- function(meta, data, verbose = FALSE) {
   meta <- remove_dropped(meta)
   meta <- arrange_by_sections(meta)
   meta <- create_coding_list(meta)
 
   for (section in unique(meta$section)) {
-    write_section(section, meta, data)
+    write_section(section, meta, data, verbose = verbose)
   }
 }

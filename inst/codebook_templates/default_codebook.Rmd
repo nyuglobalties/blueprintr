@@ -10,6 +10,7 @@ params:
   blueprint: NULL
   meta: NULL
   title: NULL
+  verbose: false
 ---
 
 ```{css, echo=FALSE}
@@ -35,9 +36,9 @@ if (!is.null(params$blueprint$description)) {
 }
 
 if ("section" %in% names(params$meta)) {
-  write_sections(params$meta, params$dataset)
+  write_sections(params$meta, params$dataset, verbose = params$verbose)
 } else {
-  write_variables_only(params$meta, params$dataset)
+  write_variables_only(params$meta, params$dataset, verbose = params$verbose)
 }
 ```
 

@@ -17,6 +17,7 @@ render_codebook <- function(blueprint,
                             title = glue("{ui_value(blueprint$name)} Codebook"),
                             dataset = NULL,
                             template = bp_path("codebook_templates/default_codebook.Rmd"),
+                            verbose = FALSE,
                             ...) {
   bp_assert(inherits(blueprint, "blueprint"))
   bp_assert(inherits(meta, "blueprint_metadata"))
@@ -46,7 +47,8 @@ render_codebook <- function(blueprint,
       blueprint = blueprint,
       meta = meta,
       dataset = dataset,
-      title = title
+      title = title,
+      verbose = verbose
     ),
     quiet = TRUE,
     ...
