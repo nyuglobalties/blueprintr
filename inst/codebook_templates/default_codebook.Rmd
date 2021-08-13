@@ -30,7 +30,7 @@ stopifnot(inherits(params$blueprint, "blueprint"))
 stopifnot(inherits(params$meta, "blueprint_metadata"))
 ```
 
-```{r output, echo=FALSE, results='asis'}
+```{r output, echo=FALSE, results='asis', message=TRUE}
 if (!is.null(params$blueprint$description)) {
   blockquote(params$blueprint$description)
 }
