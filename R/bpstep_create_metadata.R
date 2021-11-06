@@ -1,37 +1,15 @@
-bpstep_create_metadata <- function(assembler, bp, ...) {
-  UseMethod("bpstep_create_metadata", assembler)
-}
-
-#' @export
-bpstep_create_metadata.drake_assembler <- function(assembler, bp, ...) {
-  plan <- bpstep_payload(
-    assembler,
-    metadata_target_file_name(bp),
-    metadata_call(bp),
-    format = "file"
-  )
-
-  drake_bpstep(
+bpstep_create_metadata <- function(asm, bp, ...) {
+  assemble_bpstep(
+    asm,
     step = "create_metadata",
     bp = bp,
-    payload = plan,
-    ...
-  )
-}
-
-#' @export
-bpstep_create_metadata.targets_assembler <- function(assembler, bp, ...) {
-  target <- targets::tar_target_raw(
-    metadata_target_file_name(bp),
-    metadata_call(bp),
-    format = "file"
-  )
-
-  targets_bpstep(
-    step = "create_metadata",
-    bp = bp,
-    payload = target,
-    ...
+    payload = bpstep_payload(
+      asm,
+      metadata_target_file_name(bp),
+      metadata_call(bp),
+      format = "file",
+      ...
+    )
   )
 }
 

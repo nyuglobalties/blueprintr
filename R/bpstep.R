@@ -29,6 +29,10 @@ bpstep <- function(step, bp, payload, ..., .class = NULL) {
   )
 }
 
+is_bpstep <- function(x) {
+  inherits(x, "bpstep")
+}
+
 #' @export
 print.bpstep <- function(x, ...) {
   cat_line("<blueprint assembly step>") # nocov start
@@ -40,6 +44,18 @@ print.bpstep <- function(x, ...) {
   print(x$payload)
 
   invisible(x) # nocov end
+}
+
+assemble_bpstep <- function(assembler, step, bp, payload, ...) {
+  cls <- paste0(assembler, "_bpstep")
+
+  bpstep(
+    step = step,
+    bp = bp,
+    payload = payload,
+    ...,
+    .class = cls
+  )
 }
 
 drake_bpstep <- function(step, bp, payload, ...) {
@@ -62,7 +78,7 @@ targets_bpstep <- function(step, bp, payload, ...) {
   )
 }
 
-bpstep_payload <- function(assembler, ...) {
+bpstep_payload <- function(assembler, target_name, target_command, ...) {
   UseMethod("bpstep_payload", assembler)
 }
 

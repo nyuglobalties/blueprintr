@@ -1,34 +1,14 @@
-bpstep_check_data <- function(assembler, bp, meta, ...) {
-  UseMethod("bpstep_check_data", assembler)
-}
-
-#' @export
-bpstep_check_data.drake_assembler <- function(assembler, bp, meta = NULL, ...) {
-  arglist <- list(check_data_call(bp, meta))
-  names(arglist) <- blueprint_checks_name(bp)
-
-  plan <- do.call(drake::drake_plan, arglist)
-
-  drake_bpstep(
+bpstep_check_data <- function(asm, bp, meta = NULL, ...) {
+  assemble_bpstep(
+    asm,
     step = "check_data",
     bp = bp,
-    payload = plan,
-    ...
-  )
-}
-
-#' @export
-bpstep_check_data.targets_assembler <- function(assembler, bp, meta = NULL, ...) {
-  target <- targets::tar_target_raw(
-    blueprint_checks_name(bp),
-    check_data_call(bp, meta)
-  )
-
-  targets_bpstep(
-    step = "check_data",
-    bp = bp,
-    payload = target,
-    ...
+    payload = bpstep_payload(
+      asm,
+      target_name = blueprint_checks_name(bp),
+      target_command = check_data_call(bp, meta),
+      ...
+    )
   )
 }
 

@@ -1,40 +1,15 @@
-bpstep_export_codebook <- function(assembler, bp, ...) {
-  UseMethod("bpstep_export_codebook", assembler)
-}
-
-#' @export
-bpstep_export_codebook.drake_assembler <- function(assembler, bp, ...) {
-  arglist <- list(
-    bquote(target(
-      command = .(codebook_export_call(bp)),
-      format = "file"
-    ))
-  )
-  names(arglist) <- blueprint_codebook_name(bp)
-
-  plan <- do.call(drake::drake_plan, arglist)
-
-  drake_bpstep(
+bpstep_export_codebook <- function(asm, bp, ...) {
+  assemble_bpstep(
+    asm,
     step = "export_codebook",
     bp = bp,
-    payload = plan,
-    ...
-  )
-}
-
-#' @export
-bpstep_export_codebook.targets_assembler <- function(assembler, bp, ...) {
-  target <- targets::tar_target_raw(
-    blueprint_codebook_name(bp),
-    codebook_export_call(bp),
-    format = "file"
-  )
-
-  targets_bpstep(
-    step = "export_codebook",
-    bp = bp,
-    payload = target,
-    ...
+    payload = bpstep_payload(
+      asm,
+      target_name = blueprint_codebook_name(bp),
+      target_command = codebook_export_call(bp),
+      format = "file",
+      ...
+    )
   )
 }
 

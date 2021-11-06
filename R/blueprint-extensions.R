@@ -1,3 +1,4 @@
+#' @export
 bp_extend <- function(bp, ...) {
   bp_assert(inherits(bp, "blueprint"))
 
@@ -30,8 +31,22 @@ bp_extend <- function(bp, ...) {
 
   do.call(
     blueprint,
-    rlang::list2(!!!slice_known_args, !!!slice_unknown_params, !!!dots_remainder)
+    rlang::list2(
+      !!!slice_known_args,
+      !!!slice_unknown_params,
+      !!!dots_remainder
+    )
   )
+}
+
+#' @export
+bp_add_bpstep <- function(bp, step) {
+  bp_assert(is_blueprint(bp))
+  bp_assert(is_bpstep(step))
+
+  steps <- add_assembly_step(bp$extra_steps, step)
+  bp$extra_steps <- steps
+  bp
 }
 
 #' Instruct blueprint to export codebooks

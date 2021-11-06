@@ -1,34 +1,14 @@
-bpstep_cleanup <- function(assembler, bp, ...) {
-  UseMethod("bpstep_cleanup", assembler)
-}
-
-#' @export
-bpstep_cleanup.drake_assembler <- function(assembler, bp, ...) {
-  arglist <- list(cleanup_call(bp))
-  names(arglist) <- blueprint_final_name(bp)
-
-  plan <- do.call(drake::drake_plan, arglist)
-
-  drake_bpstep(
+bpstep_cleanup <- function(asm, bp, ...) {
+  assemble_bpstep(
+    asm,
     step = "cleanup",
     bp = bp,
-    payload = plan,
-    ...
-  )
-}
-
-#' @export
-bpstep_cleanup.targets_assembler <- function(assembler, bp, ...) {
-  target <- targets::tar_target_raw(
-    blueprint_final_name(bp),
-    cleanup_call(bp)
-  )
-
-  targets_bpstep(
-    step = "cleanup",
-    bp = bp,
-    payload = target,
-    ...
+    payload = bpstep_payload(
+      asm,
+      target_name = blueprint_final_name(bp),
+      target_command = cleanup_call(bp),
+      ...
+    )
   )
 }
 
