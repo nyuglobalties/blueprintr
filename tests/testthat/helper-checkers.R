@@ -1,3 +1,5 @@
+options(tidyverse.quiet = TRUE)
+
 equivalent_plans <- function(out, exp) {
   assert_pkg("testthat")
   out <- deparse_lang_cols(out)
