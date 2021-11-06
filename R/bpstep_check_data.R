@@ -1,10 +1,8 @@
-bpstep_check_data <- function(asm, bp, meta = NULL, ...) {
-  assemble_bpstep(
-    asm,
+bpstep_check_data <- function(bp, meta = NULL, ...) {
+  bpstep(
     step = "check_data",
     bp = bp,
     payload = bpstep_payload(
-      asm,
       target_name = blueprint_checks_name(bp),
       target_command = check_data_call(bp, meta),
       ...

@@ -1,31 +1,27 @@
 #' Define a step of blueprint assembly
 #'
 #' Each step in the blueprint assembly process is contained in a wrapper
-#' 'bpstep' object. `bpstep()` is the abstract class. `drake_bpstep()` and
-#' `targets_bpstep()` are the implementations used within the `bpstep_*()`
-#' methods.
+#' 'bpstep' object. 
 #'
 #' @param step The name of the step
 #' @param bp A 'blueprint' object to create the assembled step
-#' @param payload The assembled object, either a 'drake_plan' or 'tar_target'
-#' @param ... Any extra information. Currently unused.
-#' @param .class A character string to subclass `bpstep()`
+#' @param payload A 'bpstep_payload' object that outlines the code
+#'   to be assembled depending on the workflow executor
 #'
 #' @return A 'bpstep' object
 #' @keywords internal
 #'
-bpstep <- function(step, bp, payload, ..., .class = NULL) {
+bpstep <- function(step, bp, payload) {
   stopifnot(is_blueprint(bp))
   stopifnot(is.character(step))
 
   structure(
     list(
       step = step,
-      payload = payload,
       blueprint = bp,
-      ...
+      payload = payload
     ),
-    class = c(.class, "bpstep")
+    class = "bpstep"
   )
 }
 
@@ -34,52 +30,70 @@ is_bpstep <- function(x) {
 }
 
 #' @export
-print.bpstep <- function(x, ...) {
+print.bpstep <- function(x, executor = NULL, ...) {
   cat_line("<blueprint assembly step>") # nocov start
   cat_line("name: {x$step}", indent = 1)
   cat_line("blueprint: '{x$blueprint$name}'", indent = 1)
-  cat_line("class: '{class(x)[1]}'", indent = 1)
   cat_line()
-  cat_line("payload:")
-  print(x$payload)
+  print(x$payload, executor = executor)
 
   invisible(x) # nocov end
 }
 
-assemble_bpstep <- function(assembler, step, bp, payload, ...) {
-  cls <- paste0(assembler, "_bpstep")
+#' @export
+print.assembled_bpstep <- function(x, ...) {
+  cat_line("<assembled blueprint step>") # nocov start
+  cat_line("name: {x$step}", indent = 1)
+  cat_line("blueprint: '{x$blueprint$name}'", indent = 1)
+  cat_line()
+  cat_line("built payload:")
+  print(x$built_payload)
 
-  bpstep(
-    step = step,
-    bp = bp,
-    payload = payload,
-    ...,
-    .class = cls
+  invisible(x) # nocov end
+}
+
+bpstep_payload <- function(target_name, target_command, ...) {
+  bp_assert(is.character(target_name))
+  bp_assert(is.language(target_command))
+
+  structure(
+    list(
+      target_name = target_name,
+      target_command = target_command,
+      ...
+    ),
+    class = "bpstep_payload"
   )
 }
 
-drake_bpstep <- function(step, bp, payload, ...) {
-  bpstep(
-    step = step,
-    bp = bp,
-    payload = payload,
-    ...,
-    .class = "drake_bpstep"
-  )
+#' @export
+print.bpstep_payload <- function(x, executor = NULL, ...) {
+  cat_line("<blueprint assembly step payload>")
+  cat_line("target: {x$target_name}")
+  cat_line("command:")
+  print(x$target_command)
+
+  if (!is.null(executor)) {
+    known_executors <- c("targets", "drake")
+
+    if (!executor %in% known_executors) {
+      cat_line("Unknown executor -- no preview of built payload")
+    } else {
+      asm <- switch(
+        executor,
+        targets = targets_assembler(),
+        drake = drake_assembler()
+      )
+
+      print(assemble_payload(asm, x))
+    }
+  }
 }
 
-targets_bpstep <- function(step, bp, payload, ...) {
-  bpstep(
-    step = step,
-    bp = bp,
-    payload = payload,
-    ...,
-    .class = "targets_bpstep"
-  )
-}
+bpstep_payload_extra_args <- function(payload) {
+  bp_assert(inherits(payload, "bpstep_payload"))
 
-bpstep_payload <- function(assembler, target_name, target_command, ...) {
-  UseMethod("bpstep_payload", assembler)
+  payload[!names(payload) %in% c("target_name", "target_command")]
 }
 
 #' @export

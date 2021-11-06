@@ -1,10 +1,8 @@
-bpstep_load_metadata <- function(asm, bp, ...) {
-  assemble_bpstep(
-    asm,
+bpstep_load_metadata <- function(bp, ...) {
+  bpstep(
     step = "load_metadata",
     bp = bp,
     payload = bpstep_payload(
-      asm,
       metadata_target_name(bp),
       metadata_load_call(bp),
       ...

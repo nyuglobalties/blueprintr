@@ -1,10 +1,8 @@
-bpstep_cleanup <- function(asm, bp, ...) {
-  assemble_bpstep(
-    asm,
+bpstep_cleanup <- function(bp, ...) {
+  bpstep(
     step = "cleanup",
     bp = bp,
     payload = bpstep_payload(
-      asm,
       target_name = blueprint_final_name(bp),
       target_command = cleanup_call(bp),
       ...

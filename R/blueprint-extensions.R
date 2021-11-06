@@ -75,13 +75,17 @@ bp_export_codebook <- function(
   template = NULL,
   title = NULL
 ) {
-  bp_extend(
+  bp <- bp_extend(
     blueprint,
-    codebook_export = TRUE,
     codebook_summaries = summaries,
     codebook_file = file,
     codebook_template = template,
     codebook_title = title
+  )
+
+  bp_add_bpstep(
+    bp,
+    bpstep_export_codebook(bp)
   )
 }
 

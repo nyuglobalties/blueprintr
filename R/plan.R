@@ -54,7 +54,7 @@ attach_blueprint <- function(plan, blueprint) {
 blueprint_plan <- function(bp) {
   steps <- assembly_steps(drake_assembler(), bp)
 
-  dplyr::bind_rows(!!!lapply(steps, function(step) step$payload))
+  dplyr::bind_rows(!!!lapply(steps, function(step) step$built_payload))
 }
 
 deparse_lang_cols <- function(plan) {

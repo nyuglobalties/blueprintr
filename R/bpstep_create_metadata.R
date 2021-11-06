@@ -1,10 +1,8 @@
-bpstep_create_metadata <- function(asm, bp, ...) {
-  assemble_bpstep(
-    asm,
+bpstep_create_metadata <- function(bp, ...) {
+  bpstep(
     step = "create_metadata",
     bp = bp,
     payload = bpstep_payload(
-      asm,
       metadata_target_file_name(bp),
       metadata_call(bp),
       format = "file",

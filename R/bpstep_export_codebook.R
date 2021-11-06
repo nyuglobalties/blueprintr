@@ -1,10 +1,8 @@
-bpstep_export_codebook <- function(asm, bp, ...) {
-  assemble_bpstep(
-    asm,
+bpstep_export_codebook <- function(bp, ...) {
+  bpstep(
     step = "export_codebook",
     bp = bp,
     payload = bpstep_payload(
-      asm,
       target_name = blueprint_codebook_name(bp),
       target_command = codebook_export_call(bp),
       format = "file",

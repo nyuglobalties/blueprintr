@@ -26,8 +26,61 @@ targets_assembler <- function() {
   assembler("targets", "targets_assembler")
 }
 
+assemble_bpstep <- function(asm, step) {
+  bp_assert(is_bpstep(step))
+
+  step$built_payload <- assemble_payload(asm, step$payload)
+
+  structure(
+    step,
+    class = c("assembled_bpstep", class(step))
+  )
+}
+
+assemble_payload <- function(asm, payload) {
+  UseMethod("assemble_payload", asm)
+}
+
+#' @export
+assemble_payload.drake_assembler <- function(asm, payload) {
+  dots <- bpstep_payload_extra_args(payload)
+
+  if (length(dots) > 0) {
+    quoted_target <- call2(
+      "target",
+      command = payload$target_command,
+      !!!dots,
+      .ns = "drake"
+    )
+  } else {
+    quoted_target <- payload$target_command
+  }
+
+  argslist <- list(quoted_target)
+  names(argslist) <- payload$target_name
+
+  do.call(drake::drake_plan, argslist)
+}
+
+#' @export
+assemble_payload.targets_assembler <- function(asm, payload) {
+  dots <- bpstep_payload_extra_args(payload)
+
+  argslist <- rlang::list2(
+    name = payload$target_name,
+    command = bquote(quote(.(payload$target_command))),
+    !!!dots
+  )
+
+  eval(rlang::call2(
+    "tar_target_raw",
+    !!!argslist,
+    .ns = "targets"
+  ))
+}
+
 assembly_steps <- function(asm, bp) {
-  steps <- default_assembly_steps(asm, bp)
+  steps <- default_assembly_steps(bp)
 
   if (!is.null(bp$extra_steps)) {
     for (step in bp$extra_steps) {
@@ -36,10 +89,10 @@ assembly_steps <- function(asm, bp) {
   }
 
   if (isTRUE(bp$codebook_export)) {
-    steps[[length(steps) + 1]] <- bpstep_export_codebook(asm, bp)
+    steps[[length(steps) + 1]] <- bpstep_export_codebook(bp)
   }
 
-  steps
+  lapply(steps, function(x) assemble_bpstep(asm, x))
 }
 
 add_assembly_step <- function(steps, step) {
@@ -61,7 +114,7 @@ add_assembly_step <- function(steps, step) {
   steps
 }
 
-default_assembly_steps <- function(asm, bp) {
+default_assembly_steps <- function(bp) {
   if (file.exists(metadata_path(bp))) {
     meta_df <- load_metadata(bp)
   } else {
@@ -69,11 +122,11 @@ default_assembly_steps <- function(asm, bp) {
   }
 
   list(
-    bpstep_build_initial(asm, bp),
-    bpstep_blueprint_reference(asm, bp),
-    bpstep_create_metadata(asm, bp),
-    bpstep_load_metadata(asm, bp),
-    bpstep_check_data(asm, bp, meta = meta_df),
-    bpstep_cleanup(asm, bp)
+    bpstep_build_initial(bp),
+    bpstep_blueprint_reference(bp),
+    bpstep_create_metadata(bp),
+    bpstep_load_metadata(bp),
+    bpstep_check_data(bp, meta = meta_df),
+    bpstep_cleanup(bp)
   )
 }
