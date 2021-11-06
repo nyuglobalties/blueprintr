@@ -1,12 +1,8 @@
 #' Create a metadata file from a dataset
 #'
-#' One of the targets in the blueprint drake target chain.
-#' If a metadata file does not exist and the blueprint has
-#' `export_metadata` set to `TRUE`, then this function will be
-#' added to the drake plan during the blueprint attaching step.
-#' In case the metadata file is accidentally deleted, the `.file`
-#' paramter is set to `file_out(metadata_path(blueprint))`
-#' so that drake can monitor the metadata file's state.
+#' One of the targets in the blueprint workflow target chain.
+#' If a metadata file does not exist, then this function will be
+#' added to the workflow.
 #'
 #' @param df A dataframe that the metadata table describes
 #' @param blueprint The original blueprint for the dataframe

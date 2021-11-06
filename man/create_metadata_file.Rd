@@ -15,11 +15,7 @@ create_metadata_file(df, blueprint, ...)
 metadata table depends}
 }
 \description{
-One of the targets in the blueprint drake target chain.
-If a metadata file does not exist and the blueprint has
-\code{export_metadata} set to \code{TRUE}, then this function will be
-added to the drake plan during the blueprint attaching step.
-In case the metadata file is accidentally deleted, the \code{.file}
-paramter is set to \code{file_out(metadata_path(blueprint))}
-so that drake can monitor the metadata file's state.
+One of the targets in the blueprint workflow target chain.
+If a metadata file does not exist, then this function will be
+added to the workflow.
 }
