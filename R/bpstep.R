@@ -68,7 +68,7 @@ bpstep_payload <- function(target_name, target_command, ...) {
 
 #' @export
 print.bpstep_payload <- function(x, executor = NULL, ...) {
-  cat_line("<blueprint assembly step payload>")
+  cat_line("<blueprint assembly step payload>") # nocov start
   cat_line("target: {x$target_name}")
   cat_line("command:")
   print(x$target_command)
@@ -88,50 +88,12 @@ print.bpstep_payload <- function(x, executor = NULL, ...) {
       print(assemble_payload(asm, x))
     }
   }
+
+  invisible(x) # nocov end
 }
 
 bpstep_payload_extra_args <- function(payload) {
   bp_assert(inherits(payload, "bpstep_payload"))
 
   payload[!names(payload) %in% c("target_name", "target_command")]
-}
-
-#' @export
-bpstep_payload.drake_assembler <- function(
-  assembler,
-  target_name,
-  target_command,
-  ...
-) {
-  dots <- rlang::dots_list(...)
-
-  if (length(dots) > 0) {
-    quoted_target <- call2(
-      "target",
-      command = target_command,
-      !!!dots,
-      .ns = "drake"
-    )
-  } else {
-    quoted_target <- target_command
-  }
-
-  argslist <- list(quoted_target)
-  names(argslist) <- target_name
-
-  do.call(drake::drake_plan, argslist)
-}
-
-#' @export
-bpstep_payload.targets_assembler <- function(
-  assembler,
-  target_name,
-  target_command,
-  ...
-) {
-  targets::tar_target_raw(
-    name = target_name,
-    command = target_command,
-    ...
-  )
 }

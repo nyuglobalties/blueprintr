@@ -1,7 +1,6 @@
 options(tidyverse.quiet = TRUE)
 
 equivalent_plans <- function(out, exp) {
-  assert_pkg("testthat")
   out <- deparse_lang_cols(out)
   exp <- deparse_lang_cols(exp)
   out <- out[order(out$target), ]
