@@ -101,8 +101,9 @@ add_assembly_step <- function(steps, step) {
 
   if (!is.null(steps)) {
     step_names <- vcapply(steps, function(s) s$step)
+    allow_duplicates <- step$allow_duplicates %||% FALSE
 
-    if (step$step %in% step_names) {
+    if (step$step %in% step_names & !isTRUE(allow_duplicates)) {
       bp_err("'{step$step}' already found in blueprint '{bp$name}' steps")
     }
 

@@ -1,3 +1,11 @@
+# TODO: Fill out dev docs
+
+#' Add custom elements to a blueprint
+#'
+#'
+#' @param bp A blueprint
+#' @param ... Keyword arguments forwarded to blueprint()
+#'
 #' @export
 bp_extend <- function(bp, ...) {
   bp_assert(inherits(bp, "blueprint"))
@@ -39,6 +47,11 @@ bp_extend <- function(bp, ...) {
   )
 }
 
+#' Add custom bpstep to blueprint schema
+#'
+#' @param bp A blueprint
+#' @param step A bpstep object
+#'
 #' @export
 bp_add_bpstep <- function(bp, step) {
   bp_assert(is_blueprint(bp))
@@ -69,7 +82,7 @@ bp_label_variables <- function(blueprint) {
 }
 
 #' Include panelcleaner mapping on metadata creation
-#' 
+#'
 #' [panelcleaner](https://nyuglobalties.github.io/panelcleaner/]) defines
 #' a mapping structure used for data import of panel, or more generally
 #' longitudinal, surveys / data which can be used as a source for some
@@ -77,11 +90,11 @@ bp_label_variables <- function(blueprint) {
 #' If the blueprint constructs a `mapped_df` object, then this extension
 #' will signal to blueprintr to extract the mapping information and
 #' include it.
-#' 
+#'
 #' @param blueprint A blueprint that may create a `mapped_df` data.frame
 #' @return An amended blueprint with `mapped_df` metadata extraction set
 #'         for metadata creation
-#' @export 
+#' @export
 bp_include_panelcleaner_meta <- function(blueprint) {
   bp_extend(
     blueprint,

@@ -1,17 +1,18 @@
 #' Define a step of blueprint assembly
 #'
 #' Each step in the blueprint assembly process is contained in a wrapper
-#' 'bpstep' object. 
+#' 'bpstep' object.
 #'
 #' @param step The name of the step
 #' @param bp A 'blueprint' object to create the assembled step
 #' @param payload A 'bpstep_payload' object that outlines the code
 #'   to be assembled depending on the workflow executor
+#' @param ... Extensions to the bpstep, like "allow_duplicates"
 #'
 #' @return A 'bpstep' object
 #' @keywords internal
 #'
-bpstep <- function(step, bp, payload) {
+bpstep <- function(step, bp, payload, ...) {
   stopifnot(is_blueprint(bp))
   stopifnot(is.character(step))
 
@@ -19,7 +20,8 @@ bpstep <- function(step, bp, payload) {
     list(
       step = step,
       blueprint = bp,
-      payload = payload
+      payload = payload,
+      ...
     ),
     class = "bpstep"
   )
@@ -79,8 +81,7 @@ print.bpstep_payload <- function(x, executor = NULL, ...) {
     if (!executor %in% known_executors) {
       cat_line("Unknown executor -- no preview of built payload")
     } else {
-      asm <- switch(
-        executor,
+      asm <- switch(executor,
         targets = targets_assembler(),
         drake = drake_assembler()
       )

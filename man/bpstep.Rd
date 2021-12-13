@@ -4,26 +4,23 @@
 \alias{bpstep}
 \title{Define a step of blueprint assembly}
 \usage{
-bpstep(step, bp, payload, ..., .class = NULL)
+bpstep(step, bp, payload, ...)
 }
 \arguments{
 \item{step}{The name of the step}
 
 \item{bp}{A 'blueprint' object to create the assembled step}
 
-\item{payload}{The assembled object, either a 'drake_plan' or 'tar_target'}
+\item{payload}{A 'bpstep_payload' object that outlines the code
+to be assembled depending on the workflow executor}
 
-\item{...}{Any extra information. Currently unused.}
-
-\item{.class}{A character string to subclass \code{bpstep()}}
+\item{...}{Extensions to the bpstep, like "allow_duplicates"}
 }
 \value{
 A 'bpstep' object
 }
 \description{
 Each step in the blueprint assembly process is contained in a wrapper
-'bpstep' object. \code{bpstep()} is the abstract class. \code{drake_bpstep()} and
-\code{targets_bpstep()} are the implementations used within the \verb{bpstep_*()}
-methods.
+'bpstep' object.
 }
 \keyword{internal}

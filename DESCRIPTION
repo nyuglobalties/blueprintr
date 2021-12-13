@@ -25,7 +25,8 @@ Suggests:
     rcoder,
     labelled,
     targets,
-    panelcleaner
+    panelcleaner,
+    kfa
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
@@ -45,5 +46,6 @@ Imports:
     readr,
     tidyr,
     fs,
-    lifecycle
+    lifecycle,
+    tidyselect
 VignetteBuilder: knitr
