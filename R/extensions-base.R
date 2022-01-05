@@ -1,3 +1,19 @@
+#' Add custom elements to a blueprint
+#'
+#' `blueprint()` objects are essentially just `list()` objects
+#' that contain a bunch of metadata on the data asset construction.
+#' Use `bp_extend()` to set or add new elements.
+#'
+#' @param bp A blueprint
+#' @param ... Keyword arguments forwarded to blueprint()
+#'
+#' @export
+#' @examples
+#' if (FALSE) {
+#'   bp <- blueprint("some_blueprint", ...)
+#'   adjusted_bp <- bp_extend(bp, new_option = TRUE)
+#'   bp_with_annotation_set <- bp_extend(bp, annotate = TRUE)
+#' }
 bp_extend <- function(bp, ...) {
   bp_assert(inherits(bp, "blueprint"))
 
@@ -30,44 +46,50 @@ bp_extend <- function(bp, ...) {
 
   do.call(
     blueprint,
-    rlang::list2(!!!slice_known_args, !!!slice_unknown_params, !!!dots_remainder)
+    rlang::list2(
+      !!!slice_known_args,
+      !!!slice_unknown_params,
+      !!!dots_remainder
+    )
   )
 }
 
-#' Instruct blueprint to export codebooks
+#' Add custom bpstep to blueprint schema
 #'
-#' @param blueprint A blueprint
-#' @param summaries Whether or not variable summaries should be included in codebook
-#' @param file Path to where the codebook should be saved
-#' @param template A path to an RMarkdown template
-#' @param title Optional title of codebook
-#' @return An amended blueprint with the codebook export instructions
+#' `blueprint()` objects store custom [bpstep][bpstep] objects
+#' in the "extra_steps" element. This function adds a new
+#' step to that element.
+#'
+#' @param bp A blueprint
+#' @param step A bpstep object
+#'
 #' @export
 #' @examples
-#' \dontrun{
-#' test_bp <- blueprint(
-#'   "mtcars_dat",
-#'   description = "The mtcars dataset",
-#'   command = mtcars
-#' )
+#' if (FALSE) {
+#'   # Based on the codebook export step
+#'   step <- bpstep(
+#'     step = "export_codebook",
+#'     bp = bp,
+#'     payload = bpstep_payload(
+#'       target_name = blueprint_codebook_name(bp),
+#'       target_command = codebook_export_call(bp),
+#'       format = "file",
+#'       ...
+#'     )
+#'   )
 #'
-#' new_bp <- test_bp %>% bp_export_codebook()
+#'   bp_add_bpstep(
+#'     bp,
+#'     step
+#'   )
 #' }
-bp_export_codebook <- function(
-  blueprint,
-  summaries = FALSE,
-  file = NULL,
-  template = NULL,
-  title = NULL
-) {
-  bp_extend(
-    blueprint,
-    codebook_export = TRUE,
-    codebook_summaries = summaries,
-    codebook_file = file,
-    codebook_template = template,
-    codebook_title = title
-  )
+bp_add_bpstep <- function(bp, step) {
+  bp_assert(is_blueprint(bp))
+  bp_assert(is_bpstep(step))
+
+  steps <- add_assembly_step(bp$extra_steps, step)
+  bp$extra_steps <- steps
+  bp
 }
 
 #' Convert variables to labelled variables in cleanup stage
@@ -90,7 +112,7 @@ bp_label_variables <- function(blueprint) {
 }
 
 #' Include panelcleaner mapping on metadata creation
-#' 
+#'
 #' [panelcleaner](https://nyuglobalties.github.io/panelcleaner/]) defines
 #' a mapping structure used for data import of panel, or more generally
 #' longitudinal, surveys / data which can be used as a source for some
@@ -98,11 +120,11 @@ bp_label_variables <- function(blueprint) {
 #' If the blueprint constructs a `mapped_df` object, then this extension
 #' will signal to blueprintr to extract the mapping information and
 #' include it.
-#' 
+#'
 #' @param blueprint A blueprint that may create a `mapped_df` data.frame
 #' @return An amended blueprint with `mapped_df` metadata extraction set
 #'         for metadata creation
-#' @export 
+#' @export
 bp_include_panelcleaner_meta <- function(blueprint) {
   bp_extend(
     blueprint,

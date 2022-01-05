@@ -16,9 +16,7 @@
 #' @export
 tar_blueprint <- function(...) {
   bp <- blueprint(...)
-  steps <- assembly_steps(targets_assembler(), bp)
-
-  lapply(steps, function(step) step$payload)
+  tar_blueprint_raw(bp)
 }
 
 #' @rdname tar_blueprint
@@ -41,5 +39,5 @@ tar_blueprints <- function(
 tar_blueprint_raw <- function(bp) {
   steps <- assembly_steps(targets_assembler(), bp)
 
-  lapply(steps, function(step) step$payload)
+  lapply(steps, function(step) step$built_payload)
 }

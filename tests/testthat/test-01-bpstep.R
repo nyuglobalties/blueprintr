@@ -11,12 +11,27 @@ test_that("bpstep objects are formed correctly", {
   expect_s3_class(step, "bpstep")
 })
 
-test_that("bpstep implmentations render correctly", {
+test_that("Assembled bpsteps are generated correctly", {
   dummy_bp <- blueprint("hi", print("hi"))
+  step <- bpstep(
+    "a_step",
+    dummy_bp,
+    bpstep_payload(
+      "hi",
+      dummy_bp$command
+    )
+  )
 
-  dbp <- drake_bpstep("a_step", dummy_bp, list())
-  tbp <- targets_bpstep("a_step", dummy_bp, list())
+  assembled_step <- assemble_bpstep(targets_assembler(), step)
+  expect_s3_class(assembled_step, "assembled_bpstep")
 
-  expect_s3_class(dbp, "drake_bpstep")
-  expect_s3_class(tbp, "targets_bpstep")
+  target <- targets::tar_target_raw(
+    "hi",
+    dummy_bp$command
+  )
+
+  expect_equivalent(
+    assembled_step$built_payload,
+    target
+  )
 })
