@@ -89,6 +89,14 @@ assembly_steps <- function(asm, bp) {
   }
 
   if (isTRUE(bp$codebook_export)) {
+    # The codebook export step is now defined as an extra step to faciliate
+    # custom steps after final artifact is generated.
+    lifecycle::deprecate_warn(
+      "0.1.0",
+      "blueprint(codebook_export)",
+      "bp_export_codebook()"
+    )
+
     steps[[length(steps) + 1]] <- bpstep_export_codebook(bp)
   }
 

@@ -2,10 +2,10 @@
 #'
 #' @param name The name of the blueprint
 #' @param command The code to build the target dataset
-#' @param description An optional description of the dataset to be used for 
+#' @param description An optional description of the dataset to be used for
 #'   codebook generation
 #' @param annotate If `TRUE`, during cleanup the metadata will "annotate"
-#'   the dataset by adding variable attributes for each metadata field to 
+#'   the dataset by adding variable attributes for each metadata field to
 #'   make metadata provenance easier and responsive to code changes.
 #' @param metadata The associated variable metadata for this dataset
 #' @param metadata_file_type The kind of metadata file. Currently only CSV.
@@ -40,29 +40,19 @@
 #'     columns.
 #'
 #' @export
-blueprint <- function(
-  name,
-  command,
-  description = NULL,
-  metadata = NULL,
-  annotate = FALSE,
-  metadata_file_type = c("csv"),
-  metadata_directory = here::here("blueprints"),
-  metadata_file_path = NULL,
-  extra_steps = NULL,
-  ...,
-  class = character()
-) {
+blueprint <- function(name,
+                      command,
+                      description = NULL,
+                      metadata = NULL,
+                      annotate = FALSE,
+                      metadata_file_type = c("csv"),
+                      metadata_directory = here::here("blueprints"),
+                      metadata_file_path = NULL,
+                      extra_steps = NULL,
+                      ...,
+                      class = character()) {
   stopifnot(is.character(name))
   stopifnot(is.null(description) || is.character(description))
-
-  # The codebook export step is now defined as an extra step to faciliate
-  # custom steps after final artifact is generated.
-  lifecycle::deprecate_warn(
-    "0.1.0",
-    "blueprint(codebook_export)",
-    "bp_export_codebook()"
-  )
 
   captured_command <- capture_command(substitute(command))
   metadata_file_type <- match.arg(metadata_file_type)
