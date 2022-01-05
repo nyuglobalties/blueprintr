@@ -1,3 +1,8 @@
+# blueprintr 0.1.0
+* Adds capability to define custom pipeline steps, executed after completion of the `_final` stage
+* Moves codebook export step to new custom step
+* Adds [kfa](https://github.com/knickodem/kfa) report generation step capability
+
 # blueprintr 0.0.11
 * Uses UTF-8 encoding when parsing blueprint files (#41)
 * Ignores private (dot-prefixed) metadata fields during variable annotation (#40)

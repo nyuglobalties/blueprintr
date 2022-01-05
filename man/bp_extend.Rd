@@ -12,5 +12,14 @@ bp_extend(bp, ...)
 \item{...}{Keyword arguments forwarded to blueprint()}
 }
 \description{
-Add custom elements to a blueprint
+\code{blueprint()} objects are essentially just \code{list()} objects
+that contain a bunch of metadata on the data asset construction.
+Use \code{bp_extend()} to set or add new elements.
+}
+\examples{
+if (FALSE) {
+  bp <- blueprint("some_blueprint", ...)
+  adjusted_bp <- bp_extend(bp, new_option = TRUE)
+  bp_with_annotation_set <- bp_extend(bp, annotate = TRUE)
+}
 }

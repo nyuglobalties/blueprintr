@@ -12,5 +12,27 @@ bp_add_bpstep(bp, step)
 \item{step}{A bpstep object}
 }
 \description{
-Add custom bpstep to blueprint schema
+\code{blueprint()} objects store custom \link{bpstep} objects
+in the "extra_steps" element. This function adds a new
+step to that element.
+}
+\examples{
+if (FALSE) {
+  # Based on the codebook export step
+  step <- bpstep(
+    step = "export_codebook",
+    bp = bp,
+    payload = bpstep_payload(
+      target_name = blueprint_codebook_name(bp),
+      target_command = codebook_export_call(bp),
+      format = "file",
+      ...
+    )
+  )
+
+  bp_add_bpstep(
+    bp,
+    step
+  )
+}
 }

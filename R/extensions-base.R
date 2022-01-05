@@ -1,12 +1,19 @@
-# TODO: Fill out dev docs
-
 #' Add custom elements to a blueprint
 #'
+#' `blueprint()` objects are essentially just `list()` objects
+#' that contain a bunch of metadata on the data asset construction.
+#' Use `bp_extend()` to set or add new elements.
 #'
 #' @param bp A blueprint
 #' @param ... Keyword arguments forwarded to blueprint()
 #'
 #' @export
+#' @examples
+#' if (FALSE) {
+#'   bp <- blueprint("some_blueprint", ...)
+#'   adjusted_bp <- bp_extend(bp, new_option = TRUE)
+#'   bp_with_annotation_set <- bp_extend(bp, annotate = TRUE)
+#' }
 bp_extend <- function(bp, ...) {
   bp_assert(inherits(bp, "blueprint"))
 
@@ -49,10 +56,33 @@ bp_extend <- function(bp, ...) {
 
 #' Add custom bpstep to blueprint schema
 #'
+#' `blueprint()` objects store custom [bpstep][bpstep] objects
+#' in the "extra_steps" element. This function adds a new
+#' step to that element.
+#'
 #' @param bp A blueprint
 #' @param step A bpstep object
 #'
 #' @export
+#' @examples
+#' if (FALSE) {
+#'   # Based on the codebook export step
+#'   step <- bpstep(
+#'     step = "export_codebook",
+#'     bp = bp,
+#'     payload = bpstep_payload(
+#'       target_name = blueprint_codebook_name(bp),
+#'       target_command = codebook_export_call(bp),
+#'       format = "file",
+#'       ...
+#'     )
+#'   )
+#'
+#'   bp_add_bpstep(
+#'     bp,
+#'     step
+#'   )
+#' }
 bp_add_bpstep <- function(bp, step) {
   bp_assert(is_blueprint(bp))
   bp_assert(is_bpstep(step))
