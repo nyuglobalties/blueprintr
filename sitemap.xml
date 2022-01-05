@@ -55,7 +55,16 @@
     <loc>/reference/blueprintr-package.html</loc>
   </url>
   <url>
+    <loc>/reference/bp_add_bpstep.html</loc>
+  </url>
+  <url>
     <loc>/reference/bp_export_codebook.html</loc>
+  </url>
+  <url>
+    <loc>/reference/bp_export_kfa_report.html</loc>
+  </url>
+  <url>
+    <loc>/reference/bp_extend.html</loc>
   </url>
   <url>
     <loc>/reference/bp_include_panelcleaner_meta.html</loc>
@@ -104,6 +113,9 @@
   </url>
   <url>
     <loc>/reference/render_codebook.html</loc>
+  </url>
+  <url>
+    <loc>/reference/render_kfa_report.html</loc>
   </url>
   <url>
     <loc>/reference/tar_blueprint.html</loc>

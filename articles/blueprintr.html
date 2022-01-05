@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">blueprintr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.11</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <h1 data-toc-skip>A Walkthrough of blueprintr</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/nyuglobalties/blueprintr/blob/master/vignettes/blueprintr.Rmd" class="external-link"><code>vignettes/blueprintr.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/nyuglobalties/blueprintr/blob/HEAD/vignettes/blueprintr.Rmd" class="external-link"><code>vignettes/blueprintr.Rmd</code></a></small>
       <div class="hidden name"><code>blueprintr.Rmd</code></div>
 
     </div>
@@ -107,9 +107,9 @@ div.vg-info span:before {
 }
 </style>
 <p>blueprintr is a companion to <a href="https://github.com/ropensci/drake" class="external-link">drake</a> that focuses on documenting and testing tabular data. Whereas drake manages the workflow execution, blueprintr defines a collection of steps that need to be run in a drake workflow.</p>
-<div id="basic-use" class="section level1">
-<h1 class="hasAnchor">
-<a href="#basic-use" class="anchor" aria-hidden="true"></a>Basic Use</h1>
+<div class="section level1">
+<h1 id="basic-use">Basic Use<a class="anchor" aria-label="anchor" href="#basic-use"></a>
+</h1>
 <p>The first, and recommended, step is to attach blueprintr to your R session with <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/nyuglobalties/blueprintr" class="external-link">blueprintr</a></span><span class="op">)</span></code></pre></div>
@@ -130,7 +130,7 @@ div.vg-info span:before {
 <span class="co">#&gt; Metadata location: '/Users/runner/work/blueprintr/blueprintr/blueprints/mtcars_dat.csv'</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; -- Command --</span>
-<span class="co">#&gt; Drake command:</span>
+<span class="co">#&gt; Workflow command:</span>
 <span class="co">#&gt; {</span>
 <span class="co">#&gt;     mtcars</span>
 <span class="co">#&gt; }</span>
@@ -171,17 +171,17 @@ div.vg-info span:before {
     <span class="op">}</span>
   <span class="op">)</span>
 <span class="op">)</span>
-<span class="co">#&gt; # A tibble: 8 x 3</span>
-<span class="co">#&gt;   target           command                                                format</span>
-<span class="co">#&gt;   &lt;chr&gt;            &lt;expr_lst&gt;                                             &lt;chr&gt; </span>
-<span class="co">#&gt; 1 initial_vector   runif(1000)                                          … &lt;NA&gt;  </span>
-<span class="co">#&gt; 2 squared          initial_vector^2                                     … &lt;NA&gt;  </span>
-<span class="co">#&gt; 3 mtcars_dat_init… {     mtcars }                                       … &lt;NA&gt;  </span>
-<span class="co">#&gt; 4 mtcars_dat_blue… blueprintr::blueprint(name = "mtcars_dat", command = … &lt;NA&gt;  </span>
-<span class="co">#&gt; 5 mtcars_dat_meta… blueprintr::create_metadata_file(mtcars_dat_initial, … file  </span>
-<span class="co">#&gt; 6 mtcars_dat_meta  blueprintr::read_metadata(mtcars_dat_meta_path)      … &lt;NA&gt;  </span>
-<span class="co">#&gt; 7 mtcars_dat_chec… blueprintr::eval_checks(all_variables_present(mtcars_… &lt;NA&gt;  </span>
-<span class="co">#&gt; 8 mtcars_dat       blueprintr::cleanup(mtcars_dat_checks, mtcars_dat_ini… &lt;NA&gt;</span></code></pre></div>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 8 × 3</span></span>
+<span class="co">#&gt;   target               command                                            format</span>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;expr_lst&gt;</span>                                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> initial_vector       runif(1000)                                      … <span style="color: #BB0000;">NA</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> squared              initial_vector^2                                 … <span style="color: #BB0000;">NA</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> mtcars_dat_initial   {     mtcars }                                   … <span style="color: #BB0000;">NA</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> mtcars_dat_blueprint blueprintr::blueprint(name = "mtcars_dat", comman… <span style="color: #BB0000;">NA</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> mtcars_dat_meta_path blueprintr::create_metadata_file(mtcars_dat_initi… file  </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> mtcars_dat_meta      blueprintr::read_metadata(mtcars_dat_meta_path)  … <span style="color: #BB0000;">NA</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">7</span> mtcars_dat_checks    blueprintr::eval_checks(all_variables_present(mtc… <span style="color: #BB0000;">NA</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">8</span> mtcars_dat           blueprintr::cleanup(mtcars_dat_checks, mtcars_dat… <span style="color: #BB0000;">NA</span></span></code></pre></div>
 <p>blueprintr creates five “steps” (targets) per blueprint:</p>
 <table class="table">
 <colgroup>
@@ -240,7 +240,7 @@ div.vg-info span:before {
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.9000.</p>
 </div>
 
       </footer>
