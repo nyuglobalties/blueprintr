@@ -124,7 +124,12 @@ string_to_coding_single <- function(x) {
     return(rcoder::empty_coding())
   }
 
-  rcoder::eval_coding(rlang::parse_expr(x))
+  tryCatch(
+    rcoder::eval_coding(rlang::parse_expr(x)),
+    error = function(e) {
+      bp_err("Could not evaluate coding: '{x}'")
+    }
+  )
 }
 
 flatten <- function(x) {
