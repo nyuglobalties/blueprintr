@@ -1,5 +1,6 @@
-# Development version
+# blueprintr 0.1.1
 * Clarifies which coding string cannot be evaluated during codebook generation or labelling
+* Fixes a bug where `bp_extend()` would clobber the results of `bp_add_bpstep()` 
 
 # blueprintr 0.1.0
 * Adds capability to define custom pipeline steps, executed after completion of the `_final` stage
