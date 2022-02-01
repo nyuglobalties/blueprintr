@@ -112,7 +112,7 @@ add_assembly_step <- function(steps, step) {
     allow_duplicates <- step$allow_duplicates %||% FALSE
 
     if (step$step %in% step_names & !isTRUE(allow_duplicates)) {
-      bp_err("'{step$step}' already found in blueprint '{bp$name}' steps")
+      bp_err("'{step$step}' already found in blueprint '{step$blueprint$name}' steps") # nolint
     }
 
     steps[[length(steps) + 1]] <- step

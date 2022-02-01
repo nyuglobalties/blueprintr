@@ -83,3 +83,84 @@ test_that("Codebooks are rendered safely", {
   expect_true(!inherits(render_out, "error"))
   unlink(temp_file)
 })
+
+test_that("Codebook export step added correctly", {
+  test_bp <- blueprint(
+    "mtcars_chunk_rearranged",
+    command = mtcars,
+    metadata_directory = bp_path("blueprints")
+  )
+
+  test_bp_with_cbexport <- bp_export_codebook(
+    test_bp
+  )
+
+  plan <- plan_from_blueprint(test_bp_with_cbexport)
+  expect_true("mtcars_chunk_rearranged_codebook" %in% plan$target)
+
+  # Adding custom args
+  test_bp_with_cbexport <- bp_export_codebook(
+    test_bp,
+    summaries = TRUE
+  )
+
+  plan <- plan_from_blueprint(test_bp_with_cbexport)
+  expect_true("mtcars_chunk_rearranged_codebook" %in% plan$target)
+
+  test_bp_with_cbexport <- bp_export_codebook(
+    test_bp,
+    file = here::here("testy.html")
+  )
+
+  plan <- plan_from_blueprint(test_bp_with_cbexport)
+  expect_true("mtcars_chunk_rearranged_codebook" %in% plan$target)
+
+  test_bp_with_cbexport <- bp_export_codebook(
+    test_bp,
+    title = "test"
+  )
+
+  plan <- plan_from_blueprint(test_bp_with_cbexport)
+  expect_true("mtcars_chunk_rearranged_codebook" %in% plan$target)
+})
+
+test_that("targets attachment works", {
+  skip_if_not_installed("targets")
+
+  test_bp <- blueprint(
+    "mtcars_chunk_rearranged",
+    command = mtcars,
+    metadata_directory = bp_path("blueprints")
+  )
+
+  test_bp_with_cbexport <- bp_export_codebook(
+    test_bp
+  )
+
+  tar_list <- tar_blueprint_raw(test_bp_with_cbexport)
+  expect_true("mtcars_chunk_rearranged_codebook" %in% vcapply(tar_list, function(x) x$settings$name)) # nolint
+
+  test_bp_with_cbexport <- bp_export_codebook(
+    test_bp,
+    summaries = TRUE
+  )
+
+  tar_list <- tar_blueprint_raw(test_bp_with_cbexport)
+  expect_true("mtcars_chunk_rearranged_codebook" %in% vcapply(tar_list, function(x) x$settings$name)) # nolint
+
+  test_bp_with_cbexport <- bp_export_codebook(
+    test_bp,
+    file = here::here("testy.html")
+  )
+
+  tar_list <- tar_blueprint_raw(test_bp_with_cbexport)
+  expect_true("mtcars_chunk_rearranged_codebook" %in% vcapply(tar_list, function(x) x$settings$name)) # nolint
+
+  test_bp_with_cbexport <- bp_export_codebook(
+    test_bp,
+    title = "testy"
+  )
+
+  tar_list <- tar_blueprint_raw(test_bp_with_cbexport)
+  expect_true("mtcars_chunk_rearranged_codebook" %in% vcapply(tar_list, function(x) x$settings$name)) # nolint
+})

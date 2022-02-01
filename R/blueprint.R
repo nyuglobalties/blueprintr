@@ -70,6 +70,7 @@ blueprint <- function(name,
       description = description,
       annotate = annotate,
       metadata_file_path = path,
+      extra_steps = extra_steps,
       ...
     ),
     class = c(class, "blueprint")

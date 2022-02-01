@@ -64,3 +64,36 @@ test_that("Extra bpstep additions behave correctly", {
     )
   )
 })
+
+test_that("bp_extend() and bp_add_bpstep() don't break each other", {
+  test_bp <- blueprint(
+    "test_bp_1",
+    description = "dummy",
+    command = mtcars
+  )
+
+  bp1 <- bp_label_variables(bp_export_codebook(test_bp))
+  bp2 <- bp_export_codebook(bp_label_variables(test_bp))
+
+  expect_false(is.null(bp1$extra_steps))
+  expect_identical(length(bp1$extra_steps), length(bp2$extra_steps))
+
+  cb1 <- bp1$extra_steps[[1]]
+  cb2 <- bp2$extra_steps[[1]]
+
+  expect_identical(cb1$step, "export_codebook")
+  expect_identical(cb1$step, cb2$step)
+})
+
+test_that("Multiple steps make sense when applicable", {
+  test_bp <- blueprint(
+    "test_bp_1",
+    description = "dummy",
+    command = mtcars
+  )
+
+  expect_error(
+    bp_export_codebook(bp_export_codebook(test_bp)),
+    class = "bp_error"
+  )
+})
