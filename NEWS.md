@@ -1,3 +1,6 @@
+# Development version
+* Clarifies which coding string cannot be evaluated during codebook generation or labelling
+
 # blueprintr 0.1.0
 * Adds capability to define custom pipeline steps, executed after completion of the `_final` stage
 * Moves codebook export step to new custom step
