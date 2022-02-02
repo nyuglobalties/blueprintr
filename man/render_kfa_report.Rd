@@ -4,10 +4,21 @@
 \alias{render_kfa_report}
 \title{Render k-fold factor analysis on scale using kfa}
 \usage{
-render_kfa_report(dat, meta, scale, path = NULL, format = NULL, title = NULL)
+render_kfa_report(
+  dat,
+  bp,
+  meta,
+  scale,
+  path = NULL,
+  path_pattern = "reports/kfa-{snakecase_scale}-{dat_name}.html",
+  format = NULL,
+  title = NULL
+)
 }
 \arguments{
 \item{dat}{Source data}
+
+\item{bp}{The dataset's blueprint}
 
 \item{meta}{blueprintr data dictionary}
 
@@ -15,6 +26,14 @@ render_kfa_report(dat, meta, scale, path = NULL, format = NULL, title = NULL)
 
 \item{path}{Where to output the report; defaults to the "reports"
 subfolder of the current working \emph{project} folder.}
+
+\item{path_pattern}{If path is \code{NULL}, this is where the report will
+be saved. Variables available for use are:
+\itemize{
+\item \code{scale}: The scale name defined in the metadata
+\item \code{snakecase_scale}: \code{scale} but in snake_case
+\item \code{dat_name}: Name of the dataset (equivalent to the blueprint name)
+}}
 
 \item{format}{The output format; defaults to 'html_document'}
 
@@ -24,7 +43,7 @@ subfolder of the current working \emph{project} folder.}
 Path to where the generated report is saved
 }
 \description{
-Generates a k-fold factor analys report using the 'scale'
+Generates a k-fold factor analysis report using the 'scale'
 field in the blueprintr data dictionaries. While not recommended,
 this function does allow for multiple loaded variables, delimited by
 commas. For example, 'var1' could have 'scale' be "SCALE1,SCALE2".

@@ -4,7 +4,14 @@
 \alias{bp_export_kfa_report}
 \title{Instruct blueprint to generate kfa report}
 \usage{
-bp_export_kfa_report(bp, scale, path = NULL, format = NULL, title = NULL)
+bp_export_kfa_report(
+  bp,
+  scale,
+  path = NULL,
+  path_pattern = NULL,
+  format = NULL,
+  title = NULL
+)
 }
 \arguments{
 \item{bp}{A blueprint}
@@ -12,6 +19,9 @@ bp_export_kfa_report(bp, scale, path = NULL, format = NULL, title = NULL)
 \item{scale}{Which scale(s) to analyze}
 
 \item{path}{Path(s) to where the report(s) should be saved}
+
+\item{path_pattern}{Override the default location to save files
+(always rooted to the project root with here::here())}
 
 \item{format}{The output format of the report(s)}
 

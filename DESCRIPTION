@@ -1,6 +1,6 @@
 Package: blueprintr
 Title: Automagically Document and Test Datasets Using Targets Or Drake
-Version: 0.1.1
+Version: 0.1.1.9000
 Authors@R: 
     c(person(given = "Patrick",
              family = "Anker",
@@ -47,5 +47,6 @@ Imports:
     tidyr,
     fs,
     lifecycle,
-    tidyselect
+    tidyselect,
+    snakecase
 VignetteBuilder: knitr

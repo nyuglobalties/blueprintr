@@ -54,6 +54,29 @@ print.assembled_bpstep <- function(x, ...) {
   invisible(x) # nocov end
 }
 
+#' Create a step payload
+#'
+#' The bpstep payload is the object that contains the target name
+#' and command, along with any other metadata to be passed to the
+#' execution engine.
+#'
+#' @param target_name The target's name
+#' @param target_command The target's command
+#' @param ... Arguments to be passed to the executing engine (e.g.
+#'   arguments sent to targets::tar_target())
+#' @return A bpstep payload object
+#' @export
+#' @examples
+#' if (FALSE) {
+#'   bpstep(
+#'     step = "some_step",
+#'     bp = some_bp_object,
+#'     payload = bpstep_payload(
+#'       "payload_name",
+#'       payload_command()
+#'     )
+#'   )
+#' }
 bpstep_payload <- function(target_name, target_command, ...) {
   bp_assert(is.character(target_name))
   bp_assert(is.language(target_command))
