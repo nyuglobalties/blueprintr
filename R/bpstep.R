@@ -83,7 +83,7 @@ bpstep_payload <- function(target_name, target_command, ...) {
 
   structure(
     list(
-      target_name = target_name,
+      target_name = as.character(target_name),
       target_command = target_command,
       ...
     ),

@@ -68,3 +68,38 @@ test_that("kfa report custom paths rendered correctly", {
   expect_identical(cmd1[["path_pattern"]], "report-{snakecase_scale}.html")
   expect_identical(cmd2[["path_pattern"]], "report-{snakecase_scale}.html")
 })
+
+# Emulating issue ID'd in Peru pipeline
+# turns out this error I was testing was in targets 0.10.0: ropensci/targets#758
+test_that("targets accepts kfa target names", {
+  skip_if_not_installed("targets")
+
+  scales <- c(
+    "Self-Regulation",
+    "Self-Regulated Learning",
+    "Child Internalizing",
+    "Child Externalizing",
+    "Child Relationship with Caregiver",
+    "Enumerator-report Child Regulation"
+  )
+
+  test_bp <- blueprint(
+    "panel4_c4",
+    description = "dummy",
+    command = mtcars
+  )
+
+  test_bp_withkfa <- bp_export_kfa_report(
+    test_bp,
+    scale = scales
+  )
+
+  expect_silent(pipeline <- tar_blueprint_raw(test_bp_withkfa))
+
+  # Try composing extra steps
+  test_bp_composed <- bp_label_variables(test_bp)
+  test_bp_composed <- bp_export_codebook(test_bp_composed)
+  test_bp_composed <- bp_export_kfa_report(test_bp_composed, scale = scales)
+
+  expect_silent(pipeline <- tar_blueprint_raw(test_bp_composed))
+})
