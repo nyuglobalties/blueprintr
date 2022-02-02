@@ -62,7 +62,10 @@ bpstep_export_kfa_report <- function(bp,
                                      path_pattern = NULL,
                                      format = NULL,
                                      title = NULL) {
-  snakecase_scale <- snakecase::to_snake_case(scale)
+  snakecase_scale <- snakecase::to_snake_case(
+    scale,
+    transliterations = "ASCII-Latin"
+  )
   target_name <- glue::glue("{bp$name}_{snakecase_scale}_kfa_report")
 
   bpstep(
