@@ -185,9 +185,10 @@ render_kfa_report <- function(dat,
   models <- kfa::kfa(variables = scale_dat)
   report <- kfa::kfa_report(
     models,
-    file.name = path,
+    file.name = basename(path),
     report.format = format,
-    report.title = title
+    report.title = title,
+    path = dirname(path)
   )
 
   path
