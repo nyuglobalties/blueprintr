@@ -164,10 +164,11 @@ render_kfa_report <- function(dat,
     .scale = strsplit(.data$scale, "\\,\\s*")
   )
 
-  scale_vars <- dplyr::filter(
-    meta,
-    vlapply(.data$.scale, function(.s) scale %in% .s)
-  )[["name"]]
+  scale_vars <- meta[
+    vlapply(meta$.scale, function(.s) scale %in% .s),
+    "name",
+    drop = TRUE
+  ]
 
   if (length(scale_vars) == 0) {
     bp_err(c(
