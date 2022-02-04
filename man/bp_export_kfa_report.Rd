@@ -10,7 +10,8 @@ bp_export_kfa_report(
   path = NULL,
   path_pattern = NULL,
   format = NULL,
-  title = NULL
+  title = NULL,
+  kfa_args = list()
 )
 }
 \arguments{
@@ -26,6 +27,9 @@ bp_export_kfa_report(
 \item{format}{The output format of the report(s)}
 
 \item{title}{Optional title of report}
+
+\item{kfa_args}{Arguments forwarded to \code{kfa::kfa()} for this batch
+of scales}
 }
 \value{
 An amended blueprint with the kfa report export instructions

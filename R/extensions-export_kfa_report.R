@@ -7,6 +7,8 @@
 #'   (always rooted to the project root with here::here())
 #' @param format The output format of the report(s)
 #' @param title Optional title of report
+#' @param kfa_args Arguments forwarded to `kfa::kfa()` for this batch
+#'   of scales
 #' @return An amended blueprint with the kfa report export instructions
 #' @export
 #' @examples
@@ -24,7 +26,8 @@ bp_export_kfa_report <- function(bp,
                                  path = NULL,
                                  path_pattern = NULL,
                                  format = NULL,
-                                 title = NULL) {
+                                 title = NULL,
+                                 kfa_args = list()) {
   bp_assert(is.character(scale))
   bp_assert(
     length(path) == length(scale) || is.null(path),
@@ -48,7 +51,8 @@ bp_export_kfa_report <- function(bp,
         path = .p,
         format = format,
         title = .t,
-        path_pattern = path_pattern
+        path_pattern = path_pattern,
+        kfa_args = kfa_args
       )
     )
   }
@@ -61,7 +65,8 @@ bpstep_export_kfa_report <- function(bp,
                                      path = NULL,
                                      path_pattern = NULL,
                                      format = NULL,
-                                     title = NULL) {
+                                     title = NULL,
+                                     kfa_args = list()) {
   snakecase_scale <- snakecase::to_snake_case(
     scale,
     transliterations = "ASCII-Latin"
@@ -76,6 +81,7 @@ bpstep_export_kfa_report <- function(bp,
       target_command = render_kfa_call(
         bp, scale, path,
         format, title,
+        kfa_args = kfa_args,
         path_pattern = path_pattern
       )
     ),
@@ -88,6 +94,7 @@ render_kfa_call <- function(bp,
                             path,
                             format,
                             title,
+                            kfa_args,
                             path_pattern = NULL) {
   out <- rlang::call2(
     "render_kfa_report",
@@ -98,6 +105,7 @@ render_kfa_call <- function(bp,
     path = path,
     format = format,
     title = title,
+    !!!kfa_args,
     .ns = "blueprintr"
   )
 
@@ -128,6 +136,7 @@ render_kfa_call <- function(bp,
 #'   * `dat_name`: Name of the dataset (equivalent to the blueprint name)
 #' @param format The output format; defaults to 'html_document'
 #' @param title Optional title of the report
+#' @param ... Arugments forwarded kfa::kfa()
 #' @return Path to where the generated report is saved
 #' @export
 render_kfa_report <- function(dat,
@@ -137,7 +146,8 @@ render_kfa_report <- function(dat,
                               path = NULL,
                               path_pattern = "reports/kfa-{snakecase_scale}-{dat_name}.html", # nolint
                               format = NULL,
-                              title = NULL) {
+                              title = NULL,
+                              ...) {
   dat_name <- blueprint_final_name(bp)
   snakecase_scale <- snakecase::to_snake_case(scale)
 
@@ -182,7 +192,7 @@ render_kfa_report <- function(dat,
     tidyselect::all_of(scale_vars)
   )
 
-  models <- kfa::kfa(variables = scale_dat)
+  models <- kfa::kfa(variables = scale_dat, ...)
   report <- kfa::kfa_report(
     models,
     file.name = basename(path),

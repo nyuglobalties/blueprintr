@@ -69,6 +69,39 @@ test_that("kfa report custom paths rendered correctly", {
   expect_identical(cmd2[["path_pattern"]], "report-{snakecase_scale}.html")
 })
 
+test_that("kfa argument forwarding works", {
+  test_bp <- blueprint(
+    "test_bp",
+    description = "dummy",
+    command = mtcars
+  )
+
+  # Using path_pattern first
+  test_bp_withkfas <- bp_export_kfa_report(
+    test_bp,
+    scale = c("Measure A", "Measure B"),
+    kfa_args = list(ordered = TRUE, k = 3)
+  )
+
+  plan <- plan_from_blueprint(test_bp_withkfas)
+
+  cmd1 <- plan[
+    plan[["target"]] == "test_bp_measure_a_kfa_report",
+    "command",
+    drop = TRUE
+  ][[1]]
+
+  cmd2 <- plan[
+    plan[["target"]] == "test_bp_measure_b_kfa_report",
+    "command",
+    drop = TRUE
+  ][[1]]
+
+  expect_identical(cmd1[["k"]], cmd2[["k"]]) # Scales get same set of args for kfa
+  expect_identical(cmd1[["k"]], 3)
+  expect_true(cmd1[["ordered"]])
+})
+
 # Emulating issue ID'd in Peru pipeline
 # turns out this error I was testing was in targets 0.10.0: ropensci/targets#758
 test_that("targets accepts kfa target names", {

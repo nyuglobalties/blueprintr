@@ -12,7 +12,8 @@ render_kfa_report(
   path = NULL,
   path_pattern = "reports/kfa-{snakecase_scale}-{dat_name}.html",
   format = NULL,
-  title = NULL
+  title = NULL,
+  ...
 )
 }
 \arguments{
@@ -38,6 +39,8 @@ be saved. Variables available for use are:
 \item{format}{The output format; defaults to 'html_document'}
 
 \item{title}{Optional title of the report}
+
+\item{...}{Arugments forwarded kfa::kfa()}
 }
 \value{
 Path to where the generated report is saved
