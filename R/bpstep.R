@@ -10,8 +10,7 @@
 #' @param ... Extensions to the bpstep, like "allow_duplicates"
 #'
 #' @return A 'bpstep' object
-#' @keywords internal
-#'
+#' @export
 bpstep <- function(step, bp, payload, ...) {
   stopifnot(is_blueprint(bp))
   stopifnot(is.character(step))

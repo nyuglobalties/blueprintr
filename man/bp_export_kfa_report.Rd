@@ -11,7 +11,8 @@ bp_export_kfa_report(
   path_pattern = NULL,
   format = NULL,
   title = NULL,
-  kfa_args = list()
+  kfa_args = list(),
+  ...
 )
 }
 \arguments{
@@ -30,6 +31,9 @@ bp_export_kfa_report(
 
 \item{kfa_args}{Arguments forwarded to \code{kfa::kfa()} for this batch
 of scales}
+
+\item{...}{Arguments forwarded to the executing engine
+e.g. targets::tar_target_raw() or drake::target()}
 }
 \value{
 An amended blueprint with the kfa report export instructions

@@ -9,6 +9,8 @@
 #' @param title Optional title of report
 #' @param kfa_args Arguments forwarded to `kfa::kfa()` for this batch
 #'   of scales
+#' @param ... Arguments forwarded to the executing engine
+#'   e.g. targets::tar_target_raw() or drake::target()
 #' @return An amended blueprint with the kfa report export instructions
 #' @export
 #' @examples
@@ -27,7 +29,8 @@ bp_export_kfa_report <- function(bp,
                                  path_pattern = NULL,
                                  format = NULL,
                                  title = NULL,
-                                 kfa_args = list()) {
+                                 kfa_args = list(),
+                                 ...) {
   bp_assert(is.character(scale))
   bp_assert(
     length(path) == length(scale) || is.null(path),
@@ -52,7 +55,8 @@ bp_export_kfa_report <- function(bp,
         format = format,
         title = .t,
         path_pattern = path_pattern,
-        kfa_args = kfa_args
+        kfa_args = kfa_args,
+        ...
       )
     )
   }
@@ -66,7 +70,8 @@ bpstep_export_kfa_report <- function(bp,
                                      path_pattern = NULL,
                                      format = NULL,
                                      title = NULL,
-                                     kfa_args = list()) {
+                                     kfa_args = list(),
+                                     ...) {
   snakecase_scale <- snakecase::to_snake_case(
     scale,
     transliterations = "ASCII-Latin"
@@ -83,7 +88,8 @@ bpstep_export_kfa_report <- function(bp,
         format, title,
         kfa_args = kfa_args,
         path_pattern = path_pattern
-      )
+      ),
+      ...
     ),
     allow_duplicates = TRUE
   )
