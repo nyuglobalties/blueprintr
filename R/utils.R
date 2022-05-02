@@ -27,6 +27,7 @@ is_missing.character <- function(x) {
 viapply <- function(.x, .f, ...) vapply(.x, .f, integer(1L), ...)
 vcapply <- function(.x, .f, ...) vapply(.x, .f, character(1L), ...)
 vlapply <- function(.x, .f, ...) vapply(.x, .f, logical(1L), ...)
+vdapply <- function(.x, .f, ...) vapply(.x, .f, double(1L), ...)
 
 collapse_message_list <- function(x, and = TRUE) {
   x <- paste0("'", x, "'")
@@ -180,4 +181,27 @@ unique_val <- function(x) {
   } else {
     ux[is.na(ux)]
   }
+}
+
+# from compat-purrr.R in rlang
+map2 <- function(.x, .y, .f, ...) {
+  .f <- rlang::as_function(.f, env = rlang::global_env())
+  out <- mapply(.f, .x, .y, MoreArgs = list(...), SIMPLIFY = FALSE)
+  if (length(out) == length(.x)) {
+    rlang::set_names(out, names(.x))
+  } else {
+    rlang::set_names(out, NULL)
+  }
+}
+map2_lgl <- function(.x, .y, .f, ...) {
+  as.vector(map2(.x, .y, .f, ...), "logical")
+}
+map2_int <- function(.x, .y, .f, ...) {
+  as.vector(map2(.x, .y, .f, ...), "integer")
+}
+map2_dbl <- function(.x, .y, .f, ...) {
+  as.vector(map2(.x, .y, .f, ...), "double")
+}
+map2_chr <- function(.x, .y, .f, ...) {
+  as.vector(map2(.x, .y, .f, ...), "character")
 }

@@ -10,8 +10,7 @@ ast <- function(.call) {
       bp_err("Unknown call structure: {safe_deparse(.call)}")
     }
   } else {
-    switch(
-      head_sym_chr(.call),
+    switch(head_sym_chr(.call),
       "~" = formula_ast(.call),
       "function" = function_ast(.call),
       structure(
@@ -91,6 +90,29 @@ qualified_head <- function(.call) {
   stopifnot(is_language(.call))
 
   extract_ast(node_car(node_cdar(.call)))
+}
+
+#' Find expressions of the form package::name
+#'
+#' Only of the form `package::name`, not `package::name()`
+#'
+#' @param .call An R expression
+#' @return logical
+is_qualified_sym <- function(.call) {
+  if (!is_language(.call)) {
+    return(FALSE)
+  }
+
+  if (is_language(node_car(.call))) {
+    return(FALSE)
+  }
+
+  car_sym <- node_car(.call)
+
+  identical(car_sym, quote(`::`)) ||
+    identical(car_sym, quote(`:::`)) ||
+    identical(car_sym, quote(`$`)) ||
+    identical(car_sym, quote(`@`))
 }
 
 is_qualified_call <- function(.call) {
