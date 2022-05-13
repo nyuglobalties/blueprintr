@@ -21,7 +21,8 @@ collapse_ast.qualified_ast <- function(ex) {
   if (!is_namespaced_ast(ex)) {
     collapsed_head <- collapse_ast(ex$qual_head)
 
-    call2(ex$qual_sym, collapsed_head, call2(ex$head, !!!collapsed_args))
+    ncar <- call2(ex$qual_sym, collapsed_head, ex$head)
+    call2(ncar, !!!collapsed_args)
   } else {
     if (identical(ex$qual_sym, quote(`::`))) {
       call2(ex$head, !!!collapsed_args, .ns = ex$ns)
