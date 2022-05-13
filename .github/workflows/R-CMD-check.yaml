@@ -44,12 +44,6 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
-      - name: Install custom packages
-        run: |
-          remotes::install_github("nyuglobalties/rcoder")
-          remotes::install_github("nyuglobalties/panelcleaner")
-        shell: Rscript {0}
-
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
