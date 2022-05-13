@@ -13,15 +13,18 @@ test_that("extract_ast and collapse_ast are inverses", {
   })
   expr3 <- bquote(codetools::showTree(expr1))
 
-  expr4  <- quote(func(function(.x) .x, param = "test"))
-  expr5  <- quote(func(function(.x, .p = "word") .x, param = "test"))
-  expr6  <- quote(~ .x)
-  expr7  <- quote(function(.x) { .x + 1 })
-  expr8  <- quote(dplyr:::abort_glue(words))
-  expr9  <- quote(stuff@hidden_function(words))
+  expr4 <- quote(func(function(.x) .x, param = "test"))
+  expr5 <- quote(func(function(.x, .p = "word") .x, param = "test"))
+  expr6 <- quote(~.x)
+  expr7 <- quote(function(.x) {
+    .x + 1
+  })
+  expr8 <- quote(dplyr:::abort_glue(words))
+  expr9 <- quote(stuff@hidden_function(words))
   expr10 <- quote(stuff$thing(words))
   expr11 <- quote(func(function(.x) ifelse(is.na(.x), 0, .x)))
   expr12 <- quote(df %>% module$func(x = stuff))
+  expr13 <- quote(thing == TRUE ~ x)
 
   ast_ident <- function(e) collapse_ast(extract_ast(e))
 
@@ -37,6 +40,7 @@ test_that("extract_ast and collapse_ast are inverses", {
   expect_equal(ast_ident(expr10), expr10)
   expect_equal(ast_ident(expr11), expr11)
   expect_equal(ast_ident(expr12), expr12)
+  expect_equal(ast_ident(expr13), expr13)
 })
 
 test_that("Corner cases are covered", {

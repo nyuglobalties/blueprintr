@@ -3,8 +3,14 @@
 #' @param bp A blueprint
 #' @param scale Which scale(s) to analyze
 #' @param path Path(s) to where the report(s) should be saved
+#' @param path_pattern Override the default location to save files
+#'   (always rooted to the project root with here::here())
 #' @param format The output format of the report(s)
 #' @param title Optional title of report
+#' @param kfa_args Arguments forwarded to `kfa::kfa()` for this batch
+#'   of scales
+#' @param ... Arguments forwarded to the executing engine
+#'   e.g. targets::tar_target_raw() or drake::target()
 #' @return An amended blueprint with the kfa report export instructions
 #' @export
 #' @examples
@@ -20,8 +26,11 @@
 bp_export_kfa_report <- function(bp,
                                  scale,
                                  path = NULL,
+                                 path_pattern = NULL,
                                  format = NULL,
-                                 title = NULL) {
+                                 title = NULL,
+                                 kfa_args = list(),
+                                 ...) {
   bp_assert(is.character(scale))
   bp_assert(
     length(path) == length(scale) || is.null(path),
@@ -44,7 +53,10 @@ bp_export_kfa_report <- function(bp,
         .s,
         path = .p,
         format = format,
-        title = .t
+        title = .t,
+        path_pattern = path_pattern,
+        kfa_args = kfa_args,
+        ...
       )
     )
   }
@@ -55,9 +67,16 @@ bp_export_kfa_report <- function(bp,
 bpstep_export_kfa_report <- function(bp,
                                      scale,
                                      path = NULL,
+                                     path_pattern = NULL,
                                      format = NULL,
-                                     title = NULL) {
-  target_name <- glue::glue("{bp$name}_{scale}_kfa_report")
+                                     title = NULL,
+                                     kfa_args = list(),
+                                     ...) {
+  snakecase_scale <- snakecase::to_snake_case(
+    scale,
+    transliterations = "ASCII-Latin"
+  )
+  target_name <- glue::glue("{bp$name}_{snakecase_scale}_kfa_report")
 
   bpstep(
     step = "export_kfa_report",
@@ -66,50 +85,80 @@ bpstep_export_kfa_report <- function(bp,
       target_name = target_name,
       target_command = render_kfa_call(
         bp, scale, path,
-        format, title
-      )
+        format, title,
+        kfa_args = kfa_args,
+        path_pattern = path_pattern
+      ),
+      ...
     ),
     allow_duplicates = TRUE
   )
 }
 
-render_kfa_call <- function(bp, scale, path, format, title) {
-  rlang::call2(
+render_kfa_call <- function(bp,
+                            scale,
+                            path,
+                            format,
+                            title,
+                            kfa_args,
+                            path_pattern = NULL) {
+  out <- rlang::call2(
     "render_kfa_report",
     as.name(blueprint_final_name(bp)),
+    as.name(blueprint_reference_name(bp)),
     as.name(metadata_target_name(bp)),
     scale = scale,
     path = path,
     format = format,
     title = title,
+    !!!kfa_args,
     .ns = "blueprintr"
   )
+
+  if (!is.null(path_pattern)) {
+    out[["path_pattern"]] <- path_pattern
+  }
+
+  out
 }
 
 #' Render k-fold factor analysis on scale using kfa
 #'
-#' Generates a k-fold factor analys report using the 'scale'
+#' Generates a k-fold factor analysis report using the 'scale'
 #' field in the blueprintr data dictionaries. While not recommended,
 #' this function does allow for multiple loaded variables, delimited by
 #' commas. For example, 'var1' could have 'scale' be "SCALE1,SCALE2".
 #'
 #' @param dat Source data
+#' @param bp The dataset's blueprint
 #' @param meta blueprintr data dictionary
 #' @param scale Scale identifier to be located in the 'scale' field
 #' @param path Where to output the report; defaults to the "reports"
 #'   subfolder of the current working *project* folder.
+#' @param path_pattern If path is `NULL`, this is where the report will
+#'   be saved. Variables available for use are:
+#'   * `scale`: The scale name defined in the metadata
+#'   * `snakecase_scale`: `scale` but in snake_case
+#'   * `dat_name`: Name of the dataset (equivalent to the blueprint name)
 #' @param format The output format; defaults to 'html_document'
 #' @param title Optional title of the report
+#' @param ... Arugments forwarded kfa::kfa()
 #' @return Path to where the generated report is saved
 #' @export
 render_kfa_report <- function(dat,
+                              bp,
                               meta,
                               scale,
                               path = NULL,
+                              path_pattern = "reports/kfa-{snakecase_scale}-{dat_name}.html", # nolint
                               format = NULL,
-                              title = NULL) {
+                              title = NULL,
+                              ...) {
+  dat_name <- blueprint_final_name(bp)
+  snakecase_scale <- snakecase::to_snake_case(scale)
+
   path <- path %||% here::here(
-    glue::glue("reports/kfa-{scale}-{substitute(dat)}.html")
+    glue::glue(path_pattern)
   )
 
   format <- format %||% "html_document"
@@ -131,10 +180,11 @@ render_kfa_report <- function(dat,
     .scale = strsplit(.data$scale, "\\,\\s*")
   )
 
-  scale_vars <- dplyr::filter(
-    meta,
-    vlapply(.data$.scale, function(.s) scale %in% .s)
-  )[["name"]]
+  scale_vars <- meta[
+    vlapply(meta$.scale, function(.s) scale %in% .s),
+    "name",
+    drop = TRUE
+  ]
 
   if (length(scale_vars) == 0) {
     bp_err(c(
@@ -148,12 +198,13 @@ render_kfa_report <- function(dat,
     tidyselect::all_of(scale_vars)
   )
 
-  models <- kfa::kfa(variables = scale_dat)
+  models <- kfa::kfa(variables = scale_dat, ...)
   report <- kfa::kfa_report(
     models,
-    file.name = path,
+    file.name = basename(path),
     report.format = format,
-    report.title = title
+    report.title = title,
+    path = dirname(path)
   )
 
   path

@@ -27,6 +27,6 @@ extract_ast.function_ast <- function(ex) {
 
 #' @export
 extract_ast.formula_ast <- function(ex) {
-  ex$args <- extract_ast(ex$args)
+  ex$args <- lapply(ex$args, extract_ast)
   ex
 }

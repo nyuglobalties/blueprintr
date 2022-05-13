@@ -21,7 +21,8 @@ collapse_ast.qualified_ast <- function(ex) {
   if (!is_namespaced_ast(ex)) {
     collapsed_head <- collapse_ast(ex$qual_head)
 
-    call2(ex$qual_sym, collapsed_head, call2(ex$head, !!!collapsed_args))
+    ncar <- call2(ex$qual_sym, collapsed_head, ex$head)
+    call2(ncar, !!!collapsed_args)
   } else {
     if (identical(ex$qual_sym, quote(`::`))) {
       call2(ex$head, !!!collapsed_args, .ns = ex$ns)
@@ -40,6 +41,12 @@ collapse_ast.function_ast <- function(ex) {
 
 #' @export
 collapse_ast.formula_ast <- function(ex) {
-  form <- collapse_ast(ex$args)
-  bquote(~ .(form))
+  if (length(ex$args) > 1) {
+    lhs <- collapse_ast(ex$args[[1]])
+    rhs <- collapse_ast(ex$args[[2]])
+    bquote(.(lhs) ~ .(rhs))
+  } else {
+    form <- collapse_ast(ex$args[[1]])
+    bquote(~ .(form))
+  }
 }

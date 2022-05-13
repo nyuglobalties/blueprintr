@@ -23,4 +23,3 @@ A 'bpstep' object
 Each step in the blueprint assembly process is contained in a wrapper
 'bpstep' object.
 }
-\keyword{internal}

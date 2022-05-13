@@ -1,3 +1,8 @@
+# blueprintr 0.1.2
+* Fixes double-sided formulae rendering in blueprints
+* Exports `bpstep()` and `bp_add_step()` for customization
+* Allows argument forwarding to `kfa::kfa()` using the `kfa_args` parameter in `bp_export_kfa_report()`
+
 # blueprintr 0.1.1
 * Clarifies which coding string cannot be evaluated during codebook generation or labelling
 * Fixes a bug where `bp_extend()` would clobber the results of `bp_add_bpstep()` 

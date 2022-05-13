@@ -4,7 +4,16 @@
 \alias{bp_export_kfa_report}
 \title{Instruct blueprint to generate kfa report}
 \usage{
-bp_export_kfa_report(bp, scale, path = NULL, format = NULL, title = NULL)
+bp_export_kfa_report(
+  bp,
+  scale,
+  path = NULL,
+  path_pattern = NULL,
+  format = NULL,
+  title = NULL,
+  kfa_args = list(),
+  ...
+)
 }
 \arguments{
 \item{bp}{A blueprint}
@@ -13,9 +22,18 @@ bp_export_kfa_report(bp, scale, path = NULL, format = NULL, title = NULL)
 
 \item{path}{Path(s) to where the report(s) should be saved}
 
+\item{path_pattern}{Override the default location to save files
+(always rooted to the project root with here::here())}
+
 \item{format}{The output format of the report(s)}
 
 \item{title}{Optional title of report}
+
+\item{kfa_args}{Arguments forwarded to \code{kfa::kfa()} for this batch
+of scales}
+
+\item{...}{Arguments forwarded to the executing engine
+e.g. targets::tar_target_raw() or drake::target()}
 }
 \value{
 An amended blueprint with the kfa report export instructions
