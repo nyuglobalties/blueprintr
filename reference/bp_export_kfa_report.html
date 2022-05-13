@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">blueprintr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2</span>
       </span>
     </div>
 
@@ -56,7 +56,16 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">bp_export_kfa_report</span><span class="op">(</span><span class="va">bp</span>, <span class="va">scale</span>, path <span class="op">=</span> <span class="cn">NULL</span>, format <span class="op">=</span> <span class="cn">NULL</span>, title <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">bp_export_kfa_report</span><span class="op">(</span>
+  <span class="va">bp</span>,
+  <span class="va">scale</span>,
+  path <span class="op">=</span> <span class="cn">NULL</span>,
+  path_pattern <span class="op">=</span> <span class="cn">NULL</span>,
+  format <span class="op">=</span> <span class="cn">NULL</span>,
+  title <span class="op">=</span> <span class="cn">NULL</span>,
+  kfa_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,
+  <span class="va">...</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -67,10 +76,19 @@
 <dd><p>Which scale(s) to analyze</p></dd>
 <dt>path</dt>
 <dd><p>Path(s) to where the report(s) should be saved</p></dd>
+<dt>path_pattern</dt>
+<dd><p>Override the default location to save files
+(always rooted to the project root with here::here())</p></dd>
 <dt>format</dt>
 <dd><p>The output format of the report(s)</p></dd>
 <dt>title</dt>
 <dd><p>Optional title of report</p></dd>
+<dt>kfa_args</dt>
+<dd><p>Arguments forwarded to <code><a href="https://rdrr.io/pkg/kfa/man/kfa.html" class="external-link">kfa::kfa()</a></code> for this batch
+of scales</p></dd>
+<dt>...</dt>
+<dd><p>Arguments forwarded to the executing engine
+e.g. targets::tar_target_raw() or drake::target()</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -102,7 +120,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
 </div>
 
       </footer></div>

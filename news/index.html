@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">blueprintr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2</span>
       </span>
     </div>
 
@@ -51,6 +51,13 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.2" id="blueprintr-012">blueprintr 0.1.2<a class="anchor" aria-label="anchor" href="#blueprintr-012"></a></h2>
+<ul><li>Fixes double-sided formulae rendering in blueprints</li>
+<li>Exports <code><a href="../reference/bpstep.html">bpstep()</a></code> and <code>bp_add_step()</code> for customization</li>
+<li>Allows argument forwarding to <code><a href="https://rdrr.io/pkg/kfa/man/kfa.html" class="external-link">kfa::kfa()</a></code> using the <code>kfa_args</code> parameter in <code><a href="../reference/bp_export_kfa_report.html">bp_export_kfa_report()</a></code>
+</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.1" id="blueprintr-011">blueprintr 0.1.1<a class="anchor" aria-label="anchor" href="#blueprintr-011"></a></h2>
 <ul><li>Clarifies which coding string cannot be evaluated during codebook generation or labelling</li>
 <li>Fixes a bug where <code><a href="../reference/bp_extend.html">bp_extend()</a></code> would clobber the results of <code><a href="../reference/bp_add_bpstep.html">bp_add_bpstep()</a></code>
@@ -69,8 +76,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.10" id="blueprintr-0010">blueprintr 0.0.10<a class="anchor" aria-label="anchor" href="#blueprintr-0010"></a></h2>
-<ul><li>Adds a <code>.with_names</code> parameter to <code>mutate_annotation_across</code> that, when <code>TRUE</code>, sends a column and its name as arguments to <code>.fn</code>.</li>
-</ul></div>
+<ul><li>Adds a <code>.with_names</code> parameter to <code>mutate_annotation_across</code> that, when <code>TRUE</code>, sends a column and its name as arguments to <code>.fn</code>.</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.9" id="blueprintr-009">blueprintr 0.0.9<a class="anchor" aria-label="anchor" href="#blueprintr-009"></a></h2>
 <ul><li>Bugfix to ensure the “description” field is present in the event that parent, annotated datasets don’t have the “description” field filled in at all</li>
@@ -84,8 +90,7 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.7" id="blueprintr-007">blueprintr 0.0.7<a class="anchor" aria-label="anchor" href="#blueprintr-007"></a></h2>
 <ul><li>Adds <code>recurse</code> parameter to <code><a href="../reference/load_blueprint.html">load_blueprints()</a></code> and <code><a href="../reference/tar_blueprint.html">tar_blueprints()</a></code> to recursively load blueprints from the provided <code>directory</code>
-</li>
-</ul></div>
+</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.6" id="blueprintr-006">blueprintr 0.0.6<a class="anchor" aria-label="anchor" href="#blueprintr-006"></a></h2>
 <ul><li>Integration with <code>panelcleaner</code> to import homogenized codings if target data.frame is a <code>mapped_df</code>
@@ -94,8 +99,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.5" id="blueprintr-005">blueprintr 0.0.5<a class="anchor" aria-label="anchor" href="#blueprintr-005"></a></h2>
-<ul><li>Fixed bug that would not translate anonymous functions and formulae correctly (<a href="https://github.com/nyuglobalties/blueprintr/issues/22" class="external-link">#22</a> and <a href="https://github.com/nyuglobalties/blueprintr/issues/29" class="external-link">#29</a>)</li>
-</ul></div>
+<ul><li>Fixed bug that would not translate anonymous functions and formulae correctly (<a href="https://github.com/nyuglobalties/blueprintr/issues/22" class="external-link">#22</a> and <a href="https://github.com/nyuglobalties/blueprintr/issues/29" class="external-link">#29</a>)</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.4" id="blueprintr-004">blueprintr 0.0.4<a class="anchor" aria-label="anchor" href="#blueprintr-004"></a></h2>
 <ul><li>Add targets support, with <code><a href="../reference/tar_blueprint.html">tar_blueprint()</a></code> and <code><a href="../reference/tar_blueprint.html">tar_blueprints()</a></code>
@@ -106,8 +110,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.3" id="blueprintr-003">blueprintr 0.0.3<a class="anchor" aria-label="anchor" href="#blueprintr-003"></a></h2>
-<ul><li>Added blueprint extension functions <code><a href="../reference/bp_export_codebook.html">bp_export_codebook()</a></code> and <code><a href="../reference/bp_label_variables.html">bp_label_variables()</a></code> that create a pipe-able method of setting blueprint configuration.</li>
-</ul></div>
+<ul><li>Added blueprint extension functions <code><a href="../reference/bp_export_codebook.html">bp_export_codebook()</a></code> and <code><a href="../reference/bp_label_variables.html">bp_label_variables()</a></code> that create a pipe-able method of setting blueprint configuration.</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.0.2" id="blueprintr-002">blueprintr 0.0.2<a class="anchor" aria-label="anchor" href="#blueprintr-002"></a></h2>
 <ul><li>Created codebook export feature with <code><a href="../reference/render_codebook.html">render_codebook()</a></code> (<a href="https://github.com/nyuglobalties/blueprintr/issues/3" class="external-link">#3</a>)</li>
@@ -128,7 +131,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
 </div>
 
       </footer></div>
