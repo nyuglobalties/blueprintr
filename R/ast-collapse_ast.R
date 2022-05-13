@@ -41,6 +41,12 @@ collapse_ast.function_ast <- function(ex) {
 
 #' @export
 collapse_ast.formula_ast <- function(ex) {
-  form <- collapse_ast(ex$args)
-  bquote(~ .(form))
+  if (length(ex$args) > 1) {
+    lhs <- collapse_ast(ex$args[[1]])
+    rhs <- collapse_ast(ex$args[[2]])
+    bquote(.(lhs) ~ .(rhs))
+  } else {
+    form <- collapse_ast(ex$args[[1]])
+    bquote(~ .(form))
+  }
 }

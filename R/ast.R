@@ -133,7 +133,7 @@ formula_ast <- function(.call) {
   structure(
     list(
       head = "~",
-      args = call_list[[2]]
+      args = call_list[-1]
     ),
     class = c("formula_ast", "ast")
   )
