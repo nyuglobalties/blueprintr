@@ -11,7 +11,12 @@ collapse_ast.default <- function(ex) {
 collapse_ast.ast <- function(ex) {
   collapsed_args <- lapply(ex$args, collapse_ast)
 
-  call2(ex$head, !!!collapsed_args)
+  out <- tryCatch(
+    call2(ex$head, !!!collapsed_args),
+    error = function(e) browser()
+  )
+
+  out
 }
 
 #' @export
