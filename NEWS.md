@@ -1,3 +1,6 @@
+# blueprintr 0.1.3
+* Fixes an issue where qualified expressions like "package::thing" were not being translated correctly
+
 # blueprintr 0.1.2
 * Fixes double-sided formulae rendering in blueprints
 * Exports `bpstep()` and `bp_add_step()` for customization
