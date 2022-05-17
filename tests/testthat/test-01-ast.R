@@ -33,22 +33,22 @@ test_that("Qualifier identification works correctly", {
   )
 
   expect_identical(
-    qquote(thing::stuff),
+    qquote(rlang::call_name),
     quote(`::`)
   )
 
   expect_identical(
-    qquote(thing::stuff()),
+    qquote(rlang::call_name()),
     quote(`::`)
   )
 
   expect_identical(
-    qquote(thing:::stuff),
+    qquote(rlang:::call_name),
     quote(`:::`)
   )
 
   expect_identical(
-    qquote(thing:::stuff()),
+    qquote(rlang:::call_name()),
     quote(`:::`)
   )
 
@@ -88,8 +88,8 @@ test_that("extract_ast and collapse_ast are inverses", {
   expr11 <- quote(func(function(.x) ifelse(is.na(.x), 0, .x)))
   expr12 <- quote(df %>% module$func(x = stuff))
   expr13 <- quote(thing == TRUE ~ x)
-  expr14 <- quote(tidytable::select.)
-  expr15 <- quote(tidytable:::select.)
+  expr14 <- quote(rlang::call_name)
+  expr15 <- quote(rlang:::call_name)
 
   ast_ident <- function(e) collapse_ast(extract_ast(e))
 
