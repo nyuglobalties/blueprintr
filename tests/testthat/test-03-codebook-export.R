@@ -11,9 +11,12 @@ test_that("Codebook exports are added to plan correctly", {
 
   test_bp_1 <- blueprint(
     "test_bp",
-    command = mtcars,
-    codebook_export = TRUE,
-    codebook_summaries = TRUE
+    command = mtcars
+  )
+
+  test_bp_1 <- bp_export_codebook(
+    test_bp_1,
+    summaries = TRUE
   )
 
   plan <- plan_from_blueprint(test_bp_1)
@@ -33,9 +36,12 @@ test_that("Codebook exports are added to plan correctly", {
   random_template_location <- "some/randsome/rmarkdown/file.Rmd"
   test_bp_2 <- blueprint(
     "test_bp",
-    command = mtcars,
-    codebook_export = TRUE,
-    codebook_template = random_template_location
+    command = mtcars
+  )
+
+  test_bp_2 <- bp_export_codebook(
+    test_bp_2,
+    template = random_template_location
   )
 
   plan <- plan_from_blueprint(test_bp_2)

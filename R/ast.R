@@ -9,9 +9,17 @@ ast <- function(.call) {
     } else {
       bp_err("Unknown call structure: {safe_deparse(.call)}")
     }
+  } else if (is_qualified_expr(.call)) {
+    # For pure qualified expressions, not qualified call weirdness
+    structure(
+      list(
+        head = as.character(qualifier(.call)),
+        args = as.list(.call)[-1]
+      ),
+      class = "ast"
+    )
   } else {
-    switch(
-      head_sym_chr(.call),
+    switch(head_sym_chr(.call),
       "~" = formula_ast(.call),
       "function" = function_ast(.call),
       structure(
@@ -84,13 +92,42 @@ is_leaf <- function(x) {
 qualifier <- function(.call) {
   stopifnot(is_language(.call))
 
-  node_caar(.call)
+  if (is_qualified_call(.call)) {
+    return(qualifier(node_car(.call)))
+  }
+
+  if (is_qualified_expr(.call)) {
+    node_car(.call)
+  } else {
+    NULL
+  }
 }
 
 qualified_head <- function(.call) {
   stopifnot(is_language(.call))
 
   extract_ast(node_car(node_cdar(.call)))
+}
+
+is_qualified_expr <- function(.call) {
+  if (!is_language(.call)) {
+    return(FALSE)
+  }
+
+  if (!is_symbol(node_car(.call))) {
+    return(FALSE)
+  }
+
+  if (length(node_cdr(.call)) != 2) {
+    return(FALSE)
+  }
+
+  head_sym <- node_car(.call)
+
+  identical(head_sym, quote(`::`)) ||
+    identical(head_sym, quote(`:::`)) ||
+    identical(head_sym, quote(`$`)) ||
+    identical(head_sym, quote(`@`))
 }
 
 is_qualified_call <- function(.call) {
@@ -102,18 +139,7 @@ is_qualified_call <- function(.call) {
     return(FALSE)
   }
 
-  call_cmd <- node_car(.call)
-
-  if (!is_symbol(node_cadr(node_cdr(call_cmd)))) {
-    return(FALSE)
-  }
-
-  qual_sym <- qualifier(.call)
-
-  identical(qual_sym, quote(`::`)) ||
-    identical(qual_sym, quote(`:::`)) ||
-    identical(qual_sym, quote(`$`)) ||
-    identical(qual_sym, quote(`@`))
+  is_qualified_expr(node_car(.call))
 }
 
 is_namespaced_call <- function(.call) {

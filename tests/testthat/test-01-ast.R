@@ -1,5 +1,68 @@
 context("ast")
 
+test_that("Qualifier identification works correctly", {
+  qquote <- function(x) qualifier(substitute(x))
+
+  # qualifier() only works on expressions -- wouldn't make sense on
+  # syntactic literals
+  expect_error(qquote(x))
+
+  expect_identical(
+    qquote(thing()),
+    NULL
+  )
+
+  expect_identical(
+    qquote(y ~ x + z),
+    NULL
+  )
+
+  expect_identical(
+    qquote(word <- thing()),
+    NULL
+  )
+
+  expect_identical(
+    qquote(thing$stuff),
+    quote(`$`)
+  )
+
+  expect_identical(
+    qquote(thing$stuff()),
+    quote(`$`)
+  )
+
+  expect_identical(
+    qquote(rlang::call_name),
+    quote(`::`)
+  )
+
+  expect_identical(
+    qquote(rlang::call_name()),
+    quote(`::`)
+  )
+
+  expect_identical(
+    qquote(rlang:::call_name),
+    quote(`:::`)
+  )
+
+  expect_identical(
+    qquote(rlang:::call_name()),
+    quote(`:::`)
+  )
+
+  expect_identical(
+    qquote(thing@stuff),
+    quote(`@`)
+  )
+
+  expect_identical(
+    qquote(thing@stuff()),
+    quote(`@`)
+  )
+})
+
 test_that("extract_ast and collapse_ast are inverses", {
   expr1 <- bquote(x + 1)
   expr2 <- bquote({
@@ -25,6 +88,8 @@ test_that("extract_ast and collapse_ast are inverses", {
   expr11 <- quote(func(function(.x) ifelse(is.na(.x), 0, .x)))
   expr12 <- quote(df %>% module$func(x = stuff))
   expr13 <- quote(thing == TRUE ~ x)
+  expr14 <- quote(rlang::call_name)
+  expr15 <- quote(rlang:::call_name)
 
   ast_ident <- function(e) collapse_ast(extract_ast(e))
 
@@ -41,6 +106,8 @@ test_that("extract_ast and collapse_ast are inverses", {
   expect_equal(ast_ident(expr11), expr11)
   expect_equal(ast_ident(expr12), expr12)
   expect_equal(ast_ident(expr13), expr13)
+  expect_equal(ast_ident(expr14), expr14)
+  expect_equal(ast_ident(expr15), expr15)
 })
 
 test_that("Corner cases are covered", {
