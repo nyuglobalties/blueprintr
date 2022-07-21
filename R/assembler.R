@@ -72,11 +72,7 @@ assemble_payload.targets_assembler <- function(asm, payload) {
     !!!dots
   )
 
-  eval(rlang::call2(
-    "tar_target_raw",
-    !!!argslist,
-    .ns = "targets"
-  ))
+  do.call(targets::tar_target_raw, argslist)
 }
 
 assembly_steps <- function(asm, bp) {
