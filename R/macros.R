@@ -83,7 +83,8 @@ handle_macro <- function(macro_name) {
 }
 
 can_run_macros_interactively <- function() {
-  getOption("blueprintr.interactive_eval_macros", default = FALSE) # nolint: object_name_linter
+  getOption("blueprintr.interactive_eval_macros", default = FALSE) &&
+    !getOption("blueprintr.attach_state", default = FALSE)
 }
 
 is_macro_ast <- function(ast, .macro = ".TARGET") {
