@@ -2,6 +2,7 @@
   op <- options()
   op_bpr <- list(
     blueprintr.interactive_eval_macros = FALSE,
+    blueprintr.interactive_always_reload = TRUE,
     blueprintr.interactive_reload_warn = TRUE,
     blueprintr.attach_state = FALSE
   )

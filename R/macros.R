@@ -53,18 +53,20 @@ NULL
 
 handle_macro <- function(macro_name) {
   if (interactive() && can_run_macros_interactively()) {
-    if (exists(macro_name, envir = globalenv())) {
-      if (isTRUE(getOption("blueprintr.interactive_reload_warn", default = TRUE))) {
-        message(
-          "Using '", macro_name, "' in global environment. ",
-          "Reload with targets::tar_load(). ",
-          "(This message only displays once per session)."
-        )
+    if (!isTRUE(getOption("blueprintr.interactive_always_reload", default = TRUE))) {
+      if (exists(macro_name, envir = globalenv())) {
+        if (isTRUE(getOption("blueprintr.interactive_reload_warn", default = TRUE))) {
+          message(
+            "Using '", macro_name, "' in global environment. ",
+            "Reload with targets::tar_load(). ",
+            "(This message only displays once per session)."
+          )
 
-        options(blueprintr.interactive_reload_warn = FALSE)
+          options(blueprintr.interactive_reload_warn = FALSE)
+        }
+
+        return(get(macro_name, envir = globalenv()))
       }
-
-      return(get(macro_name, envir = globalenv()))
     }
 
     # Only supports targets since targets supersedes drake now
