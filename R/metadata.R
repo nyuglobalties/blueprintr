@@ -83,14 +83,14 @@ read_metadata <- function(metadata_file) {
   metadata(metadata_df)
 }
 
-metadata_target_name <- function(blueprint) {
-  paste0(blueprint_final_name(blueprint), "_meta")
+metadata_target_name <- function(blueprint, .env = parent.frame()) {
+  paste0(blueprint_final_name(blueprint, .env = .env), "_meta")
 }
 
-metadata_target_file_name <- function(blueprint) {
-  paste0(blueprint_final_name(blueprint), "_meta_path")
+metadata_target_file_name <- function(blueprint, .env = parent.frame()) {
+  paste0(blueprint_final_name(blueprint, .env = .env), "_meta_path")
 }
 
-metadata_export_name <- function(blueprint) {
-  paste0(blueprint_final_name(blueprint), "_metadata_export")
+metadata_export_name <- function(blueprint, .env = parent.frame()) {
+  paste0(blueprint_final_name(blueprint, .env = .env), "_metadata_export")
 }

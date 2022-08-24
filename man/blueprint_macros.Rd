@@ -7,11 +7,11 @@
 \alias{.META}
 \title{Macros for blueprint authoring}
 \usage{
-.TARGET(bp_name)
+.TARGET(bp_name, .env = parent.frame())
 
-.BLUEPRINT(bp_name)
+.BLUEPRINT(bp_name, .env = parent.frame())
 
-.META(bp_name)
+.META(bp_name, .env = parent.frame())
 }
 \arguments{
 \item{bp_name}{Character string of blueprint's name}
@@ -23,13 +23,13 @@ symbols to be analyzed in the \code{drake} plan.
 }
 \section{Functions}{
 \itemize{
-\item \code{.TARGET}: Gets symbol of built and checked data
+\item \code{.TARGET()}: Gets symbol of built and checked data
 
-\item \code{.BLUEPRINT}: Gets symbol of blueprint reference in plan
+\item \code{.BLUEPRINT()}: Gets symbol of blueprint reference in plan
 
-\item \code{.META}: Gets symbol of metadata reference in plan
+\item \code{.META()}: Gets symbol of metadata reference in plan
+
 }}
-
 \section{When to use}{
 Generally speaking, the \code{.BLUEPRINT} and \code{.META} macros should be used for
 check functions, which frequently require context, e.g. in the form of

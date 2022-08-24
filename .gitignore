@@ -9,3 +9,5 @@ inst/doc
 
 # State file stuff
 **/*.~lock*
+
+_targets

@@ -121,97 +121,52 @@ capture_command <- function(quoted_statement) {
   quoted_statement
 }
 
-blueprint_target_name <- function(x, ...) {
-  UseMethod("blueprint_target_name")
+handle_name_dispatch <- function(x, suffix = NULL, .env = parent.frame()) {
+  stopifnot(is.null(suffix) || is.character(suffix))
+
+  sym_x <- substitute(x, env = .env)
+
+  if (!exists(as.character(sym_x))) {
+    # User passed in a symbol to a macro which needs to be
+    # converted to a string
+
+    return(handle_name_dispatch(
+      as.character(sym_x),
+      suffix = suffix
+    ))
+  }
+
+  if (is_blueprint(x)) {
+    return(handle_name_dispatch(
+      x$name,
+      suffix = suffix
+    ))
+  }
+
+  if (is.character(x)) {
+    suffix <- if (!is.null(suffix)) paste0("_", suffix) else NULL
+    return(paste0(x, suffix))
+  }
+
+  bp_err("Unhandled object passed to blueprint name retrieval system: {class(x)}")
 }
 
-#' @export
-blueprint_target_name.default <- function(x, ...) {
-  bp_err("Not defined")
+blueprint_target_name <- function(x, .env = parent.frame()) {
+  handle_name_dispatch(x, suffix = "initial", .env = .env)
 }
 
-#' @export
-blueprint_target_name.character <- function(x, ...) {
-  paste0(blueprint_final_name(x), "_initial")
+blueprint_checks_name <- function(x, .env = parent.frame()) {
+  handle_name_dispatch(x, suffix = "checks", .env = .env)
 }
 
-#' @export
-blueprint_target_name.blueprint <- function(x, ...) {
-  blueprint_target_name(x$name)
+blueprint_final_name <- function(x, .env = parent.frame()) {
+  handle_name_dispatch(x, .env = .env)
 }
 
-blueprint_checks_name <- function(x, ...) {
-  UseMethod("blueprint_checks_name")
+blueprint_reference_name <- function(x, .env = parent.frame()) {
+  handle_name_dispatch(x, suffix = "blueprint", .env = .env)
 }
 
-#' @export
-blueprint_checks_name.default <- function(x, ...) {
-  bp_err("Not defined")
-}
-
-#' @export
-blueprint_checks_name.character <- function(x, ...) {
-  paste0(blueprint_final_name(x), "_checks")
-}
-
-#' @export
-blueprint_checks_name.blueprint <- function(x, ...) {
-  blueprint_checks_name(x$name)
-}
-
-blueprint_final_name <- function(x, ...) {
-  UseMethod("blueprint_final_name")
-}
-
-#' @export
-blueprint_final_name.default <- function(x, ...) {
-  bp_err("Not defined")
-}
-
-#' @export
-blueprint_final_name.character <- function(x, ...) {
-  x
-}
-
-#' @export
-blueprint_final_name.blueprint <- function(x, ...) {
-  blueprint_final_name(x$name)
-}
-
-blueprint_reference_name <- function(x, ...) {
-  UseMethod("blueprint_reference_name")
-}
-
-#' @export
-blueprint_reference_name.default <- function(x, ...) {
-  bp_err("Not defined")
-}
-
-#' @export
-blueprint_reference_name.character <- function(x, ...) {
-  paste0(blueprint_final_name(x), "_blueprint")
-}
-
-#' @export
-blueprint_reference_name.blueprint <- function(x, ...) {
-  blueprint_reference_name(x$name)
-}
-
-blueprint_codebook_name <- function(x, ...) {
-  UseMethod("blueprint_codebook_name")
-}
-
-#' @export
-blueprint_codebook_name.default <- function(x, ...) {
-  bp_err("Not defined")
-}
-
-#' @export
-blueprint_codebook_name.character <- function(x, ...) {
-  paste0(blueprint_final_name(x), "_codebook")
-}
-
-#' @export
-blueprint_codebook_name.blueprint <- function(x, ...) {
-  blueprint_codebook_name(x$name)
+blueprint_codebook_name <- function(x, .env = parent.frame()) {
+  handle_name_dispatch(x, suffix = "codebook", .env = .env)
 }

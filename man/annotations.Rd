@@ -33,16 +33,16 @@ Access the blueprintr metadata at runtime
 }
 \section{Functions}{
 \itemize{
-\item \code{annotations}: Gets a list of all decorations assigned to an object
+\item \code{annotations()}: Gets a list of all decorations assigned to an object
 
-\item \code{annotation_names}: Get the names of all of the
+\item \code{annotation_names()}: Get the names of all of the
 decorations assigned to an object
 
-\item \code{annotation}: Gets a decoration for an object
+\item \code{annotation()}: Gets a decoration for an object
 
-\item \code{has_annotation}: Checks to see if a decoration exists for an object
+\item \code{has_annotation()}: Checks to see if a decoration exists for an object
 
-\item \code{add_annotation}: Adds a decoration to an object,
+\item \code{add_annotation()}: Adds a decoration to an object,
 with the option of overwriting an existing value
-}}
 
+}}

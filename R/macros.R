@@ -35,20 +35,55 @@ NULL
 
 #' @describeIn blueprint_macros Gets symbol of built and checked data
 #' @export
-.TARGET <- function(bp_name) {
-  as.name(blueprint_final_name(bp_name))
+.TARGET <- function(bp_name, .env = parent.frame()) {
+  handle_macro(blueprint_final_name(bp_name, .env = .env))
 }
 
 #' @describeIn blueprint_macros Gets symbol of blueprint reference in plan
 #' @export
-.BLUEPRINT <- function(bp_name) {
-  as.name(blueprint_reference_name(bp_name))
+.BLUEPRINT <- function(bp_name, .env = parent.frame()) {
+  handle_macro(blueprint_reference_name(bp_name, .env = .env))
 }
 
 #' @describeIn blueprint_macros Gets symbol of metadata reference in plan
 #' @export
-.META <- function(bp_name) {
-  as.name(metadata_target_name(bp_name))
+.META <- function(bp_name, .env = parent.frame()) {
+  handle_macro(metadata_target_name(bp_name, .env = .env))
+}
+
+handle_macro <- function(macro_name) {
+  if (interactive() && can_run_macros_interactively()) {
+    if (exists(macro_name, envir = globalenv())) {
+      if (isTRUE(getOption("blueprintr.interactive_reload_warn", default = TRUE))) {
+        message(
+          "Using '", macro_name, "' in global environment. ",
+          "Reload with targets::tar_load(). ",
+          "(This message only displays once per session)."
+        )
+
+        options(blueprintr.interactive_reload_warn = FALSE)
+      }
+
+      return(get(macro_name, envir = globalenv()))
+    }
+
+    # Only supports targets since targets supersedes drake now
+    if (!requireNamespace("targets", quietly = TRUE)) {
+      bp_err(c(
+        "Interactive evaluation of blueprintr macros is only supported by targets. ",
+        "If you'd like to use this feature, consider migrating to targets."
+      ))
+    }
+
+    targets::tar_load_raw(macro_name, envir = globalenv())
+    return(get(macro_name, envir = globalenv()))
+  }
+
+  as.name(macro_name)
+}
+
+can_run_macros_interactively <- function() {
+  getOption("blueprintr.interactive_eval_macros", default = FALSE) # nolint: object_name_linter
 }
 
 is_macro_ast <- function(ast, .macro = ".TARGET") {
