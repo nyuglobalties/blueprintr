@@ -1,3 +1,6 @@
+# Development version (0.1.3.9000)
+* Fixes a bug where targets patterns were being evaluated prematurely
+
 # blueprintr 0.1.3
 * Fixes an issue where qualified expressions like "package::thing" were not being translated correctly
 
