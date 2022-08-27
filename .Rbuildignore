@@ -13,3 +13,4 @@
 ^pkgdown$
 ^\.drake$
 ^tests\/testthat\/\.drake$
+^\.lintr$
