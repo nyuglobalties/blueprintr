@@ -5,6 +5,8 @@
 #' symbols to be analyzed in the `drake` plan.
 #'
 #' @param bp_name Character string of blueprint's name
+#' @param .env The environment in which to evaluate the macro. For internal
+#'   use only!
 #'
 #' @details # When to use
 #' Generally speaking, the `.BLUEPRINT` and `.META` macros should be used for

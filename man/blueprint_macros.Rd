@@ -15,6 +15,9 @@
 }
 \arguments{
 \item{bp_name}{Character string of blueprint's name}
+
+\item{.env}{The environment in which to evaluate the macro. For internal
+use only!}
 }
 \description{
 \code{blueprintr} uses code inspection to identify and trace dataset dependencies.
