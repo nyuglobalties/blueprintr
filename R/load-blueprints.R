@@ -74,7 +74,7 @@ import_blueprint_file <- function(bp_file, env = parent.frame()) {
   # `metadata_file_path`, one could just set the `blueprintr.use_local_metadata_path`
   # option to `TRUE` and then just use `metadata_file_name` to set the
   # file base name.
-  env$cur_blueprint_script_dir <- dirname(bp_file)
+  env$cur_blueprint_script <- bp_file
 
   exprs <- rlang::parse_exprs(file(bp_file, encoding = "UTF-8"))
   vals <- lapply(exprs, base::eval, envir = env)

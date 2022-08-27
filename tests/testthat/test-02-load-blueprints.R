@@ -89,5 +89,16 @@ test_that("Local metadata works", {
         "test_subdir_blueprint.csv"
       )
     )
+
+    subdir_bp2 <- vlapply(bp_list, function(bp) bp$name == "test_subdir_blueprint2")
+    subdir_bp2 <- bp_list[subdir_bp2][[1]]
+
+    expect_identical(
+      subdir_bp2$metadata_file_path,
+      file.path(
+        bp_path("blueprints", "subdir_test"),
+        "test2.csv"
+      )
+    )
   })
 })

@@ -51,23 +51,24 @@ blueprint <- function(name,
                       metadata = NULL,
                       annotate = FALSE,
                       metadata_file_type = c("csv"),
-                      metadata_file_name = name,
+                      metadata_file_name = NULL,
                       metadata_directory = NULL,
                       metadata_file_path = NULL,
                       extra_steps = NULL,
                       ...,
                       class = character()) {
-  stopifnot(is.character(name))
+  stopifnot(is.character(name) || is.null(name))
   stopifnot(is.null(description) || is.character(description))
 
   captured_command <- capture_command(substitute(command))
   metadata_file_type <- match.arg(metadata_file_type)
 
+  metadata_file_name <- metadata_file_name %||% blueprint_metadata_name(name, .env = parent.frame())
   metadata_directory <- metadata_directory %||% blueprint_metadata_directory(.env = parent.frame())
 
   default_path <- file.path(
     metadata_directory,
-    glue("{name}.{metadata_file_type}")
+    glue("{metadata_file_name}.{metadata_file_type}")
   )
   path <- metadata_file_path %||% default_path
 
@@ -85,18 +86,33 @@ blueprint <- function(name,
   )
 }
 
+use_localized_metadata <- function() {
+  getOption("blueprintr.use_local_metadata_path", default = FALSE)
+}
+
+blueprint_metadata_name <- function(name, .env = parent.frame()) {
+  if (exists("cur_blueprint_script", envir = .env)) {
+    script_file <- basename(.env$cur_blueprint_script)
+    script_name <- gsub("\\.[rR]$", "", script_file)
+
+    if (use_localized_metadata()) {
+      name <- script_name
+    }
+  }
+
+  name
+}
+
 blueprint_metadata_directory <- function(.env = parent.frame()) {
-  script_dir <- NULL
+  script_dir <- here::here("blueprints")
 
-  if (exists("cur_blueprint_script_dir", envir = .env)) {
-    script_dir <- .env$cur_blueprint_script_dir
+  if (exists("cur_blueprint_script", envir = .env)) {
+    if (use_localized_metadata()) {
+      script_dir <- dirname(.env$cur_blueprint_script)
+    }
   }
 
-  if (!is.null(script_dir) && getOption("blueprintr.use_local_metadata_path", default = FALSE)) {
-    return(script_dir)
-  }
-
-  here::here("blueprints")
+  script_dir
 }
 
 #' @export
