@@ -1,4 +1,4 @@
-# Development version (0.1.3.9000)
+# blueprintr 0.2.0
 * Adds ability to run macro statements in interactive mode. Very useful when debugging pipelines! Set the `blueprintr.interactive_eval_macros` option to `TRUE` to enable.
 * Adds ability to set `metadata_file_path` based on the directory and name of the affiliated blueprint script. For example, a blueprint defined in "blueprints/ex/test.R" will get its default metadata file location set to "blueprints/ex/test.csv". Set the `blueprintr.use_local_metadata_path` option to `TRUE` to enable.
 * Fixes a bug where targets patterns were being evaluated prematurely
