@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">blueprintr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -112,33 +112,33 @@ div.vg-info span:before {
 </h2>
 <p>The first, and recommended, step is to attach blueprintr to your R session with <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/nyuglobalties/blueprintr" class="external-link">blueprintr</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/nyuglobalties/blueprintr" class="external-link">blueprintr</a></span><span class="op">)</span></span></code></pre></div>
 <p>In a <a href="https://books.ropensci.org/drake/projects.html" class="external-link">drake project</a>, all packages that you want attached are declared in a <code>"packages.R"</code> file. This <code><a href="https://github.com/nyuglobalties/blueprintr" class="external-link">library(blueprintr)</a></code> command should go there.</p>
 <p>blueprintr is built around “blueprints.” Our first blueprint will be a blueprint for <code>mtcars</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/blueprint.html">blueprint</a></span><span class="op">(</span>
-  <span class="st">"mtcars_dat"</span>,
-  description <span class="op">=</span> <span class="st">"The famous mtcars dataset"</span>,
-  command <span class="op">=</span> <span class="op">{</span>
-    <span class="va">mtcars</span>
-  <span class="op">}</span>
-<span class="op">)</span>
-<span class="co">#&gt; &lt;blueprint: 'mtcars_dat'&gt;</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Description: The famous mtcars dataset</span>
-<span class="co">#&gt; Annotations: DISABLED</span>
-<span class="co">#&gt; Metadata location: '/Users/runner/work/blueprintr/blueprintr/blueprints/mtcars_dat.csv'</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; -- Command --</span>
-<span class="co">#&gt; Workflow command:</span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     mtcars</span>
-<span class="co">#&gt; }</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Raw command:</span>
-<span class="co">#&gt; {</span>
-<span class="co">#&gt;     mtcars</span>
-<span class="co">#&gt; }</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/blueprint.html">blueprint</a></span><span class="op">(</span></span>
+<span>  <span class="st">"mtcars_dat"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"The famous mtcars dataset"</span>,</span>
+<span>  command <span class="op">=</span> <span class="op">{</span></span>
+<span>    <span class="va">mtcars</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;blueprint: 'mtcars_dat'&gt;</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Description: The famous mtcars dataset</span></span>
+<span><span class="co">#&gt; Annotations: DISABLED</span></span>
+<span><span class="co">#&gt; Metadata location: '/Users/runner/work/blueprintr/blueprintr/blueprints/mtcars_dat.csv'</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Command --</span></span>
+<span><span class="co">#&gt; Workflow command:</span></span>
+<span><span class="co">#&gt; {</span></span>
+<span><span class="co">#&gt;     mtcars</span></span>
+<span><span class="co">#&gt; }</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Raw command:</span></span>
+<span><span class="co">#&gt; {</span></span>
+<span><span class="co">#&gt;     mtcars</span></span>
+<span><span class="co">#&gt; }</span></span></code></pre></div>
 <p>All blueprints have</p>
 <ul>
 <li>A name (the first argument) for the <em>target</em> dataset.</li>
@@ -151,37 +151,37 @@ div.vg-info span:before {
 </div>
 <p>To get this loaded into a drake plan, we need to <em>attach</em> it to an already existing plan using</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/attach_blueprint.html">attach_blueprint</a></span><span class="op">(</span><span class="va">plan</span>, <span class="va">blueprint</span><span class="op">)</span>
-<span class="fu"><a href="../reference/attach_blueprint.html">attach_blueprints</a></span><span class="op">(</span><span class="va">plan</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/attach_blueprint.html">attach_blueprint</a></span><span class="op">(</span><span class="va">plan</span>, <span class="va">blueprint</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/attach_blueprint.html">attach_blueprints</a></span><span class="op">(</span><span class="va">plan</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
 <div class="vg-info">
 <span><code>attach_blueprints</code> accepts “<a href="https://adv-r.hadley.nz/quasiquotation.html#tidy-dots" class="external-link">tidy dots</a>”, so if you have a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> of blueprints, you can “splat” all of those blueprints into <code>attach_blueprints</code> like <code>attach_blueprints(plan, !!!list_of_blueprints)</code></span>
 </div>
 <p>If you don’t have an existing plan, you can create one with</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plan_from_blueprint.html">plan_from_blueprint</a></span><span class="op">(</span><span class="va">blueprint</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plan_from_blueprint.html">plan_from_blueprint</a></span><span class="op">(</span><span class="va">blueprint</span><span class="op">)</span></span></code></pre></div>
 <p>For now, we’ll use an already existing plan, which is probably what you’ll have most of the time.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/attach_blueprint.html">attach_blueprint</a></span><span class="op">(</span>
-  <span class="va">existing_plan</span>,
-  <span class="fu"><a href="../reference/blueprint.html">blueprint</a></span><span class="op">(</span>
-    <span class="st">"mtcars_dat"</span>,
-    description <span class="op">=</span> <span class="st">"The famous mtcars dataset"</span>,
-    command <span class="op">=</span> <span class="op">{</span>
-      <span class="va">mtcars</span>
-    <span class="op">}</span>
-  <span class="op">)</span>
-<span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 8 × 3</span></span>
-<span class="co">#&gt;   target               command                                            format</span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;expr_lst&gt;</span>                                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> initial_vector       runif(1000)                                      … <span style="color: #BB0000;">NA</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> squared              initial_vector^2                                 … <span style="color: #BB0000;">NA</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> mtcars_dat_initial   {     mtcars }                                   … <span style="color: #BB0000;">NA</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> mtcars_dat_blueprint blueprintr::blueprint(name = "mtcars_dat", comman… <span style="color: #BB0000;">NA</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> mtcars_dat_meta_path blueprintr::create_metadata_file(mtcars_dat_initi… file  </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> mtcars_dat_meta      blueprintr::read_metadata(mtcars_dat_meta_path)  … <span style="color: #BB0000;">NA</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">7</span> mtcars_dat_checks    blueprintr::eval_checks(all_variables_present(mtc… <span style="color: #BB0000;">NA</span>    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">8</span> mtcars_dat           blueprintr::cleanup(mtcars_dat_checks, mtcars_dat… <span style="color: #BB0000;">NA</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/attach_blueprint.html">attach_blueprint</a></span><span class="op">(</span></span>
+<span>  <span class="va">existing_plan</span>,</span>
+<span>  <span class="fu"><a href="../reference/blueprint.html">blueprint</a></span><span class="op">(</span></span>
+<span>    <span class="st">"mtcars_dat"</span>,</span>
+<span>    description <span class="op">=</span> <span class="st">"The famous mtcars dataset"</span>,</span>
+<span>    command <span class="op">=</span> <span class="op">{</span></span>
+<span>      <span class="va">mtcars</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 8 × 3</span></span></span>
+<span><span class="co">#&gt;   target               command                                            format</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;expr_lst&gt;</span>                                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> initial_vector       runif(1000)                                      … <span style="color: #BB0000;">NA</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> squared              initial_vector^2                                 … <span style="color: #BB0000;">NA</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> mtcars_dat_initial   {     mtcars }                                   … <span style="color: #BB0000;">NA</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> mtcars_dat_blueprint blueprintr::blueprint(name = "mtcars_dat", comman… <span style="color: #BB0000;">NA</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> mtcars_dat_meta_path blueprintr::create_metadata_file(mtcars_dat_initi… file  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> mtcars_dat_meta      blueprintr::read_metadata(mtcars_dat_meta_path)  … <span style="color: #BB0000;">NA</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> mtcars_dat_checks    blueprintr::eval_checks(all_variables_present(mtc… <span style="color: #BB0000;">NA</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> mtcars_dat           blueprintr::cleanup(mtcars_dat_checks, mtcars_dat… <span style="color: #BB0000;">NA</span></span></span></code></pre></div>
 <p>blueprintr creates five “steps” (targets) per blueprint:</p>
 <table class="table">
 <colgroup>
@@ -240,7 +240,7 @@ div.vg-info span:before {
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
 </div>
 
       </footer>

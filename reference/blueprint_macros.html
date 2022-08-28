@@ -19,7 +19,7 @@ symbols to be analyzed in the drake plan."><meta property="og:image" content="/l
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">blueprintr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -60,24 +60,30 @@ symbols to be analyzed in the <code>drake</code> plan.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">.TARGET</span><span class="op">(</span><span class="va">bp_name</span><span class="op">)</span>
-
-<span class="fu">.BLUEPRINT</span><span class="op">(</span><span class="va">bp_name</span><span class="op">)</span>
-
-<span class="fu">.META</span><span class="op">(</span><span class="va">bp_name</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.TARGET</span><span class="op">(</span><span class="va">bp_name</span>, .env <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">.BLUEPRINT</span><span class="op">(</span><span class="va">bp_name</span>, .env <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">.META</span><span class="op">(</span><span class="va">bp_name</span>, .env <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>bp_name</dt>
 <dd><p>Character string of blueprint's name</p></dd>
+
+
+<dt>.env</dt>
+<dd><p>The environment in which to evaluate the macro. For internal
+use only!</p></dd>
+
 </dl></div>
     <div id="functions">
     <h2>Functions</h2>
     
-<ul><li><p><code>.TARGET</code>: Gets symbol of built and checked data</p></li>
-<li><p><code>.BLUEPRINT</code>: Gets symbol of blueprint reference in plan</p></li>
-<li><p><code>.META</code>: Gets symbol of metadata reference in plan</p></li>
+<ul><li><p><code>.TARGET()</code>: Gets symbol of built and checked data</p></li>
+<li><p><code>.BLUEPRINT()</code>: Gets symbol of blueprint reference in plan</p></li>
+<li><p><code>.META()</code>: Gets symbol of metadata reference in plan</p></li>
 </ul></div>
     <div id="when-to-use">
     <h2>When to use</h2>
@@ -93,26 +99,26 @@ symbols are generated when blueprints are attached to a plan.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">.TARGET</span><span class="op">(</span><span class="st">"example_dataset"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">.TARGET</span><span class="op">(</span><span class="st">"example_dataset"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> example_dataset</span>
-<span class="r-in"><span class="fu">.BLUEPRINT</span><span class="op">(</span><span class="st">"example_dataset"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">.BLUEPRINT</span><span class="op">(</span><span class="st">"example_dataset"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> example_dataset_blueprint</span>
-<span class="r-in"><span class="fu">.META</span><span class="op">(</span><span class="st">"example_dataset"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">.META</span><span class="op">(</span><span class="st">"example_dataset"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> example_dataset_meta</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="blueprint.html">blueprint</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="st">"test_bp"</span>,</span>
-<span class="r-in">  description <span class="op">=</span> <span class="st">"Blueprint with dependencies"</span>,</span>
-<span class="r-in">  command <span class="op">=</span></span>
-<span class="r-in">    <span class="fu">.TARGET</span><span class="op">(</span><span class="st">"parent1"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">      <span class="fu">left_join</span><span class="op">(</span><span class="fu">.TARGET</span><span class="op">(</span><span class="st">"parent2"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">      <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="blueprint.html">blueprint</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">"test_bp"</span>,</span></span>
+<span class="r-in"><span>  description <span class="op">=</span> <span class="st">"Blueprint with dependencies"</span>,</span></span>
+<span class="r-in"><span>  command <span class="op">=</span></span></span>
+<span class="r-in"><span>    <span class="fu">.TARGET</span><span class="op">(</span><span class="st">"parent1"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>      <span class="fu">left_join</span><span class="op">(</span><span class="fu">.TARGET</span><span class="op">(</span><span class="st">"parent2"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;blueprint: 'test_bp'&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Description: Blueprint with dependencies</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Annotations: DISABLED</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Metadata location: '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpG9Wewn/file2fbd1f3f83bf/blueprints/test_bp.csv'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Metadata location: '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp01SmGN/file1ebb33ce71dc/blueprints/test_bp.csv'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -- Command --</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Workflow command:</span>
@@ -135,7 +141,7 @@ symbols are generated when blueprints are attached to a plan.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
 </div>
 
       </footer></div>

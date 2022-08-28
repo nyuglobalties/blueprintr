@@ -20,7 +20,7 @@ commas. For example, 'var1' could have 'scale' be &quot;SCALE1,SCALE2&quot;."><m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">blueprintr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -62,48 +62,67 @@ commas. For example, 'var1' could have 'scale' be "SCALE1,SCALE2".</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">render_kfa_report</span><span class="op">(</span>
-  <span class="va">dat</span>,
-  <span class="va">bp</span>,
-  <span class="va">meta</span>,
-  <span class="va">scale</span>,
-  path <span class="op">=</span> <span class="cn">NULL</span>,
-  path_pattern <span class="op">=</span> <span class="st">"reports/kfa-{snakecase_scale}-{dat_name}.html"</span>,
-  format <span class="op">=</span> <span class="cn">NULL</span>,
-  title <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">render_kfa_report</span><span class="op">(</span></span>
+<span>  <span class="va">dat</span>,</span>
+<span>  <span class="va">bp</span>,</span>
+<span>  <span class="va">meta</span>,</span>
+<span>  <span class="va">scale</span>,</span>
+<span>  path <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  path_pattern <span class="op">=</span> <span class="st">"reports/kfa-{snakecase_scale}-{dat_name}.html"</span>,</span>
+<span>  format <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>dat</dt>
 <dd><p>Source data</p></dd>
+
+
 <dt>bp</dt>
 <dd><p>The dataset's blueprint</p></dd>
+
+
 <dt>meta</dt>
 <dd><p>blueprintr data dictionary</p></dd>
+
+
 <dt>scale</dt>
 <dd><p>Scale identifier to be located in the 'scale' field</p></dd>
+
+
 <dt>path</dt>
 <dd><p>Where to output the report; defaults to the "reports"
 subfolder of the current working <em>project</em> folder.</p></dd>
+
+
 <dt>path_pattern</dt>
 <dd><p>If path is <code>NULL</code>, this is where the report will
 be saved. Variables available for use are:</p><ul><li><p><code>scale</code>: The scale name defined in the metadata</p></li>
 <li><p><code>snakecase_scale</code>: <code>scale</code> but in snake_case</p></li>
 <li><p><code>dat_name</code>: Name of the dataset (equivalent to the blueprint name)</p></li>
 </ul></dd>
+
+
 <dt>format</dt>
 <dd><p>The output format; defaults to 'html_document'</p></dd>
+
+
 <dt>title</dt>
 <dd><p>Optional title of the report</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Arugments forwarded kfa::kfa()</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Path to where the generated report is saved</p>
+    
+
+<p>Path to where the generated report is saved</p>
     </div>
 
   </div>
@@ -118,7 +137,7 @@ be saved. Variables available for use are:</p><ul><li><p><code>scale</code>: The
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
 </div>
 
       </footer></div>

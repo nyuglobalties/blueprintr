@@ -22,7 +22,7 @@ prior to metadata file creation, in the style of dplyr::mutate."><meta property=
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">blueprintr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -66,55 +66,70 @@ prior to metadata file creation, in the style of <code><a href="https://dplyr.ti
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">mutate_annotation</span><span class="op">(</span><span class="va">.data</span>, <span class="va">.field</span>, <span class="va">...</span>, .overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu">mutate_annotation_across</span><span class="op">(</span>
-  <span class="va">.data</span>,
-  <span class="va">.field</span>,
-  <span class="va">.fn</span>,
-  .cols <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,
-  .with_names <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>,
-  .overwrite <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mutate_annotation</span><span class="op">(</span><span class="va">.data</span>, <span class="va">.field</span>, <span class="va">...</span>, .overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">mutate_annotation_across</span><span class="op">(</span></span>
+<span>  <span class="va">.data</span>,</span>
+<span>  <span class="va">.field</span>,</span>
+<span>  <span class="va">.fn</span>,</span>
+<span>  .cols <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  .with_names <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  .overwrite <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>.data</dt>
 <dd><p>A <code>data.frame</code></p></dd>
+
+
 <dt>.field</dt>
 <dd><p>The name of the annotation field that you wish to modify</p></dd>
+
+
 <dt>...</dt>
 <dd><p>For <code>mutate_annotation</code>, named parameters that contain the annotation
 values. Like <code><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">dplyr::mutate</a></code>, each parameter name is a variable
 (that must already exist!), and each parameter value is an R expression,
 evaluated with <code>.data</code> as a data mask.</p>
 <p>For <code>mutate_annotation_across</code>, extra arguments passed to <code>.fn</code></p></dd>
+
+
 <dt>.overwrite</dt>
 <dd><p>If <code>TRUE</code>, overwrites existing annotation values.
 Annotations have an overwriting guard by default, but since these functions
 are intentionally modifying the annotations, this parameter
 defaults to <code>TRUE</code>.</p></dd>
+
+
 <dt>.fn</dt>
 <dd><p>A function that takes in a vector and arbitrary arguments <code>...</code>
 If <code>.with_names</code> is <code>TRUE</code>, then <code>.fn</code> will be passed the vector <em>and</em>
 the name of the vector, since it's often useful to compute on the metadata.</p></dd>
+
+
 <dt>.cols</dt>
 <dd><p>A tidyselect-compatible selection of variables to be edited</p></dd>
+
+
 <dt>.with_names</dt>
 <dd><p>If <code>TRUE</code>, passes a column <em>and</em> its name as arguments to
 <code>.fn</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>data.frame</code> with annotated columns</p>
+    
+
+<p>A <code>data.frame</code> with annotated columns</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Adds a "mean" annotation to 'mpg'</span></span>
-<span class="r-in"><span class="fu">mutate_annotation</span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"mean"</span>, mpg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Adds a "mean" annotation to 'mpg'</span></span></span>
+<span class="r-in"><span><span class="fu">mutate_annotation</span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"mean"</span>, mpg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4</span>
@@ -148,9 +163,9 @@ the name of the vector, since it's often useful to compute on the metadata.</p><
 <span class="r-out co"><span class="r-pr">#&gt;</span> Ferrari Dino        19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Volvo 142E          21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Adds a "mean" annotation to all variables in `mtcars`</span></span>
-<span class="r-in"><span class="fu">mutate_annotation_across</span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"mean"</span>, .fn <span class="op">=</span> <span class="va">mean</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Adds a "mean" annotation to all variables in `mtcars`</span></span></span>
+<span class="r-in"><span><span class="fu">mutate_annotation_across</span><span class="op">(</span><span class="va">mtcars</span>, <span class="st">"mean"</span>, .fn <span class="op">=</span> <span class="va">mean</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4</span>
@@ -184,14 +199,14 @@ the name of the vector, since it's often useful to compute on the metadata.</p><
 <span class="r-out co"><span class="r-pr">#&gt;</span> Ferrari Dino        19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Volvo 142E          21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Adds a "title" annotation that copies the column name</span></span>
-<span class="r-in"><span class="fu">mutate_annotation_across</span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">mtcars</span>,</span>
-<span class="r-in">  <span class="st">"title"</span>,</span>
-<span class="r-in">  .fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">nx</span><span class="op">)</span> <span class="va">nx</span>,</span>
-<span class="r-in">  .with_names <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Adds a "title" annotation that copies the column name</span></span></span>
+<span class="r-in"><span><span class="fu">mutate_annotation_across</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">mtcars</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"title"</span>,</span></span>
+<span class="r-in"><span>  .fn <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">nx</span><span class="op">)</span> <span class="va">nx</span>,</span></span>
+<span class="r-in"><span>  .with_names <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                      mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4</span>
@@ -239,7 +254,7 @@ the name of the vector, since it's often useful to compute on the metadata.</p><
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
 </div>
 
       </footer></div>
