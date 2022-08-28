@@ -6,13 +6,9 @@
 \alias{blueprintr-package}
 \title{blueprintr: Automagically Document and Test Datasets Using Targets Or Drake}
 \description{
-\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Documents and tests datasets in a reproducible
-    manner so that data lineage is easier to comprehend for
-    small to medium tabular data. Originally designed to aid 
-    data cleaning tasks for humanitarian research groups, 
-    specifically large-scale longitudinal studies.
+Documents and tests datasets in a reproducible manner so that data lineage is easier to comprehend for small to medium tabular data. Originally designed to aid data cleaning tasks for humanitarian research groups, specifically large-scale longitudinal studies.
 }
 \seealso{
 Useful links:

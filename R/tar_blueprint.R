@@ -21,10 +21,8 @@ tar_blueprint <- function(...) {
 
 #' @rdname tar_blueprint
 #' @export
-tar_blueprints <- function(
-  directory = here::here("blueprints"),
-  recurse = FALSE
-) {
+tar_blueprints <- function(directory = here::here("blueprints"),
+                           recurse = FALSE) {
   dirs <- load_dirs_recurse(directory, recurse)
   bp_list <- fetch_blueprints_from_dir(dirs)
 
@@ -37,7 +35,12 @@ tar_blueprints <- function(
 }
 
 tar_blueprint_raw <- function(bp) {
+  # Suppress loading objects if in interactive macro eval mode
+  old_state <- options(blueprintr.attach_state = TRUE)
+  on.exit(options(old_state))
   steps <- assembly_steps(targets_assembler(), bp)
 
-  lapply(steps, function(step) step$built_payload)
+  payloads <- lapply(steps, function(step) step$built_payload)
+
+  payloads
 }

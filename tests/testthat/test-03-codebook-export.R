@@ -1,9 +1,9 @@
 test_that("Codebook exports are added to plan correctly", {
   test_bp <- blueprint(
     "test_bp",
-    command = mtcars,
-    codebook_export = TRUE
+    command = mtcars
   )
+  test_bp <- bp_export_codebook(test_bp)
 
   plan <- plan_from_blueprint(test_bp)
 

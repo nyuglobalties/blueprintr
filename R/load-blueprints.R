@@ -21,11 +21,9 @@ load_blueprint <- function(plan, file) {
 
 #' @rdname load_blueprint
 #' @export
-load_blueprints <- function(
-  plan, 
-  directory = here::here("blueprints"), 
-  recurse = FALSE
-) {
+load_blueprints <- function(plan,
+                            directory = here::here("blueprints"),
+                            recurse = FALSE) {
   bp_assert(inherits(plan, "drake_plan"))
 
   dirs <- load_dirs_recurse(directory, recurse)
@@ -71,8 +69,10 @@ fetch_blueprint_files <- function(directory) {
 }
 
 import_blueprint_file <- function(bp_file, env = parent.frame()) {
+  env$cur_blueprint_script <- bp_file
+
   exprs <- rlang::parse_exprs(file(bp_file, encoding = "UTF-8"))
-  vals <- lapply(exprs, eval_tidy, env = env)
+  vals <- lapply(exprs, base::eval, envir = env)
 
   if (length(vals) < 1) {
     bp_err("Blueprint script '{bp_file}' has no content.")

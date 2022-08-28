@@ -66,6 +66,10 @@ assemble_payload.drake_assembler <- function(asm, payload) {
 assemble_payload.targets_assembler <- function(asm, payload) {
   dots <- bpstep_payload_extra_args(payload)
 
+  if ("pattern" %in% names(dots)) {
+    dots[["pattern"]] <- bquote(quote(.(dots[["pattern"]])))
+  }
+
   argslist <- rlang::list2(
     name = payload$target_name,
     command = bquote(quote(.(payload$target_command))),
