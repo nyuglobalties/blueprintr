@@ -37,10 +37,10 @@ tar_blueprints <- function(directory = here::here("blueprints"),
 tar_blueprint_raw <- function(bp) {
   # Suppress loading objects if in interactive macro eval mode
   old_state <- options(blueprintr.attach_state = TRUE)
+  on.exit(options(old_state))
   steps <- assembly_steps(targets_assembler(), bp)
 
   payloads <- lapply(steps, function(step) step$built_payload)
-  options(old_state)
 
   payloads
 }

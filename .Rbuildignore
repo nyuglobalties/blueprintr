@@ -14,3 +14,4 @@
 ^\.drake$
 ^tests\/testthat\/\.drake$
 ^\.lintr$
+^README.html$

@@ -69,11 +69,6 @@ fetch_blueprint_files <- function(directory) {
 }
 
 import_blueprint_file <- function(bp_file, env = parent.frame()) {
-  # Add reference to blueprint script location to ease custom
-  # metadata location writing. For example, rather than specifying the full
-  # `metadata_file_path`, one could just set the `blueprintr.use_local_metadata_path`
-  # option to `TRUE` and then just use `metadata_file_name` to set the
-  # file base name.
   env$cur_blueprint_script <- bp_file
 
   exprs <- rlang::parse_exprs(file(bp_file, encoding = "UTF-8"))

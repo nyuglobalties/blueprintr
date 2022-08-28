@@ -11,7 +11,7 @@ blueprint(
   metadata = NULL,
   annotate = FALSE,
   metadata_file_type = c("csv"),
-  metadata_file_name = name,
+  metadata_file_name = NULL,
   metadata_directory = NULL,
   metadata_file_path = NULL,
   extra_steps = NULL,
@@ -35,8 +35,10 @@ make metadata provenance easier and responsive to code changes.}
 
 \item{metadata_file_type}{The kind of metadata file. Currently only CSV.}
 
-\item{metadata_file_name}{The file name for the metadata file. Defaults
-to the name of the blueprint.}
+\item{metadata_file_name}{The file name for the metadata file. If the
+option \code{blueprintr.use_local_metadata_path} is set to \code{TRUE}, then the
+default file name will be the name of the blueprint script, minus the .R
+extension. Otherwise, this will default to the name of the blueprint.}
 
 \item{metadata_directory}{Where the metadata file will be stored. If the
 option \code{blueprintr.use_local_metadata_path} is set to \code{TRUE}, then the

@@ -9,8 +9,10 @@
 #'   make metadata provenance easier and responsive to code changes.
 #' @param metadata The associated variable metadata for this dataset
 #' @param metadata_file_type The kind of metadata file. Currently only CSV.
-#' @param metadata_file_name The file name for the metadata file. Defaults
-#'   to the name of the blueprint.
+#' @param metadata_file_name The file name for the metadata file. If the
+#'   option `blueprintr.use_local_metadata_path` is set to `TRUE`, then the
+#'   default file name will be the name of the blueprint script, minus the .R
+#'   extension. Otherwise, this will default to the name of the blueprint.
 #' @param metadata_directory Where the metadata file will be stored. If the
 #'   option `blueprintr.use_local_metadata_path` is set to `TRUE`, then the
 #'   default location will be the folder where the blueprint script is
