@@ -15,8 +15,7 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/blueprintr)](https://CRAN.R-project.org/package=blueprintr)
-[![R build
-status](https://github.com/Global-TIES-for-Children/blueprintr/workflows/R-CMD-check/badge.svg)](https://github.com/Global-TIES-for-Children/blueprintr/actions)
+[![R-CMD-check](https://github.com/nyuglobalties/blueprintr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/nyuglobalties/blueprintr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 ## Usage
@@ -41,10 +40,11 @@ blueprint1
 #> <blueprint: 'blueprint1'>
 #> 
 #> Description: My first blueprint
-#> Metadata location: '/Users/runner/work/blueprintr/blueprintr/blueprints/blueprint1.csv'
+#> Annotations: DISABLED
+#> Metadata location: '/Users/patrickanker/dev/blueprintr/blueprints/blueprint1.csv'
 #> 
 #> -- Command --
-#> Drake command:
+#> Workflow command:
 #> {
 #>     mtcars
 #> }
@@ -72,7 +72,7 @@ blueprint2 <- blueprint(
     no_missing_cyl()
   ),
   command =
-    .TARGET("blueprint1") %>% 
+    .TARGET("blueprint1") %>%
       filter(cyl == 4)
 )
 ```
@@ -85,7 +85,7 @@ needed tasks.
 library(magrittr)
 library(drake)
 
-plan_from_blueprint(blueprint1) %>% 
+plan_from_blueprint(blueprint1) %>%
   attach_blueprint(blueprint2)
 ```
 
