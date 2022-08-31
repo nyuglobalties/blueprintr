@@ -28,7 +28,7 @@ test_that("Annotations behave as expected", {
     dec_table,
     dplyr::tribble(
       ~name, ~field,
-        "x",      2
+      "x", 2
     )
   )
 })
@@ -57,7 +57,8 @@ test_that("Mutate synonyms behave as expected", {
   expect_identical(annotation(dat$vs, "field"), sum(mtcars$vs))
 
   dat2 <- mutate_annotation_across(
-    mtcars, "means", .fn = mean
+    mtcars, "means",
+    .fn = mean
   )
 
   for (vn in names(dat2)) {
@@ -67,10 +68,55 @@ test_that("Mutate synonyms behave as expected", {
 
   # Demonstrates that variable names are successfully passed in
   dat3 <- mutate_annotation_across(
-    mtcars, "title", .fn = function(x, nx) nx, .with_names = TRUE
+    mtcars, "title",
+    .fn = function(x, nx) nx, .with_names = TRUE
   )
 
   for (vn in names(dat3)) {
     expect_identical(vn, annotation(dat3[[vn]], "title"))
   }
+})
+
+test_that("Super annotations work correctly", {
+  opt_old <- options(blueprintr.use_improved_annotations = TRUE)
+  on.exit(options(opt_old))
+
+  dat <- mtcars[, c("mpg", "cyl")]
+  meta <- data.frame(
+    name = c("mpg", "cyl"),
+    type = c("double", "double"),
+    description = c("MPG", "Number of cylinders")
+  )
+
+  dat <- mutate_annotation(dat, "description", mpg = "Miles per gallon")
+
+  expect_identical(
+    get_attr(dat$mpg, "bpr.super.description"),
+    "Miles per gallon"
+  )
+
+  expect_identical(
+    get_attr(dat$mpg, "bpr.description"),
+    "Miles per gallon"
+  )
+
+  expect_null(get_attr(dat$cyl, "bpr.description"))
+
+  # Simulating cleanup phase with mock data
+  dat_cleanup <- annotate_variables(dat, list(annotate_overwrite = FALSE), meta)
+
+  # Annotation happens anyway -- ignoring `annotate_overwrite`
+  expect_identical(
+    get_attr(dat_cleanup$cyl, "bpr.description"),
+    "Number of cylinders"
+  )
+
+  # mutate_annotate() overrides metadata annotation
+  expect_identical(
+    get_attr(dat_cleanup$mpg, "bpr.description"),
+    "Miles per gallon"
+  )
+
+  # Super annotation is removed
+  expect_null(get_attr(dat_cleanup$mpg, "bpr.super.description"))
 })

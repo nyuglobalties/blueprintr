@@ -17,8 +17,17 @@ annotate_variable <- function(x, varname, meta, overwrite) {
   fields <- setdiff(names(meta), c("name", "type", "dropped"))
   fields <- fields[!grepl("^\\.", fields)]
 
+  if (using_improved_annotations()) {
+    overwrite <- TRUE
+  }
+
   for (f in fields) {
     x <- add_annotation(x, f, meta[[f]], overwrite)
+
+    if (using_improved_annotations() && has_super_annotation(x, f)) {
+      x <- set_annotation(x, f, super_annotation(x, f))
+      x <- remove_super_annotation(x, f)
+    }
   }
 
   x

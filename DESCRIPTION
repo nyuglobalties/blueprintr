@@ -1,6 +1,6 @@
 Package: blueprintr
 Title: Automagically Document and Test Datasets Using Targets Or Drake
-Version: 0.2.0
+Version: 0.2.0.9000
 Authors@R: 
     c(person(given = "Patrick",
              family = "Anker",
@@ -26,8 +26,7 @@ Suggests:
     labelled,
     targets,
     panelcleaner,
-    kfa,
-    withr
+    kfa
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

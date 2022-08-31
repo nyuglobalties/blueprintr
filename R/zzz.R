@@ -8,6 +8,8 @@
     blueprintr.use_local_metadata_path = FALSE
   )
 
+  op_bpr[[improved_annotation_option()]] <- FALSE
+
   toset <- !(names(op_bpr) %in% names(op))
   if (any(toset)) options(op_bpr[toset])
 
