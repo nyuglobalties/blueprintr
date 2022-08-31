@@ -28,7 +28,7 @@ load_table_lineage <- function(directory = here::here("blueprints"),
     bp_list <- fetch_blueprints_from_dir(dirs)
 
     get_table_linage_igraph(bp_list)
-  }, args = list(script = script), package = "pkg")
+  }, args = list(script = script), package = "blueprintr")
 }
 
 #' Get an igraph of the table lineage
