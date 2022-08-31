@@ -4,8 +4,13 @@
 \alias{annotations}
 \alias{annotation_names}
 \alias{annotation}
+\alias{super_annotation}
 \alias{has_annotation}
+\alias{has_super_annotation}
 \alias{add_annotation}
+\alias{set_annotation}
+\alias{add_super_annotation}
+\alias{remove_super_annotation}
 \title{Access the blueprintr metadata at runtime}
 \usage{
 annotations(x)
@@ -14,9 +19,19 @@ annotation_names(x)
 
 annotation(x, field)
 
+super_annotation(x, field)
+
 has_annotation(x, field)
 
+has_super_annotation(x, field)
+
 add_annotation(x, field, value, overwrite = FALSE)
+
+set_annotation(x, field, value)
+
+add_super_annotation(x, field, value)
+
+remove_super_annotation(x, field)
 }
 \arguments{
 \item{x}{An object, most likely a variable in a \code{data.frame}}
@@ -33,16 +48,30 @@ Access the blueprintr metadata at runtime
 }
 \section{Functions}{
 \itemize{
-\item \code{annotations()}: Gets a list of all decorations assigned to an object
+\item \code{annotations()}: Gets a list of all annotations assigned to an object
 
 \item \code{annotation_names()}: Get the names of all of the
-decorations assigned to an object
+annotations assigned to an object
 
-\item \code{annotation()}: Gets a decoration for an object
+\item \code{annotation()}: Gets an annotation for an object
 
-\item \code{has_annotation()}: Checks to see if a decoration exists for an object
+\item \code{super_annotation()}: Gets an annotation that overrides existing
+annotations
 
-\item \code{add_annotation()}: Adds a decoration to an object,
+\item \code{has_annotation()}: Checks to see if an annotation exists for an object
+
+\item \code{has_super_annotation()}: Checks to see if an overriding
+annotation exists for an object
+
+\item \code{add_annotation()}: Adds an annotation to an object,
 with the option of overwriting an existing value
+
+\item \code{set_annotation()}: Alias to \code{add_annotation(overwrite = TRUE)}
+
+\item \code{add_super_annotation()}: Adds an overriding annotation to an
+object. Note that overriding annotations will overwrite
+previous assignments!
+
+\item \code{remove_super_annotation()}: Removes overriding annotation
 
 }}

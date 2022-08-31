@@ -73,32 +73,31 @@ test_that("Recursively loading from directory works", {
 })
 
 test_that("Local metadata works", {
-  skip_if_not_installed("withr")
+  opt_old <- options(blueprintr.use_local_metadata_path = TRUE)
+  on.exit(options(opt_old))
 
-  withr::with_options(list(blueprintr.use_local_metadata_path = TRUE), {
-    dirs <- load_dirs_recurse(bp_path("blueprints"), recurse = TRUE)
-    bp_list <- fetch_blueprints_from_dir(dirs)
+  dirs <- load_dirs_recurse(bp_path("blueprints"), recurse = TRUE)
+  bp_list <- fetch_blueprints_from_dir(dirs)
 
-    subdir_bp <- vlapply(bp_list, function(bp) bp$name == "test_subdir_blueprint")
-    subdir_bp <- bp_list[subdir_bp][[1]]
+  subdir_bp <- vlapply(bp_list, function(bp) bp$name == "test_subdir_blueprint")
+  subdir_bp <- bp_list[subdir_bp][[1]]
 
-    expect_identical(
-      subdir_bp$metadata_file_path,
-      file.path(
-        bp_path("blueprints", "subdir_test"),
-        "test_subdir_blueprint.csv"
-      )
+  expect_identical(
+    subdir_bp$metadata_file_path,
+    file.path(
+      bp_path("blueprints", "subdir_test"),
+      "test_subdir_blueprint.csv"
     )
+  )
 
-    subdir_bp2 <- vlapply(bp_list, function(bp) bp$name == "test_subdir_blueprint2")
-    subdir_bp2 <- bp_list[subdir_bp2][[1]]
+  subdir_bp2 <- vlapply(bp_list, function(bp) bp$name == "test_subdir_blueprint2")
+  subdir_bp2 <- bp_list[subdir_bp2][[1]]
 
-    expect_identical(
-      subdir_bp2$metadata_file_path,
-      file.path(
-        bp_path("blueprints", "subdir_test"),
-        "test2.csv"
-      )
+  expect_identical(
+    subdir_bp2$metadata_file_path,
+    file.path(
+      bp_path("blueprints", "subdir_test"),
+      "test2.csv"
     )
-  })
+  )
 })

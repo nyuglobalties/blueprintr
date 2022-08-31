@@ -1,3 +1,6 @@
+# Development version (0.2.0.9000)
+* Implements improved annotations through an option `blueprintr.use_improved_annotations`. Metadata now always overwrites annotations in the output dataset, but `mutate_annotation()` and `mutate_annotation_across()` will override the metadata safely. No longer a need to mess with `annotate_mutate`!
+
 # blueprintr 0.2.0
 * Adds ability to run macro statements in interactive mode. Very useful when debugging pipelines! Set the `blueprintr.interactive_eval_macros` option to `TRUE` to enable.
 * Adds ability to set `metadata_file_path` based on the directory and name of the affiliated blueprint script. For example, a blueprint defined in "blueprints/ex/test.R" will get its default metadata file location set to "blueprints/ex/test.csv". Set the `blueprintr.use_local_metadata_path` option to `TRUE` to enable.
