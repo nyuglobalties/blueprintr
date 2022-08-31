@@ -12,7 +12,7 @@ bpstep_create_metadata <- function(bp, ...) {
 }
 
 metadata_call <- function(bp) {
-  deps <- blueprint_deps(bp)
+  deps <- blueprint_target_deps(bp)
   deps_syms <- lapply(deps, function(dep) as.name(paste0(dep, "_meta")))
 
   call2(
