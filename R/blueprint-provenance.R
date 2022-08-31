@@ -57,10 +57,10 @@ blueprint_dependency_table_node <- function(bp = NULL) {
   )
 
   if (!is.null(bp)) {
-    node$name <- bp$name
-    node$type <- class(bp)[1]
-    node$description <- bp$description %||% NA_character_
-    node$metadata_path <- bp$metadata_file_path
+    node[["name"]] <- bp$name
+    node[["type"]] <- class(bp)[1]
+    node[["description"]] <- bp$description %||% NA_character_
+    node[["metadata_path"]] <- bp$metadata_file_path
   }
 
   node
@@ -76,8 +76,8 @@ blueprint_dependency_table_edges <- function(bp = NULL) {
     target_deps <- blueprint_target_deps(bp)
 
     if (length(target_deps) > 0) {
-      edges$from <- target_deps
-      edges$to <- rep(bp$name, length(target_deps))
+      edges[["from"]] <- target_deps
+      edges[["to"]] <- rep(bp$name, length(target_deps))
     }
   }
 
