@@ -2,9 +2,13 @@
 #'
 #' @param directory A folder containing blueprint scripts
 #' @param recurse Should this function recursively load blueprints?
+#' @param script Where the targets/drake project script file is located. Defaults
+#'   to using targets.
 #' @return An igraph of the table lineage for the desired blueprints
 #' @export
-load_table_lineage <- function(directory = here::here("blueprints"), recurse = FALSE) {
+load_table_lineage <- function(directory = here::here("blueprints"),
+                               recurse = FALSE,
+                               script = here::here("_targets.R")) {
   if (!requireNamespace("igraph", quietly = TRUE)) {
     bp_err(c(
       "Viewing the table lineage and other provenance features requires ",
@@ -13,10 +17,18 @@ load_table_lineage <- function(directory = here::here("blueprints"), recurse = F
     ))
   }
 
-  dirs <- load_dirs_recurse(directory, recurse)
-  bp_list <- fetch_blueprints_from_dir(dirs)
+  if (!requireNamespace("callr", quietly = TRUE)) {
+    bp_err("callr needed to run project file in separate process")
+  }
 
-  get_table_linage_igraph(bp_list)
+  callr::r(function(script) {
+    source(script)
+
+    dirs <- load_dirs_recurse(directory, recurse)
+    bp_list <- fetch_blueprints_from_dir(dirs)
+
+    get_table_linage_igraph(bp_list)
+  }, args = list(script = script), package = "pkg")
 }
 
 #' Get an igraph of the table lineage
@@ -57,10 +69,14 @@ blueprint_dependency_table_node <- function(bp = NULL) {
   )
 
   if (!is.null(bp)) {
-    node[["name"]] <- bp$name
-    node[["type"]] <- class(bp)[1]
-    node[["description"]] <- bp$description %||% NA_character_
-    node[["metadata_path"]] <- bp$metadata_file_path
+    bp_node <- data.frame(
+      name = bp$name,
+      type = class(bp)[1],
+      description = bp$description %||% NA_character_,
+      metadata_path = bp$metadata_file_path
+    )
+
+    node <- rbind(node, bp_node)
   }
 
   node
@@ -76,8 +92,12 @@ blueprint_dependency_table_edges <- function(bp = NULL) {
     target_deps <- blueprint_target_deps(bp)
 
     if (length(target_deps) > 0) {
-      edges[["from"]] <- target_deps
-      edges[["to"]] <- rep(bp$name, length(target_deps))
+      bp_edges <- data.frame(
+        from = target_deps,
+        to = rep(bp$name, length(target_deps))
+      )
+
+      edges <- rbind(edges, bp_edges)
     }
   }
 
