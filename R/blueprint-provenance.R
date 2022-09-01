@@ -47,8 +47,23 @@ vis_table_lineage <- function(...) {
 
   g <- load_table_lineage(...)
 
-  vis_g <- visNetwork::visIgraph(g)
-  vis_g <- visNetwork::visEdges(vis_g, arrows = "to")
+  vis_g <- visNetwork::toVisNetworkData(g)
+  vis_g <- visNetwork::visEdges(
+    vis_g,
+    arrows = "to",
+    smooth = list(
+      type = "cubicBezier",
+      forceDirection = "horizontal"
+    )
+  )
+  vis_g <- visNetwork::visOptions(
+    vis_g,
+    collapse = TRUE,
+    highlightNearest = list(
+      enabled = TRUE,
+      algorithm = "hierarchical"
+    )
+  )
   visNetwork::visHierarchicalLayout(vis_g, direction = "LR")
 }
 
