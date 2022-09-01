@@ -35,6 +35,23 @@ load_table_lineage <- function(directory = here::here("blueprints"),
   )
 }
 
+#' Visualize table lineage with visNetwork
+#'
+#' @param ... Arguments passed to [blueprintr::load_table_lineage]
+#' @return Interactive graph run by visNetwork
+#' @export
+vis_table_lineage <- function(...) {
+  if (!requireNamespace("visNetwork", quietly = TRUE)) {
+    bp_err("Please install 'visNetwork' to create an interactive graph of table lineage")
+  }
+
+  g <- load_table_lineage(...)
+
+  vis_g <- visNetwork::visIgraph(g)
+  vis_g <- visNetwork::visEdges(vis_g, arrows = "to")
+  visNetwork::visHierarchicalLayout(vis_g, direction = "LR")
+}
+
 #' Get an igraph of the table lineage
 #'
 #' @param blueprints a list() of blueprint objects

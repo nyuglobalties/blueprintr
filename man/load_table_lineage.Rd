@@ -4,12 +4,19 @@
 \alias{load_table_lineage}
 \title{Read blueprints from folder and get lineage}
 \usage{
-load_table_lineage(directory = here::here("blueprints"), recurse = FALSE)
+load_table_lineage(
+  directory = here::here("blueprints"),
+  recurse = FALSE,
+  script = here::here("_targets.R")
+)
 }
 \arguments{
 \item{directory}{A folder containing blueprint scripts}
 
 \item{recurse}{Should this function recursively load blueprints?}
+
+\item{script}{Where the targets/drake project script file is located. Defaults
+to using targets.}
 }
 \value{
 An igraph of the table lineage for the desired blueprints
