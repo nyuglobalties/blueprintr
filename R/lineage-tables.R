@@ -48,6 +48,7 @@ vis_table_lineage <- function(...) {
   g <- load_table_lineage(...)
 
   vis_g <- visNetwork::toVisNetworkData(g)
+  vis_g <- visNetwork::visNetwork(nodes = vis_g$nodes, edges = vis_g$edges)
   vis_g <- visNetwork::visEdges(
     vis_g,
     arrows = "to",
@@ -64,7 +65,7 @@ vis_table_lineage <- function(...) {
       algorithm = "hierarchical"
     )
   )
-  visNetwork::visHierarchicalLayout(vis_g, direction = "LR")
+  visNetwork::visHierarchicalLayout(vis_g, direction = "LR", sortMethod = "directed")
 }
 
 #' Get an igraph of the table lineage
@@ -81,7 +82,21 @@ get_table_linage_igraph <- function(blueprints) {
     acc_edges <- rbind(acc_edges, dep_tables$edges)
   }
 
+  # Create visNetwork tooltip
+  acc_node <- tl_create_visnetwork_tooltip(acc_node)
+
   igraph::graph_from_data_frame(acc_edges, directed = TRUE, vertices = acc_node)
+}
+
+tl_create_visnetwork_tooltip <- function(acc_node) {
+  header <- ifelse(is.na(acc_node$description), acc_node$name, acc_node$description)
+
+  acc_node$title <- paste0(
+    "<strong>", header, "</strong><br /><br />",
+    "Metadata:</br>", acc_node$metadata_path
+  )
+
+  acc_node
 }
 
 blueprint_dependency_tables <- function(bp) {
