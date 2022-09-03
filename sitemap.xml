@@ -94,6 +94,12 @@
     <loc>/reference/eval_checks.html</loc>
   </url>
   <url>
+    <loc>/reference/get_table_linage_igraph.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_variable_linage_igraph.html</loc>
+  </url>
+  <url>
     <loc>/reference/in_set.html</loc>
   </url>
   <url>
@@ -101,6 +107,9 @@
   </url>
   <url>
     <loc>/reference/load_blueprint.html</loc>
+  </url>
+  <url>
+    <loc>/reference/load_table_lineage.html</loc>
   </url>
   <url>
     <loc>/reference/metadata.html</loc>
@@ -121,6 +130,15 @@
     <loc>/reference/render_kfa_report.html</loc>
   </url>
   <url>
+    <loc>/reference/super_annotations.html</loc>
+  </url>
+  <url>
     <loc>/reference/tar_blueprint.html</loc>
+  </url>
+  <url>
+    <loc>/reference/variable_lineage.html</loc>
+  </url>
+  <url>
+    <loc>/reference/vis_table_lineage.html</loc>
   </url>
 </urlset>

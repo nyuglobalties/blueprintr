@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">blueprintr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
       </span>
     </div>
 
@@ -62,9 +62,19 @@
 <span></span>
 <span><span class="fu">annotation</span><span class="op">(</span><span class="va">x</span>, <span class="va">field</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">super_annotation</span><span class="op">(</span><span class="va">x</span>, <span class="va">field</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">has_annotation</span><span class="op">(</span><span class="va">x</span>, <span class="va">field</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">add_annotation</span><span class="op">(</span><span class="va">x</span>, <span class="va">field</span>, <span class="va">value</span>, overwrite <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">has_super_annotation</span><span class="op">(</span><span class="va">x</span>, <span class="va">field</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">add_annotation</span><span class="op">(</span><span class="va">x</span>, <span class="va">field</span>, <span class="va">value</span>, overwrite <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">set_annotation</span><span class="op">(</span><span class="va">x</span>, <span class="va">field</span>, <span class="va">value</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">add_super_annotation</span><span class="op">(</span><span class="va">x</span>, <span class="va">field</span>, <span class="va">value</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">remove_super_annotation</span><span class="op">(</span><span class="va">x</span>, <span class="va">field</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -89,13 +99,22 @@ annotation values</p></dd>
     <div id="functions">
     <h2>Functions</h2>
     
-<ul><li><p><code>annotations()</code>: Gets a list of all decorations assigned to an object</p></li>
+<ul><li><p><code>annotations()</code>: Gets a list of all annotations assigned to an object</p></li>
 <li><p><code>annotation_names()</code>: Get the names of all of the
-decorations assigned to an object</p></li>
-<li><p><code>annotation()</code>: Gets a decoration for an object</p></li>
-<li><p><code>has_annotation()</code>: Checks to see if a decoration exists for an object</p></li>
-<li><p><code>add_annotation()</code>: Adds a decoration to an object,
+annotations assigned to an object</p></li>
+<li><p><code>annotation()</code>: Gets an annotation for an object</p></li>
+<li><p><code>super_annotation()</code>: Gets an annotation that overrides existing
+annotations</p></li>
+<li><p><code>has_annotation()</code>: Checks to see if an annotation exists for an object</p></li>
+<li><p><code>has_super_annotation()</code>: Checks to see if an overriding
+annotation exists for an object</p></li>
+<li><p><code>add_annotation()</code>: Adds an annotation to an object,
 with the option of overwriting an existing value</p></li>
+<li><p><code>set_annotation()</code>: Alias to <code>add_annotation(overwrite = TRUE)</code></p></li>
+<li><p><code>add_super_annotation()</code>: Adds an overriding annotation to an
+object. Note that overriding annotations will overwrite
+previous assignments!</p></li>
+<li><p><code>remove_super_annotation()</code>: Removes overriding annotation</p></li>
 </ul></div>
 
   </div>
