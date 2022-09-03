@@ -9,6 +9,7 @@
   )
 
   op_bpr[[improved_annotation_option()]] <- FALSE
+  op_bpr[[variable_uuid_option()]] <- FALSE
 
   toset <- !(names(op_bpr) %in% names(op))
   if (any(toset)) options(op_bpr[toset])

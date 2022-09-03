@@ -30,5 +30,13 @@ cleanup <- function(results, df, blueprint, meta) {
     df <- drop_columns(df, blueprint, meta)
   }
 
+  if (using_variable_uuids()) {
+    if (!requireNamespace("uuid", quietly = TRUE)) {
+      bp_err("The 'uuid' package is needed to generate variable UUIDs")
+    }
+
+    df <- add_variable_uuids(df)
+  }
+
   df
 }
