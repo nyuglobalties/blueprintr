@@ -1,4 +1,4 @@
-# Development version (0.2.0.9000)
+# blueprintr 0.2.1
 * Implements variable lineage through `options(blueprintr.use_variable_uuids = TRUE)`. Visualize variable lineage with `blueprintr::vis_variable_lineage` or inspect specific parts of the graph with an igraph generated with `blueprintr::load_variable_lineage`.
 * Visualize blueprint table lineage with `blueprintr::vis_table_lineage` and inspect specific parts of the graph with `blueprintr::load_table_lineage`.
 * Implements improved annotations through an option `blueprintr.use_improved_annotations`. Metadata now always overwrites annotations in the output dataset, but `mutate_annotation()` and `mutate_annotation_across()` will override the metadata safely. No longer a need to mess with `annotate_mutate`!
