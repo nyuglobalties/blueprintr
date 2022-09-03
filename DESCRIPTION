@@ -26,7 +26,11 @@ Suggests:
     labelled,
     targets,
     panelcleaner,
-    kfa
+    kfa,
+    callr,
+    igraph,
+    uuid,
+    visNetwork
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
@@ -48,7 +52,8 @@ Imports:
     fs,
     lifecycle,
     tidyselect,
-    snakecase
+    snakecase,
+    digest
 VignetteBuilder: knitr
 Remotes:
     nyuglobalties/rcoder,
