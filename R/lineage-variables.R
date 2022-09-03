@@ -18,7 +18,6 @@
 #' @param cluster_by_dataset If `TRUE`, variable nodes will be clustered into their
 #'   respective dataset
 #' @name variable_lineage
-#' @export
 NULL
 
 #' @describeIn variable_lineage Reads blueprintrs from folder to get variable lineage.
