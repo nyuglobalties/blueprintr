@@ -3,7 +3,9 @@ context("blueprints")
 test_that("blueprint tests are run", {
   mtcars_bp <- blueprint(
     "mtcars_chunk",
-    command = { mtcars },
+    command = {
+      mtcars
+    },
     metadata_directory = bp_path("blueprints")
   )
 
@@ -72,8 +74,8 @@ test_that("Dependencies are handled properly", {
     unlink(metadata_path(student_demo_bp))
   }
 
-  expect_identical(blueprint_deps(id_bp), character())
-  expect_identical(blueprint_deps(student_demo_bp), "id_vars")
+  expect_identical(blueprint_target_deps(id_bp), character())
+  expect_identical(blueprint_target_deps(student_demo_bp), "id_vars")
 
   plan <- plan_from_blueprint(id_bp) %>%
     attach_blueprint(student_demo_bp)

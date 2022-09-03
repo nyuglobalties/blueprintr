@@ -19,8 +19,8 @@ label_columns <- function(df, blueprint, meta) {
     bp_err("`coding` is not available in {ui_value(blueprint$name)} metadata")
   }
 
-  # If data.table, downconvert to data.frame
-  df <- as.data.frame(df)
+  # If data.table, downconvert to data.frame but preserve blueprintr attributes
+  df <- preserve_blueprintr_attrs(df, as.data.frame)
 
   # Add evaluated codings to meta
   meta <- dplyr::mutate(meta, .evaluated_coding = string_to_coding(.data$coding))
@@ -50,7 +50,13 @@ label_column <- function(variable, df, meta) {
     names(var_title) <- variable
     arg_list <- c(list(df), as.list(var_title))
 
-    df <- do.call(labelled::set_variable_labels, arg_list)
+    df <- preserve_blueprintr_attrs(
+      df,
+      do.call,
+      labelled::set_variable_labels,
+      arg_list,
+      .f_of_dat = FALSE
+    )
   }
 
   if (!is.null(haven_labels)) {
@@ -58,7 +64,13 @@ label_column <- function(variable, df, meta) {
     names(labels) <- variable
     arg_list <- c(list(df), labels)
 
-    df <- do.call(labelled::set_value_labels, arg_list)
+    df <- preserve_blueprintr_attrs(
+      df,
+      do.call,
+      labelled::set_value_labels,
+      arg_list,
+      .f_of_dat = FALSE
+    )
   }
 
   df

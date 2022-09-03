@@ -70,10 +70,10 @@ ui_quote <- function(x) {
   paste0("`", x, "`")
 }
 
-bp_err <- function(x, .envir = parent.frame()) {
+bp_err <- function(x, ..., .envir = parent.frame()) {
   msg <- glue(glue_collapse(x), .envir = .envir)
 
-  rlang::abort(.subclass = "bp_error", message = msg)
+  rlang::abort(class = "bp_error", message = msg, ...)
 }
 
 bp_warn <- function(x, .envir = parent.frame()) {
@@ -149,8 +149,12 @@ flatten <- function(x) {
   flattened
 }
 
-get_attr <- function(obj, attrib) {
-  attr(obj, attrib, exact = TRUE)
+has_attr <- function(obj, key) {
+  !is.null(get_attr(obj, key))
+}
+
+get_attr <- function(obj, key) {
+  attr(obj, key, exact = TRUE)
 }
 
 set_attr <- function(obj, key, value) {
@@ -170,6 +174,29 @@ set_attrs <- function(obj, ...) {
   }
 
   obj
+}
+
+blueprintr_attrs <- function(dat) {
+  var_attrs <- lapply(dat, attributes)
+  lapply(var_attrs, function(attrs) attrs[grepl("^(bpr\\.|\\.uuid)", names(attrs))])
+}
+
+preserve_blueprintr_attrs <- function(dat, f, ..., .f_of_dat = TRUE) {
+  bpr_var_attrs <- blueprintr_attrs(dat)
+
+  if (isTRUE(.f_of_dat)) {
+    dat <- f(dat, ...)
+  } else {
+    dat <- f(...)
+  }
+
+  for (nvar in names(bpr_var_attrs)) {
+    if (!is.null(bpr_var_attrs[[nvar]])) {
+      dat[[nvar]] <- set_attrs(dat[[nvar]], !!!bpr_var_attrs[[nvar]])
+    }
+  }
+
+  dat
 }
 
 unique_val <- function(x) {

@@ -130,21 +130,6 @@ translate_macros <- function(command) {
   collapse_ast(command_ast)
 }
 
-blueprint_deps <- function(blueprint) {
-  bp_assert(inherits(blueprint, "blueprint"))
-
-  command_ast <- extract_ast(blueprint$command)
-
-  target_calls <- find_ast_if(command_ast, target_call_check)
-  target_names <- flatten_deps_search_stack(target_calls)
-
-  if (is.null(target_names)) {
-    return(character())
-  }
-
-  unname(target_names[target_names != ".TARGET"])
-}
-
 target_call_check <- function(ast) {
   if (is_ast(ast)) {
     identical(ast$head, ".TARGET")
