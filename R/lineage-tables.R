@@ -169,3 +169,18 @@ blueprint_target_deps <- function(bp) {
 
   unname(target_names[target_names != ".TARGET"])
 }
+
+blueprint_source_deps <- function(bp) {
+  bp_assert(inherits(bp, "blueprint"))
+
+  command_ast <- extract_ast(bp$command)
+
+  source_calls <- find_ast_if(command_ast, source_call_check)
+  source_names <- flatten_deps_search_stack(source_calls)
+
+  if (is.null(source_names)) {
+    return(character())
+  }
+
+  unname(source_names[source_names != ".SOURCE"])
+}

@@ -60,9 +60,12 @@ load_variable_lineage <- function(directory = here::here("blueprints"),
 get_variable_linage_igraph <- function(blueprints) {
   dep_tables <- lapply(blueprints, blueprint_variable_dep_tables)
   dep_nodes <- lapply(dep_tables, function(x) x[["node"]])
+  dep_deps <- lapply(dep_tables, function(x) x[["deps"]])
   dep_edges <- lapply(dep_tables, function(x) x[["edges"]])
 
   acc_node <- do.call(rbind, dep_nodes)
+  acc_deps <- unique(do.call(rbind, dep_deps))
+  acc_node <- unique(rbind(acc_node, acc_deps))
   acc_edges <- do.call(rbind, dep_edges)
 
   if (any(duplicated(acc_node$id))) {
@@ -125,7 +128,7 @@ blueprint_variable_dep_table_node <- function() {
   data.frame(
     id = character(), uuid = character(),
     varname = character(), database = character(),
-    parents = character()
+    database_type = character(), parents = character()
   )
 }
 
@@ -144,21 +147,30 @@ blueprint_variable_dep_tables <- function(bp, dat = NULL, deps = NULL, ...) {
 
   dat <- dat %||% targets::tar_read_raw(bp$name, ...)
   bp_deps <- blueprint_target_deps(bp)
+  bp_source_deps <- blueprint_source_deps(bp)
+  bp_all_deps <- c(bp_deps, bp_source_deps)
+
+  bp_dep_types <- c(
+    rep("blueprint", length(bp_deps)),
+    rep("source", length(bp_source_deps))
+  )
+  names(bp_dep_types) <- bp_all_deps
 
   if (length(bp_deps) > 0) {
     if (is.null(deps)) {
-      deps <- vl_populate_deps(bp_deps, ...)
+      deps <- vl_populate_deps(bp_all_deps, ...)
     } else {
-      bp_assert(setequal(names(deps), bp_deps))
+      bp_assert(setequal(names(deps), bp_all_deps))
     }
   }
 
   dat_table <- vl_dat_table(dat, bp$name)
-  edges <- vl_edge_table(dat_table, deps)
+  edge_tables <- vl_edge_table(dat_table, deps, types = bp_dep_types)
 
   list(
     node = dat_table,
-    edges = edges
+    deps = edge_tables$dep_table,
+    edges = edge_tables$edges
   )
 }
 
@@ -173,7 +185,7 @@ vl_populate_deps <- function(bp_deps, ...) {
   deps
 }
 
-vl_dat_table <- function(dat, datname) {
+vl_dat_table <- function(dat, datname, type = NULL) {
   uuids <- table_uuid_attrs(dat)
   uuid_parents <- table_uuid_parents_attrs(dat)
 
@@ -184,13 +196,14 @@ vl_dat_table <- function(dat, datname) {
     uuid = uuids,
     varname = names(dat),
     database = datname,
+    database_type = type %||% "blueprint",
     parents = uuid_parents,
     row.names = NULL
   )
 }
 
-vl_edge_table <- function(dat_table, deps) {
-  dep_table <- vl_dep_table_from_deps(deps)
+vl_edge_table <- function(dat_table, deps, types = NULL) {
+  dep_table <- vl_dep_table_from_deps(deps, types = types)
   edges <- vl_parent_tables(dat_table, dep_table)
 
   if (any(!is.na(dat_table$parents))) {
@@ -198,15 +211,21 @@ vl_edge_table <- function(dat_table, deps) {
     edges <- rbind(edges, edges_variables)
   }
 
-  edges
+  list(
+    edges = edges,
+    dep_table = dep_table
+  )
 }
 
-vl_dep_table_from_deps <- function(deps) {
+vl_dep_table_from_deps <- function(deps, types = NULL) {
   dep_table <- blueprint_variable_dep_table_node()
 
   if (length(deps) > 0) {
     for (ndep in names(deps)) {
-      dep_table <- rbind(dep_table, vl_dat_table(deps[[ndep]], ndep))
+      dep_table <- rbind(
+        dep_table,
+        vl_dat_table(deps[[ndep]], ndep, type = types[[ndep]])
+      )
     }
   }
 
