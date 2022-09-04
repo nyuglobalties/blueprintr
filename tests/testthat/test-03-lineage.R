@@ -68,7 +68,7 @@ test_that("Basic variable lineage works correctly", {
     child_dat_table[child_dat_table$varname != "new_var", "uuid", drop = TRUE]
   )
 
-  edges_from_parent_table <- vl_edge_table(child_dat_table, child_deps)
+  edges_from_parent_table <- vl_edge_table(child_dat_table, child_deps)$edges
 
   # Edges are captured correctly and have correct flow
   expect_setequal(
@@ -193,6 +193,7 @@ test_that("Lineage with deep ancestry works", {
   )
 
   expect_true(length(unique(all_nodes$id)) == nrow(all_nodes))
+  expect_setequal(all_nodes$database_type, "blueprint")
 })
 
 test_that("Cleanup doesn't mess up attributes", {
@@ -217,4 +218,36 @@ test_that("Cleanup doesn't mess up attributes", {
 
   expect_identical(uuid_attr(out$mpg), uuid_attr(test_dat$mpg))
   expect_identical(uuid_attr(out$vs), uuid_attr(test_dat$vs))
+})
+
+test_that("Variable lineage works with sources", {
+  source_dat <- mark_source(mtcars)
+  # Error only raised if UUIDs are NULL, so expect silent
+  expect_silent(table_uuid_attrs(source_dat))
+
+  test_bp <- blueprint(
+    "test_table",
+    command = .SOURCE("source_dat")[, 1:3]
+  )
+
+  test_bp_dat <- source_dat[, 1:3]
+  test_deps <- list(source_dat = source_dat)
+
+  expect_identical(blueprint_source_deps(test_bp), "source_dat")
+  test_dep_tables <- blueprint_variable_dep_tables(test_bp, test_bp_dat, deps = test_deps)
+
+  expect_setequal(test_dep_tables$deps$database, "source_dat")
+  expect_setequal(test_dep_tables$deps$database_type, "source")
+})
+
+test_that("Table lineage works with sources", {
+  # mark_source() not needed for table lineage
+  test_bp <- blueprint(
+    "test_table",
+    command = .SOURCE("source_dat")[, 1:3]
+  )
+
+  test_dep_tables <- blueprint_dependency_tables(test_bp)
+  expect_setequal(test_dep_tables$sources$type, "source")
+  expect_setequal(test_dep_tables$sources$name, "source_dat")
 })
