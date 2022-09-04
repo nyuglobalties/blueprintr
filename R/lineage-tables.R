@@ -48,6 +48,9 @@ vis_table_lineage <- function(...) {
   g <- load_table_lineage(...)
 
   vis_g <- visNetwork::toVisNetworkData(g)
+  vis_g$nodes$shape <- ifelse(vis_g$nodes$type == "souce", "square", "circle")
+  vis_g$nodes$color <- "lightblue"
+
   vis_g <- visNetwork::visNetwork(nodes = vis_g$nodes, edges = vis_g$edges)
   vis_g <- visNetwork::visEdges(
     vis_g,
@@ -65,6 +68,15 @@ vis_table_lineage <- function(...) {
       algorithm = "hierarchical"
     )
   )
+
+  vis_g <- visNetwork::visLegend(
+    vis_g,
+    addNodes = list(
+      list(label = "Blueprint", shape = "circle", color = "lightblue"),
+      list(label = "Source", shape = "Square", color = "lightblue")
+    )
+  )
+
   visNetwork::visHierarchicalLayout(vis_g, direction = "LR", sortMethod = "directed")
 }
 
