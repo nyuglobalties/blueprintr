@@ -1,4 +1,4 @@
-# Development version (0.2.1.9000)
+# blueprintr 0.2.2
 * Adds `.SOURCE("table_name")` and `mark_source(obj)` to add variable (and table) lineage to non-blueprint-created tables. Particularly useful for including data fetched from the web into lineage
 * Fixes lineage legends to focus on object type, rather than grouping. In large projects, the table groups would make the legend explode with the number of labels, rendering it useless.
 
