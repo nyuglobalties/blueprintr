@@ -74,13 +74,17 @@ vis_table_lineage <- function(...) {
 #' @return An igraph object of the table lineage structure
 get_table_linage_igraph <- function(blueprints) {
   acc_node <- blueprint_dependency_table_node()
+  acc_sources <- blueprint_dependency_table_node()
   acc_edges <- blueprint_dependency_table_edges()
 
   for (bp in blueprints) {
     dep_tables <- blueprint_dependency_tables(bp)
     acc_node <- rbind(acc_node, dep_tables$node)
+    acc_sources <- rbind(acc_sources, dep_tables$sources)
     acc_edges <- rbind(acc_edges, dep_tables$edges)
   }
+
+  acc_node <- unique(rbind(acc_node, acc_sources))
 
   # Create visNetwork tooltip
   acc_node <- tl_create_visnetwork_tooltip(acc_node)
@@ -103,15 +107,16 @@ blueprint_dependency_tables <- function(bp) {
   bp_assert(is_blueprint(bp))
 
   node <- blueprint_dependency_table_node(bp)
-  edges <- blueprint_dependency_table_edges(bp)
+  edge_tables <- blueprint_dependency_table_edges(bp)
 
   list(
     node = node,
-    edges = edges
+    edges = edge_tables$edges,
+    sources = edge_tables$sources
   )
 }
 
-blueprint_dependency_table_node <- function(bp = NULL) {
+blueprint_dependency_table_node <- function(bp = NULL, source = NULL) {
   node <- data.frame(
     name = character(),
     type = character(),
@@ -130,6 +135,17 @@ blueprint_dependency_table_node <- function(bp = NULL) {
     node <- rbind(node, bp_node)
   }
 
+  if (!is.null(source)) {
+    source_node <- data.frame(
+      name = source,
+      type = "source",
+      description = NA_character_, # TODO: Add source config in the future for better documentation
+      metadata_path = NA_character_
+    )
+
+    node <- rbind(node, source_node)
+  }
+
   node
 }
 
@@ -139,20 +155,39 @@ blueprint_dependency_table_edges <- function(bp = NULL) {
     to = character()
   )
 
+  sources <- data.frame(
+    name = character(),
+    type = character(),
+    description = character(),
+    metadata_path = character()
+  )
+
   if (!is.null(bp)) {
     target_deps <- blueprint_target_deps(bp)
+    target_source_deps <- blueprint_source_deps(bp)
+    all_deps <- c(target_deps, target_source_deps)
 
-    if (length(target_deps) > 0) {
+    if (length(all_deps) > 0) {
       bp_edges <- data.frame(
-        from = target_deps,
-        to = rep(bp$name, length(target_deps))
+        from = all_deps,
+        to = rep(bp$name, length(all_deps))
       )
 
       edges <- rbind(edges, bp_edges)
     }
+
+    if (length(target_source_deps) > 0) {
+      for (src in target_source_deps) {
+        source_node <- blueprint_dependency_table_node(source = src)
+        sources <- rbind(sources, source_node)
+      }
+    }
   }
 
-  edges
+  list(
+    edges = edges,
+    sources = sources
+  )
 }
 
 blueprint_target_deps <- function(bp) {
