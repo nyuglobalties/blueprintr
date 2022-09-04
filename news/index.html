@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">blueprintr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2</span>
       </span>
     </div>
 
@@ -50,6 +50,11 @@
       <small>Source: <a href="https://github.com/nyuglobalties/blueprintr/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.2.2" id="blueprintr-022">blueprintr 0.2.2<a class="anchor" aria-label="anchor" href="#blueprintr-022"></a></h2>
+<ul><li>Adds <code>.SOURCE("table_name")</code> and <code>mark_source(obj)</code> to add variable (and table) lineage to non-blueprint-created tables. Particularly useful for including data fetched from the web into lineage</li>
+<li>Fixes lineage legends to focus on object type, rather than grouping. In large projects, the table groups would make the legend explode with the number of labels, rendering it useless.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.2.1" id="blueprintr-021">blueprintr 0.2.1<a class="anchor" aria-label="anchor" href="#blueprintr-021"></a></h2>
 <ul><li>Implements variable lineage through <code>options(blueprintr.use_variable_uuids = TRUE)</code>. Visualize variable lineage with <code><a href="../reference/variable_lineage.html">blueprintr::vis_variable_lineage</a></code> or inspect specific parts of the graph with an igraph generated with <code><a href="../reference/variable_lineage.html">blueprintr::load_variable_lineage</a></code>.</li>
