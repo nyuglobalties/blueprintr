@@ -38,17 +38,19 @@ load_table_lineage <- function(directory = here::here("blueprints"),
 #' Visualize table lineage with visNetwork
 #'
 #' @param ... Arguments passed to [blueprintr::load_table_lineage]
+#' @param g An igraph object, defaulting to the one created with
+#'   [blueprintr::load_table_lineage]
 #' @return Interactive graph run by visNetwork
 #' @export
-vis_table_lineage <- function(...) {
+vis_table_lineage <- function(..., g = NULL) {
   if (!requireNamespace("visNetwork", quietly = TRUE)) {
     bp_err("Please install 'visNetwork' to create an interactive graph of table lineage")
   }
 
-  g <- load_table_lineage(...)
+  g <- g %||% load_table_lineage(...)
 
   vis_g <- visNetwork::toVisNetworkData(g)
-  vis_g$nodes$shape <- ifelse(vis_g$nodes$type == "souce", "square", "circle")
+  vis_g$nodes$shape <- ifelse(vis_g$nodes$type == "source", "square", "circle")
   vis_g$nodes$color <- "lightblue"
 
   vis_g <- visNetwork::visNetwork(nodes = vis_g$nodes, edges = vis_g$edges)
@@ -72,8 +74,8 @@ vis_table_lineage <- function(...) {
   vis_g <- visNetwork::visLegend(
     vis_g,
     addNodes = list(
-      list(label = "Blueprint", shape = "circle", color = "lightblue"),
-      list(label = "Source", shape = "Square", color = "lightblue")
+      list(label = "Blueprint", shape = "circle", color = "lightblue", size = 25),
+      list(label = "Source", shape = "square", color = "lightblue", size = 25)
     )
   )
 
@@ -84,10 +86,11 @@ vis_table_lineage <- function(...) {
 #'
 #' @param blueprints a list() of blueprint objects
 #' @return An igraph object of the table lineage structure
+#' @noRd
 get_table_linage_igraph <- function(blueprints) {
   acc_node <- blueprint_dependency_table_node()
   acc_sources <- blueprint_dependency_table_node()
-  acc_edges <- blueprint_dependency_table_edges()
+  acc_edges <- blueprint_dependency_table_edges()$edges
 
   for (bp in blueprints) {
     dep_tables <- blueprint_dependency_tables(bp)

@@ -56,9 +56,24 @@ load_variable_lineage <- function(directory = here::here("blueprints"),
 #' Get an igraph of the variable lineage
 #'
 #' @param blueprints a list() of blueprint objects
+#' @param dats A list of data.frames corresponding to each blueprint output.
+#'   Only really to be used in testing.
+#' @param deps A list of named lists of data.frames corresponding to the dependencies
+#'   for each blueprint output. Only really to be used in testing.
 #' @return An igraph object of the variable lineage structure
-get_variable_linage_igraph <- function(blueprints) {
-  dep_tables <- lapply(blueprints, blueprint_variable_dep_tables)
+#' @noRd
+get_variable_linage_igraph <- function(blueprints, dats = NULL, deps = NULL) {
+  dep_tables <- lapply(
+    seq_along(blueprints),
+    function(i) {
+      blueprint_variable_dep_tables(
+        blueprints[[i]],
+        dat = dats[[i]],
+        deps = deps[[i]]
+      )
+    }
+  )
+
   dep_nodes <- lapply(dep_tables, function(x) x[["node"]])
   dep_deps <- lapply(dep_tables, function(x) x[["deps"]])
   dep_edges <- lapply(dep_tables, function(x) x[["edges"]])
@@ -99,6 +114,11 @@ vis_variable_lineage <- function(..., g = NULL, cluster_by_dataset = TRUE) {
 
   # Make properties compatible with visNetwork
   igraph::V(g)$group <- igraph::V(g)$database
+  igraph::V(g)$shape <- ifelse(
+    igraph::V(g)$database_type == "source",
+    "square",
+    "circle"
+  )
 
   vis_g <- visNetwork::toVisNetworkData(g)
   vis_g$nodes$label <- vis_g$nodes$varname
@@ -121,7 +141,14 @@ vis_variable_lineage <- function(..., g = NULL, cluster_by_dataset = TRUE) {
     )
   }
 
-  visNetwork::visLegend(vis_g)
+  visNetwork::visLegend(
+    vis_g,
+    useGroups = FALSE,
+    addNodes = list(
+      list(label = "Blueprint", shape = "circle", color = "lightblue", size = 25),
+      list(label = "Source", shape = "square", color = "lightblue", size = 25)
+    )
+  )
 }
 
 blueprint_variable_dep_table_node <- function() {

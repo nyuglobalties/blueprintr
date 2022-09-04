@@ -4,10 +4,13 @@
 \alias{vis_table_lineage}
 \title{Visualize table lineage with visNetwork}
 \usage{
-vis_table_lineage(...)
+vis_table_lineage(..., g = NULL)
 }
 \arguments{
 \item{...}{Arguments passed to \link{load_table_lineage}}
+
+\item{g}{An igraph object, defaulting to the one created with
+\link{load_table_lineage}}
 }
 \value{
 Interactive graph run by visNetwork
