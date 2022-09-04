@@ -251,3 +251,33 @@ test_that("Table lineage works with sources", {
   expect_setequal(test_dep_tables$sources$type, "source")
   expect_setequal(test_dep_tables$sources$name, "source_dat")
 })
+
+test_that("Requested igraphs are rendered correctly", {
+  skip_if_not_installed("igraph")
+
+  source_dat <- mark_source(mtcars)
+  test_bp <- blueprint(
+    "test_table",
+    command = .SOURCE("source_dat")[, 1:3]
+  )
+
+  test_bp_dat <- source_dat[, 1:3]
+  test_deps <- list(source_dat = source_dat)
+
+  g1 <- get_table_linage_igraph(list(test_bp))
+  expect_s3_class(g1, "igraph")
+  expect_setequal(names(igraph::V(g1)), c("source_dat", "test_table"))
+
+  g2 <- get_variable_linage_igraph(
+    list(test_bp),
+    dats = list(test_bp_dat),
+    deps = list(test_deps)
+  )
+  expect_s3_class(g2, "igraph")
+  expect_setequal(
+    igraph::V(g2)$varname,
+    names(source_dat)
+  )
+
+  browser()
+})
