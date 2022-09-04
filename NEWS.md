@@ -1,5 +1,6 @@
 # Development version (0.2.1.9000)
 * Adds `.SOURCE("table_name")` and `mark_source(obj)` to add variable (and table) lineage to non-blueprint-created tables. Particularly useful for including data fetched from the web into lineage
+* Fixes lineage legends to focus on object type, rather than grouping. In large projects, the table groups would make the legend explode with the number of labels, rendering it useless.
 
 # blueprintr 0.2.1
 * Implements variable lineage through `options(blueprintr.use_variable_uuids = TRUE)`. Visualize variable lineage with `blueprintr::vis_variable_lineage` or inspect specific parts of the graph with an igraph generated with `blueprintr::load_variable_lineage`.
