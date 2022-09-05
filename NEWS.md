@@ -1,4 +1,4 @@
-# Development version (0.2.2.9000)
+# blueprintr 0.2.3
 * Add ability to filter variable lineage with `blueprintr::filter_variable_lineage()`
 * Add tooltop for variable node in variable lineage
 * Fix issue where grouped nodes in visNetwork would scale, harming legibility
