@@ -137,7 +137,8 @@ vis_variable_lineage <- function(..., g = NULL, cluster_by_dataset = TRUE) {
     vis_g <- visNetwork::visClusteringByGroup(
       vis_g,
       groups = unique(vis_g$x$nodes$group),
-      label = "Table: "
+      label = "Table: ",
+      scale_size = FALSE
     )
   }
 
