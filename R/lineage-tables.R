@@ -112,7 +112,7 @@ tl_create_visnetwork_tooltip <- function(acc_node) {
 
   acc_node$title <- paste0(
     "<strong>", header, "</strong><br /><br />",
-    "Metadata:</br>", acc_node$metadata_path
+    "Metadata:<br />", acc_node$metadata_path
   )
 
   acc_node
