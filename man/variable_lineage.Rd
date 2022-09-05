@@ -3,6 +3,7 @@
 \name{variable_lineage}
 \alias{variable_lineage}
 \alias{load_variable_lineage}
+\alias{filter_variable_lineage}
 \alias{vis_variable_lineage}
 \title{Variable lineage}
 \usage{
@@ -10,6 +11,14 @@ load_variable_lineage(
   directory = here::here("blueprints"),
   recurse = FALSE,
   script = here::here("_targets.R")
+)
+
+filter_variable_lineage(
+  g,
+  variables = NULL,
+  tables = NULL,
+  mode = "all",
+  cutoff = -1
 )
 
 vis_variable_lineage(..., g = NULL, cluster_by_dataset = TRUE)
@@ -22,11 +31,30 @@ vis_variable_lineage(..., g = NULL, cluster_by_dataset = TRUE)
 \item{script}{Where the targets/drake project script file is located. Defaults
 to using targets.}
 
-\item{...}{Arguments passed to \link{load_variable_lineage}}
-
 \item{g}{An igraph object. This defaults to a graph loaded with
 \link{load_variable_lineage}. However, use this if you
 want to inspect subgraphs of the variable lineage.}
+
+\item{variables}{Character vector of patterns for variable names to
+match. Note that each pattern is assumed to be disjoint (e.g. "if variable pattern
+A \emph{or} variable pattern B"), but if \code{tables} is not \code{NULL}, the search will be joint
+(e.g. "if (variable pattern A \emph{or} variable pattern B) \emph{and} (table pattern A \emph{or}
+table pattern B)").}
+
+\item{tables}{Character vector of patterns for table names to match. Note that
+each pattern is assumed to be disjoint (e.g. "if table pattern A \emph{or} table pattern B"),
+but if \code{variables} is not \code{NULL}, the search will be joint (e.g. "if (table pattern A
+\emph{or} table pattern B) \emph{and} (variable pattern A \emph{or} variable pattern B)").}
+
+\item{mode}{Which sort of relationships to include. Defaults to "all" (includes both
+relations \emph{to} the target node in the graph and \emph{from} the target node in the graph).
+See \link[igraph:all_simple_paths]{igraph::all_simple_paths()} for more details.}
+
+\item{cutoff}{The number of node steps to consider in the graph traversal for filtering.
+Defaults to -1 (no limit on steps). See \link[igraph:all_simple_paths]{igraph::all_simple_paths()}
+for more details.}
+
+\item{...}{Arguments passed to \link{load_variable_lineage}}
 
 \item{cluster_by_dataset}{If \code{TRUE}, variable nodes will be clustered into their
 respective dataset}
@@ -44,6 +72,9 @@ To enable the variable feature, set \code{options(blueprintr.use_variable_uuids 
 \itemize{
 \item \code{load_variable_lineage()}: Reads blueprintrs from folder to get variable lineage.
 Returns an igraph of the variable lineage.
+
+\item \code{filter_variable_lineage()}: Filter for specific variables to include
+in the lineage graph
 
 \item \code{vis_variable_lineage()}: Visualizes variable lineage with visNetwork.
 Returns an interactive graph.

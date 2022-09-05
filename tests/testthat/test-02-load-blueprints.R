@@ -14,7 +14,11 @@ test_that("File importing works correctly", {
 test_that("blueprint file fetching works correctly", {
   expect_error(fetch_blueprint_files(bp_path("asdfjashdfajksdfh")))
 
+  # As of 0.2.3, this will be relegated to an optional warning
+  opts <- options(blueprintr.warn_empty_blueprints_dirs = TRUE)
+  on.exit(options(opts))
   no_bps <- expect_warning(fetch_blueprint_files(tempdir()))
+
   expect_null(no_bps)
 
   expect_bp <- blueprint(

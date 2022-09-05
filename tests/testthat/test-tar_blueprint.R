@@ -5,7 +5,11 @@ test_that("Blueprint targets render correctly", {
 })
 
 test_that("Loading blueprints from folder works correctly", {
+  # As of 0.2.3, this will be relegated to an optional warning
+  opts <- options(blueprintr.warn_empty_blueprints_dirs = TRUE)
+  on.exit(options(opts))
   no_bps <- expect_warning(tar_blueprints(tempdir()))
+
   expect_identical(no_bps, list())
 
   expected_targets <- tar_blueprint(
