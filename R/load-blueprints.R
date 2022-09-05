@@ -7,6 +7,12 @@
 #'                  current R project.
 #' @param recurse Recursively loads blueprints from a directory if `TRUE`
 #'
+#' @details # Empty blueprint folder
+#' By default, blueprintr ignore empty blueprint folders. However, it may be beneficial
+#' to warn users if folder is empty, particularly during project setup. This helps
+#' identify any potential misconfiguration of drake plan attachment. To enable these warnings,
+#' set `option(blueprintr.warn_empty_blueprints_dirs = TRUE)`.
+#'
 #' @return A drake_plan with attached blueprints
 #' @export
 load_blueprint <- function(plan, file) {
@@ -61,11 +67,21 @@ fetch_blueprint_files <- function(directory) {
   bp_scripts <- fs::dir_ls(directory, regexp = "\\.[Rr]$")
 
   if (length(bp_scripts) == 0L) {
-    bp_warn("No blueprint scripts found in '{directory}'")
+    if (warn_empty_blueprints_dir()) {
+      bp_warn("No blueprint scripts found in '{directory}'")
+    }
     return(NULL)
   }
 
   bp_scripts
+}
+
+warn_empty_blueprints_dir <- function() {
+  getOption(empty_blueprints_dir_option(), default = FALSE)
+}
+
+empty_blueprints_dir_option <- function() {
+  "blueprintr.warn_empty_blueprints_dirs"
 }
 
 import_blueprint_file <- function(bp_file, env = parent.frame()) {

@@ -1,3 +1,9 @@
+# Development version (0.2.2.9000)
+* Add ability to filter variable lineage with `blueprintr::filter_variable_lineage()`
+* Add tooltop for variable node in variable lineage
+* Fix issue where grouped nodes in visNetwork would scale, harming legibility
+* Convert empty folder warning to option. Enable with `options(blueprintr.warn_empty_blueprints_dirs = TRUE)`
+
 # blueprintr 0.2.2
 * Adds `.SOURCE("table_name")` and `mark_source(obj)` to add variable (and table) lineage to non-blueprint-created tables. Particularly useful for including data fetched from the web into lineage
 * Fixes lineage legends to focus on object type, rather than grouping. In large projects, the table groups would make the legend explode with the number of labels, rendering it useless.

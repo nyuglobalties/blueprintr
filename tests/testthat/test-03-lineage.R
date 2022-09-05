@@ -268,7 +268,7 @@ test_that("Requested igraphs are rendered correctly", {
   expect_s3_class(g1, "igraph")
   expect_setequal(names(igraph::V(g1)), c("source_dat", "test_table"))
 
-  g2 <- get_variable_linage_igraph(
+  g2 <- get_variable_lineage_igraph(
     list(test_bp),
     dats = list(test_bp_dat),
     deps = list(test_deps)
@@ -278,6 +278,63 @@ test_that("Requested igraphs are rendered correctly", {
     igraph::V(g2)$varname,
     names(source_dat)
   )
+})
 
-  browser()
+test_that("Filtering variable lineage", {
+  root_bp <- blueprint(
+    "root_table",
+    command = {
+      mtcars
+    }
+  )
+
+  part1_bp <- blueprint(
+    "part1_table",
+    command =
+      .TARGET("root_table") %>%
+        dplyr::select(mpg, cyl)
+  )
+
+  part2_bp <- blueprint(
+    "part2_table",
+    command =
+      .TARGET("root_table") %>%
+        dplyr::select(disp, hp)
+  )
+
+  combined_bp <- blueprint(
+    "combined_table",
+    command = cbind(.TARGET("part1_table"), .TARGET("part2_table"))
+  )
+
+  root_bp_dat <- mtcars
+  root_bp_dat <- add_variable_uuids(root_bp_dat)
+
+  part1_bp_dat <- dplyr::select(root_bp_dat, mpg, cyl)
+  part1_bp_dat <- add_variable_uuids(part1_bp_dat)
+
+  part2_bp_dat <- dplyr::select(root_bp_dat, disp, hp)
+  part2_bp_dat <- add_variable_uuids(part2_bp_dat)
+
+  combined_bp_dat <- cbind(part1_bp_dat, part2_bp_dat)
+  combined_bp_dat <- add_variable_uuids(combined_bp_dat)
+
+  parts_deps <- list(root_table = root_bp_dat)
+  combined_deps <- list(part1_table = part1_bp_dat, part2_table = part2_bp_dat)
+
+  g <- get_variable_lineage_igraph(
+    list(root_bp, part1_bp, part2_bp, combined_bp),
+    dats = list(root_bp_dat, part1_bp_dat, part2_bp_dat, combined_bp_dat),
+    deps = list(NULL, parts_deps, parts_deps, combined_deps)
+  )
+
+  g_mpg <- filter_variable_lineage(g, variables = "mpg")
+
+  expect_setequal(igraph::V(g_mpg)$varname, "mpg")
+
+  g_mpg_part <- filter_variable_lineage(g, variables = "mpg", tables = "part", mode = "in")
+  expect_setequal(igraph::V(g_mpg)$varname, "mpg")
+
+  # Using 'in' should only include ancestors, not children
+  expect_setequal(igraph::V(g_mpg_part)$database, c("part1_table", "root_table"))
 })

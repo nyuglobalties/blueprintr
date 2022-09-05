@@ -12,6 +12,12 @@
 #'                  objects
 #' @param recurse Recursively loads blueprints from a directory if `TRUE`
 #' @return A `list()` of `tar_target` objects
+
+#' @details # Empty blueprint folder
+#' By default, blueprintr ignore empty blueprint folders. However, it may be beneficial
+#' to warn users if folder is empty, particularly during project setup. This helps
+#' identify any potential misconfiguration of targets generation. To enable these warnings,
+#' set `option(blueprintr.warn_empty_blueprints_dirs = TRUE)`.
 #'
 #' @export
 tar_blueprint <- function(...) {

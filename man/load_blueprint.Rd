@@ -26,3 +26,10 @@ A drake_plan with attached blueprints
 \description{
 Load a blueprint from a script file
 }
+\section{Empty blueprint folder}{
+By default, blueprintr ignore empty blueprint folders. However, it may be beneficial
+to warn users if folder is empty, particularly during project setup. This helps
+identify any potential misconfiguration of drake plan attachment. To enable these warnings,
+set \code{option(blueprintr.warn_empty_blueprints_dirs = TRUE)}.
+}
+

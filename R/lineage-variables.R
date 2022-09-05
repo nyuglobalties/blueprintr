@@ -17,6 +17,21 @@
 #'   want to inspect subgraphs of the variable lineage.
 #' @param cluster_by_dataset If `TRUE`, variable nodes will be clustered into their
 #'   respective dataset
+#' @param variables Character vector of patterns for variable names to
+#'   match. Note that each pattern is assumed to be disjoint (e.g. "if variable pattern
+#'   A _or_ variable pattern B"), but if `tables` is not `NULL`, the search will be joint
+#'   (e.g. "if (variable pattern A _or_ variable pattern B) _and_ (table pattern A _or_
+#'   table pattern B)").
+#' @param tables Character vector of patterns for table names to match. Note that
+#'   each pattern is assumed to be disjoint (e.g. "if table pattern A _or_ table pattern B"),
+#'   but if `variables` is not `NULL`, the search will be joint (e.g. "if (table pattern A
+#'   _or_ table pattern B) _and_ (variable pattern A _or_ variable pattern B)").
+#' @param mode Which sort of relationships to include. Defaults to "all" (includes both
+#'   relations _to_ the target node in the graph and _from_ the target node in the graph).
+#'   See [igraph::all_simple_paths()][igraph::all_simple_paths] for more details.
+#' @param cutoff The number of node steps to consider in the graph traversal for filtering.
+#'   Defaults to -1 (no limit on steps). See [igraph::all_simple_paths()][igraph::all_simple_paths]
+#'   for more details.
 #' @name variable_lineage
 NULL
 
@@ -45,7 +60,7 @@ load_variable_lineage <- function(directory = here::here("blueprints"),
       dirs <- load_dirs_recurse(directory, recurse)
       bp_list <- fetch_blueprints_from_dir(dirs)
 
-      get_variable_linage_igraph(bp_list)
+      get_variable_lineage_igraph(bp_list)
     },
     args = list(script = script, directory = directory, recurse = recurse),
     package = "blueprintr"
@@ -62,7 +77,7 @@ load_variable_lineage <- function(directory = here::here("blueprints"),
 #'   for each blueprint output. Only really to be used in testing.
 #' @return An igraph object of the variable lineage structure
 #' @noRd
-get_variable_linage_igraph <- function(blueprints, dats = NULL, deps = NULL) {
+get_variable_lineage_igraph <- function(blueprints, dats = NULL, deps = NULL) {
   dep_tables <- lapply(
     seq_along(blueprints),
     function(i) {
@@ -102,6 +117,67 @@ get_variable_linage_igraph <- function(blueprints, dats = NULL, deps = NULL) {
   igraph::graph_from_data_frame(acc_edges, directed = TRUE, vertices = acc_node)
 }
 
+#' @describeIn variable_lineage Filter for specific variables to include
+#'   in the lineage graph
+#' @export
+filter_variable_lineage <- function(g, variables = NULL, tables = NULL, mode = "all", cutoff = -1) {
+  var_names <- character()
+  var_dats <- character()
+
+  for (var_pat in variables) {
+    var_names <- c(
+      var_names,
+      match_varname_var(g, var_pat)
+    )
+  }
+
+  for (dat_pat in tables) {
+    var_dats <- c(
+      var_dats,
+      match_varname_dat(g, dat_pat)
+    )
+  }
+
+  if (!is.null(variables) && !is.null(tables)) {
+    var_names <- intersect(var_names, var_dats)
+  } else {
+    # If either NULL, keep mutually exclusive
+    var_names <- if (length(var_names) > 0) unique(var_names) else unique(var_dats)
+  }
+
+  list_vars <- vector("list", length(var_names))
+  names(list_vars) <- var_names
+
+  for (v in var_names) {
+    list_vars[[v]] <- igraph::all_simple_paths(g, from = v, mode = mode, cutoff = cutoff)
+  }
+
+  list_vars <- unlist(list_vars, recursive = FALSE)
+  igraph::V(g)$keep <- FALSE
+
+  for (vert in list_vars) {
+    igraph::V(g)[vert]$keep <- TRUE
+  }
+
+  igraph::delete_vertex_attr(
+    igraph::induced_subgraph(
+      g,
+      which(igraph::V(g)$keep == TRUE)
+    ),
+    "keep"
+  )
+}
+
+match_varname_var <- function(g, pattern) {
+  sub_vs <- igraph::V(g)[grepl(pattern, igraph::V(g)$varname)]
+  sub_vs$name
+}
+
+match_varname_dat <- function(g, pattern) {
+  sub_vs <- igraph::V(g)[grepl(pattern, igraph::V(g)$database)]
+  sub_vs$name
+}
+
 #' @describeIn variable_lineage Visualizes variable lineage with visNetwork.
 #'   Returns an interactive graph.
 #' @export
@@ -111,6 +187,13 @@ vis_variable_lineage <- function(..., g = NULL, cluster_by_dataset = TRUE) {
   }
 
   g <- g %||% load_variable_lineage(...)
+
+  # Add table tooltip in case there is only one var in a selected table, which
+  # drops the "Table: " label
+  igraph::V(g)$title <- paste0(
+    "<strong>", igraph::V(g)$varname, "</strong><br /><br />",
+    "Table: ", igraph::V(g)$database
+  )
 
   # Make properties compatible with visNetwork
   igraph::V(g)$group <- igraph::V(g)$database
@@ -137,7 +220,8 @@ vis_variable_lineage <- function(..., g = NULL, cluster_by_dataset = TRUE) {
     vis_g <- visNetwork::visClusteringByGroup(
       vis_g,
       groups = unique(vis_g$x$nodes$group),
-      label = "Table: "
+      label = "Table: ",
+      scale_size = FALSE
     )
   }
 
