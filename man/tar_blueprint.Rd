@@ -28,3 +28,10 @@ this function. The arguments for \code{tar_blueprint()} are exactly the same as
 \code{blueprint()}. \code{tar_blueprints()} behaves like \code{load_blueprints()} but is
 called, like \code{tar_blueprint()}, directly in a \code{tar_pipeline()} object.
 }
+\section{Empty blueprint folder}{
+By default, blueprintr ignore empty blueprint folders. However, it may be beneficial
+to warn users if folder is empty, particularly during project setup. This helps
+identify any potential misconfiguration of targets generation. To enable these warnings,
+set \code{option(blueprintr.warn_empty_blueprints_dirs = TRUE)}.
+}
+
