@@ -112,6 +112,13 @@ vis_variable_lineage <- function(..., g = NULL, cluster_by_dataset = TRUE) {
 
   g <- g %||% load_variable_lineage(...)
 
+  # Add table tooltip in case there is only one var in a selected table, which
+  # drops the "Table: " label
+  igraph::V(g)$title <- paste0(
+    "<strong>", igraph::V(g)$varname, "</strong><br /><br />",
+    "Table: ", igraph::V(g)$database
+  )
+
   # Make properties compatible with visNetwork
   igraph::V(g)$group <- igraph::V(g)$database
   igraph::V(g)$shape <- ifelse(
