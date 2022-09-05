@@ -20,7 +20,7 @@ of known functions. This approach yields a more consistent lineage.'><meta prope
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">blueprintr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
       </span>
     </div>
 
@@ -68,6 +68,14 @@ of known functions. This approach yields a more consistent lineage.</p>
 <span>  script <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org//reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"_targets.R"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">filter_variable_lineage</span><span class="op">(</span></span>
+<span>  <span class="va">g</span>,</span>
+<span>  variables <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  tables <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  mode <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>  cutoff <span class="op">=</span> <span class="op">-</span><span class="fl">1</span></span>
+<span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">vis_variable_lineage</span><span class="op">(</span><span class="va">...</span>, g <span class="op">=</span> <span class="cn">NULL</span>, cluster_by_dataset <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -86,14 +94,41 @@ of known functions. This approach yields a more consistent lineage.</p>
 to using targets.</p></dd>
 
 
-<dt>...</dt>
-<dd><p>Arguments passed to load_variable_lineage</p></dd>
-
-
 <dt>g</dt>
 <dd><p>An igraph object. This defaults to a graph loaded with
 load_variable_lineage. However, use this if you
 want to inspect subgraphs of the variable lineage.</p></dd>
+
+
+<dt>variables</dt>
+<dd><p>Character vector of patterns for variable names to
+match. Note that each pattern is assumed to be disjoint (e.g. "if variable pattern
+A <em>or</em> variable pattern B"), but if <code>tables</code> is not <code>NULL</code>, the search will be joint
+(e.g. "if (variable pattern A <em>or</em> variable pattern B) <em>and</em> (table pattern A <em>or</em>
+table pattern B)").</p></dd>
+
+
+<dt>tables</dt>
+<dd><p>Character vector of patterns for table names to match. Note that
+each pattern is assumed to be disjoint (e.g. "if table pattern A <em>or</em> table pattern B"),
+but if <code>variables</code> is not <code>NULL</code>, the search will be joint (e.g. "if (table pattern A
+<em>or</em> table pattern B) <em>and</em> (variable pattern A <em>or</em> variable pattern B)").</p></dd>
+
+
+<dt>mode</dt>
+<dd><p>Which sort of relationships to include. Defaults to "all" (includes both
+relations <em>to</em> the target node in the graph and <em>from</em> the target node in the graph).
+See <a href="https://rdrr.io/pkg/igraph/man/all_simple_paths.html" class="external-link">igraph::all_simple_paths()</a> for more details.</p></dd>
+
+
+<dt>cutoff</dt>
+<dd><p>The number of node steps to consider in the graph traversal for filtering.
+Defaults to -1 (no limit on steps). See <a href="https://rdrr.io/pkg/igraph/man/all_simple_paths.html" class="external-link">igraph::all_simple_paths()</a>
+for more details.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Arguments passed to load_variable_lineage</p></dd>
 
 
 <dt>cluster_by_dataset</dt>
@@ -110,6 +145,8 @@ respective dataset</p></dd>
     
 <ul><li><p><code>load_variable_lineage()</code>: Reads blueprintrs from folder to get variable lineage.
 Returns an igraph of the variable lineage.</p></li>
+<li><p><code>filter_variable_lineage()</code>: Filter for specific variables to include
+in the lineage graph</p></li>
 <li><p><code>vis_variable_lineage()</code>: Visualizes variable lineage with visNetwork.
 Returns an interactive graph.</p></li>
 </ul></div>
