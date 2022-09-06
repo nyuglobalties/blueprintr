@@ -53,18 +53,18 @@ load_variable_lineage <- function(directory = here::here("blueprints"),
     bp_err("callr needed to run project file in separate process")
   }
 
-  callr::r(
+  bp_list <- callr::r(
     function(script, directory, recurse) {
       source(script)
 
       dirs <- load_dirs_recurse(directory, recurse)
-      bp_list <- fetch_blueprints_from_dir(dirs)
-
-      get_variable_lineage_igraph(bp_list)
+      fetch_blueprints_from_dir(dirs)
     },
     args = list(script = script, directory = directory, recurse = recurse),
     package = "blueprintr"
   )
+
+  get_variable_lineage_igraph(bp_list)
 }
 
 
@@ -267,7 +267,7 @@ blueprint_variable_dep_tables <- function(bp, dat = NULL, deps = NULL, ...) {
   )
   names(bp_dep_types) <- bp_all_deps
 
-  if (length(bp_deps) > 0) {
+  if (length(bp_all_deps) > 0) {
     if (is.null(deps)) {
       deps <- vl_populate_deps(bp_all_deps, ...)
     } else {

@@ -252,6 +252,64 @@ test_that("Table lineage works with sources", {
   expect_setequal(test_dep_tables$sources$name, "source_dat")
 })
 
+test_that("Deep lineage works with sources", {
+  root_bp <- blueprint(
+    "root_table",
+    command = {
+      .SOURCE("source_dat")
+    }
+  )
+
+  part1_bp <- blueprint(
+    "part1_table",
+    command =
+      .TARGET("root_table") %>%
+        dplyr::select(mpg, cyl)
+  )
+
+  part2_bp <- blueprint(
+    "part2_table",
+    command =
+      .TARGET("root_table") %>%
+        dplyr::select(disp, hp)
+  )
+
+  combined_bp <- blueprint(
+    "combined_table",
+    command = cbind(.TARGET("part1_table"), .TARGET("part2_table"))
+  )
+
+  source_dat <- add_variable_uuids(mtcars)
+
+  root_bp_dat <- source_dat
+  root_bp_dat <- add_variable_uuids(root_bp_dat)
+
+  part1_bp_dat <- dplyr::select(root_bp_dat, mpg, cyl)
+  part1_bp_dat <- add_variable_uuids(part1_bp_dat)
+
+  part2_bp_dat <- dplyr::select(root_bp_dat, disp, hp)
+  part2_bp_dat <- add_variable_uuids(part2_bp_dat)
+
+  combined_bp_dat <- cbind(part1_bp_dat, part2_bp_dat)
+  combined_bp_dat <- add_variable_uuids(combined_bp_dat)
+
+  g <- get_variable_lineage_igraph(
+    list(root_bp, part1_bp, part2_bp, combined_bp),
+    dats = list(root_bp_dat, part1_bp_dat, part2_bp_dat, combined_bp_dat),
+    deps = list(
+      list(source_dat = source_dat),
+      list(root_table = root_bp_dat),
+      list(root_table = root_bp_dat),
+      list(part1_table = part1_bp_dat, part2_table = part2_bp_dat)
+    )
+  )
+
+  expect_setequal(
+    igraph::V(g)$database,
+    c("source_dat", "root_table", "part1_table", "part2_table", "combined_table")
+  )
+})
+
 test_that("Requested igraphs are rendered correctly", {
   skip_if_not_installed("igraph")
 
