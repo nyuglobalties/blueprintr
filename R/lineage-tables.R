@@ -21,18 +21,18 @@ load_table_lineage <- function(directory = here::here("blueprints"),
     bp_err("callr needed to run project file in separate process")
   }
 
-  callr::r(
+  bp_list <- callr::r(
     function(script, directory, recurse) {
       source(script)
 
       dirs <- load_dirs_recurse(directory, recurse)
-      bp_list <- fetch_blueprints_from_dir(dirs)
-
-      get_table_linage_igraph(bp_list)
+      fetch_blueprints_from_dir(dirs)
     },
     args = list(script = script, directory = directory, recurse = recurse),
     package = "blueprintr"
   )
+
+  get_table_linage_igraph(bp_list)
 }
 
 #' Visualize table lineage with visNetwork
