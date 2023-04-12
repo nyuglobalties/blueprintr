@@ -40,88 +40,84 @@ cache_location <- tempdir()
 drake::clean(cache = drake::drake_cache(cache_location))
 ```
 
-blueprintr is a companion to [drake](https://github.com/ropensci/drake) that focuses on documenting and testing tabular data. Whereas drake manages the workflow execution, blueprintr defines a collection of steps that need to be run in a drake workflow.
+`blueprintr` is a plugin to [drake](https://github.com/ropensci/drake) or [targets](https://cran.r-project.org/web/packages/targets/) that adds automated steps for tabular dataset documentation and testing. This package creates a replicable framework to prevent programming issues from affecting your analysis results.
+
+# Installation 
+
+```{r setup}
+install.packages("remotes")
+remotes::install_github("nyuglobalties/blueprintr")
+```
 
 # Basic Use
 
-The first, and recommended, step is to attach blueprintr to your R session with `library()`.
+The top level of the `blueprintr` workflow is a "blueprints" directory, consisting of `.R` files-- each a blueprint. 
+Each blueprint will instruct drake or targets on how to build a specific dataset and allows the user to specify any tests or checks that need to be done on the dataset. 
 
-```{r setup}
-library(blueprintr)
-```
-
-In a [drake project](https://books.ropensci.org/drake/projects.html), all packages that you want attached are declared in a `"packages.R"` file. This `library(blueprintr)` command should go there.
-
-blueprintr is built around "blueprints." Our first blueprint will be a blueprint for `mtcars`:
-
-```{r}
-blueprint(
-  "mtcars_dat",
-  description = "The famous mtcars dataset",
-  command = {
-    mtcars
-  }
-)
-```
-
-All blueprints have
-
-* A name (the first argument) for the _target_ dataset.
-* A description or brief summary of what the target is. Can be `NULL`.
-* A command, which is a quoted statement that has the code for building this target.
-* A metadata location, which is a path to where the target metadata is saved.
-
-<div class="vg-warning"><span>the blueprint name is "mtcars_dat" rather than "mtcars". If the two had the same name, drake would determine that the blueprint has a _circular dependency_ (it depends on itself). To avoid this, blueprints should not have the same names as global variables, like `mtcars`.</span></div>
-
-To get this loaded into a drake plan, we need to _attach_ it to an already existing plan using
-
-```r
-attach_blueprint(plan, blueprint)
-attach_blueprints(plan, ...)
-```
-
-<div class="vg-info"><span>`attach_blueprints` accepts "[tidy dots](https://adv-r.hadley.nz/quasiquotation.html#tidy-dots)", so if you have a `list()` of blueprints, you can "splat" all of those blueprints into `attach_blueprints` like `attach_blueprints(plan, !!!list_of_blueprints)`</span></div>
-
-If you don't have an existing plan, you can create one with
-
-```r
-plan_from_blueprint(blueprint)
-```
-
-For now, we'll use an already existing plan, which is probably what you'll have most of the time.
-
-```{r, include=FALSE}
-existing_plan <- drake::drake_plan(initial_vector = runif(1000), squared = initial_vector ^ 2)
-```
-
-```{r}
-attach_blueprint(
-  existing_plan,
-  blueprint(
-    "mtcars_dat",
-    description = "The famous mtcars dataset",
-    command = {
-      mtcars
-    }
-  )
-)
-```
-
-blueprintr creates five "steps" (targets) per blueprint:
+`blueprintr` has five "steps" (targets) per blueprint:
 
 Target name             | Description
 ------------------------|--------------
 `{blueprint}_initial`   | The result of running the blueprint's `command`
 `{blueprint}_blueprint` | A copy of the blueprint to be used throughout the plan
 `{blueprint}_meta`      | A copy of the dataset metadata --- if the metadata file doesn't exist, it will be created in this step
-`{blueprint}_checks`    | Runs all checks on the `{blueprint}_initial` target
+`{blueprint}_checks`    | Runs all tests on the `{blueprint}_initial` target
 `{blueprint}`           | The built dataset after running some cleanup tasks
-
-At this point, you're able to run `drake::make()` on this plan!
 
 <div class="vg-warning"><span>when writing other targets in your plan, it is advised to **not** refer to the `{blueprint}_initial` step since it could have problems which are discovered in the `{blueprint}_checks` step.</span></div>
 
-```{r delete_cache, include=FALSE}
-unlink(cache_location, recursive = TRUE)
+`blueprintr` takes three arguments:
+  * name : the name of your generated dataset 
+  * description: a description of your dataset
+  * command: any functions that need to be applied in order to build the dataset. 
+
+Our first blueprint will create a dataset with the first few rows of a dataset `dat`:
+
+```{r}
+blueprint(
+  "dataset_name",
+  description = "The first few rows of the a dataset",
+  command = {
+    # Code needed for building this target
+    dat |>
+      head()
+  }
+)
 ```
 
+You can create this blueprint, or multiple blueprints at once, via the pipeline using: 
+```{r}
+# Example in targets
+targets::tar_make()
+
+# Example in drake
+drake::make()
+```
+
+
+After creating a blueprint, you can load it anywhere in the pipeline via: 
+```{r}
+# In targets:
+targets::tar_load(dataset_name)
+
+dataset_name
+
+#> <blueprint: 'dataset_name'>
+#>
+#> Description: The first six rows of the a dataset
+#> Annotations: DISABLED
+#> Metadata location: '/Users/patrickanker/dev/blueprintr/blueprints/dat_name.csv'
+#>
+#> -- Command --
+#> Workflow command:
+#> {
+#>     dat |>
+#>      head()
+#> }
+#>
+#> Raw command:
+#> {
+#>     dat |>
+#>      head()
+#> }
+```
