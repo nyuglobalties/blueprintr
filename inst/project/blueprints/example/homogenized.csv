@@ -1,0 +1,14 @@
+name,type,description,coding
+name,character,Name of Car,
+mpg,double,Miles per gallon,
+cyl,double,Number of cylinders,
+disp,double,Displacement,
+hp,double,Gross horsepower,
+drat,double,Rear axle ratio,
+wt,double,Weight,
+qsec,double,Quarter mile time,
+vs,character,Engine,"coding(code(""1"",""straight""), code(""0"", ""v-shaped""))"
+am,character,Transmission,"coding(code(""1"",""manual""), code(""0"", ""automatic""))"
+gear,double,Number of forward gears,
+carb,double,Number of carburetors,
+wave,character,,

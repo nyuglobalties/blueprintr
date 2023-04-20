@@ -1,5 +1,5 @@
 ---
-title: "A Walkthrough of blueprintr"
+title: "Introduction to blueprintr"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{A Walkthrough of blueprintr}
@@ -38,23 +38,38 @@ set.seed(0x7bae)
 cache_location <- tempdir()
 
 drake::clean(cache = drake::drake_cache(cache_location))
+devtools::document()
 ```
 
-`blueprintr` is a plugin to [drake](https://github.com/ropensci/drake) or [targets](https://cran.r-project.org/web/packages/targets/) that adds automated steps for tabular dataset documentation and testing. This package creates a replicable framework to prevent programming issues from affecting your analysis results.
+`blueprintr` is a framework for managing your data assets in a reproducible fashion. While it uses [drake](https://github.com/ropensci/drake) or [targets](https://cran.r-project.org/web/packages/targets/), it adds automated steps for tabular dataset documentation and testing. This allows researchers to create a replicable framework to prevent programming issues from affecting analysis results.
 
-# Installation 
+## Installation 
 
-```{r setup}
+```{r setup, results= FALSE}
 install.packages("remotes")
 remotes::install_github("nyuglobalties/blueprintr")
+
+# Loading in our libraries:
+library(blueprintr)
+library(data.table)
 ```
 
-# Basic Use
+## Designed Use of blueprintr
+`blueprintr` provides your data with guardrails typically found in software engineering workflows. 
+This allows you to test and document before deploying to production.
 
 The top level of the `blueprintr` workflow is a "blueprints" directory, consisting of `.R` files-- each a blueprint. 
-Each blueprint will instruct drake or targets on how to build a specific dataset and allows the user to specify any tests or checks that need to be done on the dataset. 
 
-`blueprintr` has five "steps" (targets) per blueprint:
+### About blueprints
+Each blueprint has two components to it: 
+* Data Construction Spec, usually a `.R` file that instructs drake or targets on how to build a specific dataset. 
+* Metadata, usually a `.csv` file that incorporates any mapping files and checks that need to be done on the dataset. 
+
+In order to create a blueprint, we use the `blueprint` function. This function takes three arguments: name (the name of your generated dataset), description (a description of your dataset), command (any functions that need to be applied in order to build the dataset). 
+
+A project may need only a few blueprints, but more likely you'll need nested blueprints to transform the data. 
+
+`blueprintr` has six "steps" (targets) per blueprint:
 
 Target name             | Description
 ------------------------|--------------
@@ -63,61 +78,78 @@ Target name             | Description
 `{blueprint}_meta`      | A copy of the dataset metadata --- if the metadata file doesn't exist, it will be created in this step
 `{blueprint}_checks`    | Runs all tests on the `{blueprint}_initial` target
 `{blueprint}`           | The built dataset after running some cleanup tasks
+`{blueprint}_meta_path` | Creates the metadata file or loads it
 
 <div class="vg-warning"><span>when writing other targets in your plan, it is advised to **not** refer to the `{blueprint}_initial` step since it could have problems which are discovered in the `{blueprint}_checks` step.</span></div>
 
-`blueprintr` takes three arguments:
-  * name : the name of your generated dataset 
-  * description: a description of your dataset
-  * command: any functions that need to be applied in order to build the dataset. 
 
-Our first blueprint will create a dataset with the first few rows of a dataset `dat`:
+## Example
 
+Let's take a well known dataset-- `mtcars`, and create a blueprint for it.
+
+```{r}
+our_mtcars <- copy(mtcars)
+setDT(our_mtcars, keep.rownames = TRUE[])
+
+# Inspecting our mtcars dataset
+our_mtcars |>
+  head()
+```
+
+We can load in a user-created mapping file. This mapping file acts as a map for any variable name changes, as well as coding changes. 
+```{r}
+mapping_file <- system.file("mapping/mtcars_item_mapping.csv", package = "blueprintr", mustWork = TRUE)
+# Read this csv file:
+item_mapping <- mapping_file |>
+  readr::read_csv(
+    col_types = readr::cols(
+      name_1 = readr::col_character(),
+      description_1 = readr::col_character(),
+      coding_1 = readr::col_character(),
+      panel = readr::col_character(),
+      homogenized_name = readr::col_character(),
+      homogenized_coding = readr::col_character(),
+      homogenized_description = readr::col_character()
+    )
+  )
+item_mapping
+```
+
+Then, we use `panelcleaner` to attach our mapping file to the `mtcars` database.
+Typically, this is a command executed in the dataset construction spec.
 ```{r}
 blueprint(
-  "dataset_name",
-  description = "The first few rows of the a dataset",
+  "mt_cars",
+  description = "mtcars database with attached metadata",
+  annotate = TRUE,
   command = {
-    # Code needed for building this target
-    dat |>
-      head()
+    pnl <- panelcleaner::enpanel("MTCARS_PANEL", our_mtcars) |>
+      panelcleaner::add_mapping(item_mapping) |>
+      panelcleaner::homogenize_panel() |>
+      panelcleaner::bind_waves() |>
+      as.data.frame()
+
+    pnl_name <- get_attr(pnl, "panel_name")
+    pnl_mapping <- get_attr(pnl, "mapping")
+
+    pnl <-
+      pnl
+
+    class(pnl) <- c("mapped_df", class(pnl))
+    set_attrs(pnl, mapping = pnl_mapping, panel_name = pnl_name)
   }
-)
+) |>
+  bp_include_panelcleaner_meta()
 ```
-
-You can create this blueprint, or multiple blueprints at once, via the pipeline using: 
-```{r}
-# Example in targets
-targets::tar_make()
-
-# Example in drake
-drake::make()
+When running this code with either `targets` or `drake`, the blueprint metadata is automatically created.
+For our mtcars example, this looks like:
+```{r, echo= FALSE}
+mtcars_metadata <- system.file("project/blueprints/example/homogenized.csv", package = "blueprintr", mustWork = TRUE)
+# Read this csv file:
+mtcars_metadata |>
+  readr::read_csv()
 ```
-
-
-After creating a blueprint, you can load it anywhere in the pipeline via: 
-```{r}
-# In targets:
-targets::tar_load(dataset_name)
-
-dataset_name
-
-#> <blueprint: 'dataset_name'>
-#>
-#> Description: The first six rows of the a dataset
-#> Annotations: DISABLED
-#> Metadata location: '/Users/patrickanker/dev/blueprintr/blueprints/dat_name.csv'
-#>
-#> -- Command --
-#> Workflow command:
-#> {
-#>     dat |>
-#>      head()
-#> }
-#>
-#> Raw command:
-#> {
-#>     dat |>
-#>      head()
-#> }
-```
+Manually editing the metadata allows the user to add tests to check the data type and values. 
+And there you have it! You have created your first blueprint on the `mtcars` dataset. 
+When running a pipeline with `blueprintr`, the checks allow researchers to be warned of any issues at an early stage, 
+allowing them to produce replicable results. 
