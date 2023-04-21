@@ -115,8 +115,8 @@ item_mapping <- mapping_file |>
 item_mapping
 ```
 
-Then, we use `panelcleaner` to attach our mapping file to the `mtcars` database.
-Typically, this is a command executed in the dataset construction spec.
+Then, we typically use a tool such as `panelcleaner` to attach our mapping file to the `mtcars` database.
+This is a command executed in the dataset construction spec.
 ```{r}
 blueprint(
   "mt_cars",
