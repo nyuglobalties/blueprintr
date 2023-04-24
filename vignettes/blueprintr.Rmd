@@ -38,8 +38,6 @@ set.seed(0x7bae)
 cache_location <- tempdir()
 
 drake::clean(cache = drake::drake_cache(cache_location))
-install.packages("devtools")
-devtools::document()
 ```
 
 `blueprintr` is a framework for managing your data assets in a reproducible fashion. While it uses [drake](https://github.com/ropensci/drake) or [targets](https://cran.r-project.org/web/packages/targets/), it adds automated steps for tabular dataset documentation and testing. This allows researchers to create a replicable framework to prevent programming issues from affecting analysis results.
