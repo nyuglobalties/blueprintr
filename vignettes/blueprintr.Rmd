@@ -38,6 +38,7 @@ set.seed(0x7bae)
 cache_location <- tempdir()
 
 drake::clean(cache = drake::drake_cache(cache_location))
+install.packages("devtools")
 devtools::document()
 ```
 
