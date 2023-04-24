@@ -45,12 +45,10 @@ drake::clean(cache = drake::drake_cache(cache_location))
 ## Installation 
 
 ```{r setup, results= FALSE}
-install.packages("remotes")
-remotes::install_github("nyuglobalties/blueprintr")
+# install.packages("remotes")
+# remotes::install_github("nyuglobalties/blueprintr")
 
-# Loading in our libraries:
 library(blueprintr)
-library(data.table)
 ```
 
 ## Designed Use of blueprintr
@@ -87,8 +85,8 @@ Target name             | Description
 Let's take a well known dataset-- `mtcars`, and create a blueprint for it.
 
 ```{r}
-our_mtcars <- copy(mtcars)
-setDT(our_mtcars, keep.rownames = TRUE[])
+our_mtcars <- data.table::copy(mtcars)
+data.table::setDT(our_mtcars, keep.rownames = TRUE[])
 
 # Inspecting our mtcars dataset
 our_mtcars |>
