@@ -55,7 +55,7 @@ library(blueprintr)
 `blueprintr` provides your data with guardrails typically found in software engineering workflows. 
 This allows you to test and document before deploying to production.
 
-The top level of the `blueprintr` workflow is a "blueprints" directory, consisting of `.R` files-- each a blueprint. 
+The top level of the `blueprintr` workflow is a "blueprints" directory, consisting of `.R` and `.csv` files. 
 
 ### About blueprints
 Each blueprint has two components to it: 
@@ -66,16 +66,16 @@ In order to create a blueprint, we use the `blueprint` function. This function t
 
 A project may need only a few blueprints, but more likely you'll need nested blueprints to transform the data. 
 
-`blueprintr` has six "steps" (targets) per blueprint:
+`blueprintr` generates six "steps" (targets) per blueprint:
 
 Target name             | Description
 ------------------------|--------------
 `{blueprint}_initial`   | The result of running the blueprint's `command`
 `{blueprint}_blueprint` | A copy of the blueprint to be used throughout the plan
 `{blueprint}_meta`      | A copy of the dataset metadata --- if the metadata file doesn't exist, it will be created in this step
+`{blueprint}_meta_path` | Creates the metadata file or loads it
 `{blueprint}_checks`    | Runs all tests on the `{blueprint}_initial` target
 `{blueprint}`           | The built dataset after running some cleanup tasks
-`{blueprint}_meta_path` | Creates the metadata file or loads it
 
 <div class="vg-warning"><span>when writing other targets in your plan, it is advised to **not** refer to the `{blueprint}_initial` step since it could have problems which are discovered in the `{blueprint}_checks` step.</span></div>
 
@@ -85,12 +85,11 @@ Target name             | Description
 Let's take a well known dataset-- `mtcars`, and create a blueprint for it.
 
 ```{r}
-our_mtcars <- data.table::copy(mtcars)
-data.table::setDT(our_mtcars, keep.rownames = TRUE[])
+# Keeping the row names under the column `rn`
+our_mtcars <- mtcars |> tibble::as_tibble(rownames = "rn")
 
 # Inspecting our mtcars dataset
-our_mtcars |>
-  head()
+head(our_mtcars)
 ```
 
 We can load in a user-created mapping file. This mapping file acts as a map for any variable name changes, as well as coding changes. 
