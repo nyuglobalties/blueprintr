@@ -1,3 +1,7 @@
+# blueprintr 0.2.4
+* Updated the vignettes
+* Added a new folder under `inst` to add metadata to the vignettes
+
 # blueprintr 0.2.3
 * Add ability to filter variable lineage with `blueprintr::filter_variable_lineage()`
 * Add tooltop for variable node in variable lineage
