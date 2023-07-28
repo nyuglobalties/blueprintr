@@ -26,52 +26,39 @@ label_columns <- function(df, blueprint, meta) {
   meta <- dplyr::mutate(meta, .evaluated_coding = string_to_coding(.data$coding))
 
   for (variable in meta$name) {
-    df <- label_column(variable, df, meta)
+    df[[variable]] <- label_column(df[[variable]], variable, meta)
   }
 
   df
 }
 
-label_column <- function(variable, df, meta) {
+label_column <- function(x, nx, meta) {
   if ("title" %in% names(meta)) {
-    var_title <- meta[meta$name == variable, "title", drop = TRUE]
+    var_title <- meta[meta$name == nx, "title", drop = TRUE]
   } else {
-    var_title <- meta[meta$name == variable, "description", drop = TRUE]
+    var_title <- meta[meta$name == nx, "description", drop = TRUE]
   }
 
   if (var_title == "" || is.na(var_title)) {
     var_title <- NULL
   }
 
-  var_coding <- meta[meta$name == variable, ][[".evaluated_coding"]][[1]]
+  var_coding <- meta[meta$name == nx, ][[".evaluated_coding"]][[1]]
   haven_labels <- rcoder::coding_to_haven_labels(var_coding)
 
   if (!is.null(var_title)) {
-    names(var_title) <- variable
-    arg_list <- c(list(df), as.list(var_title))
-
-    df <- preserve_blueprintr_attrs(
-      df,
-      do.call,
-      labelled::set_variable_labels,
-      arg_list,
-      .f_of_dat = FALSE
-    )
+    x <- attr_safe(x, \(.x) {
+      labelled::var_label(.x) <- var_title
+      .x
+    }, .p = \(.nx) grepl("^(bpr\\.|\\.uuid)", .nx))
   }
 
   if (!is.null(haven_labels)) {
-    labels <- list(haven_labels)
-    names(labels) <- variable
-    arg_list <- c(list(df), labels)
-
-    df <- preserve_blueprintr_attrs(
-      df,
-      do.call,
-      labelled::set_value_labels,
-      arg_list,
-      .f_of_dat = FALSE
-    )
+    x <- attr_safe(x, \(.x) {
+      labelled::val_labels(.x) <- haven_labels
+      .x
+    }, .p = \(.nx) grepl("^(bpr\\.|\\.uuid)", .nx))
   }
 
-  df
+  x
 }
