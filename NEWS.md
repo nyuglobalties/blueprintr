@@ -1,3 +1,6 @@
+# blueprintr 0.2.4
+* Fix for issue where labelling large datasets would take a very long time
+
 # blueprintr 0.2.3
 * Add ability to filter variable lineage with `blueprintr::filter_variable_lineage()`
 * Add tooltop for variable node in variable lineage
