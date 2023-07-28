@@ -199,6 +199,17 @@ preserve_blueprintr_attrs <- function(dat, f, ..., .f_of_dat = TRUE) {
   dat
 }
 
+attr_safe <- function(.x, .f, ..., .p = NULL) {
+  attribs <- attributes(.x)
+
+  if (!is.null(.p)) {
+    attribs <- attribs[.p(names(attribs))]
+  }
+
+  .x <- .f(.x, ...)
+  set_attrs(.x, !!!attribs)
+}
+
 unique_val <- function(x) {
   ux <- unique(x)
 
