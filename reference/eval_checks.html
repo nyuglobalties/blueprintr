@@ -18,7 +18,7 @@ to determine if a built dataset passes all restrictions."><meta property="og:ima
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">blueprintr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.4</span>
       </span>
     </div>
 
@@ -71,6 +71,19 @@ to determine if a built dataset passes all restrictions.</p>
 <dd><p>The environment in which the calls are evaluated</p></dd>
 
 </dl></div>
+    <div id="check-functions">
+    <h2>Check functions</h2>
+    <p>Check functions are simple functions that take in either
+a data.frame or variable at the minimum, plus some extra
+arguments if need, and returns a logical value: <code>TRUE</code> or <code>FALSE.</code>
+In blueprintr, the entire check passes or fails unlike other
+testing frameworks like pointblank. If you'd like to embed
+extra context for your test result, modify the "check.errors"
+attribute of the returned logical value with a character vector
+which will be rendered into a bulleted list. Note: if you embed
+reasons for a <code>TRUE</code>, the check will produce a warning in the drake
+or targets pipeline.</p>
+    </div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -84,7 +97,7 @@ to determine if a built dataset passes all restrictions.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

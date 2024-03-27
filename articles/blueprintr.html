@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">blueprintr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.4</span>
       </span>
     </div>
 
@@ -74,7 +74,7 @@
 
       
 
-      </header><script src="blueprintr_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>A Walkthrough of blueprintr</h1>
@@ -106,15 +106,23 @@ div.vg-info span:before {
   content: "💡 Note: ";
 }
 </style>
-<p>blueprintr is a companion to <a href="https://github.com/ropensci/drake" class="external-link">drake</a> that focuses on documenting and testing tabular data. Whereas drake manages the workflow execution, blueprintr defines a collection of steps that need to be run in a drake workflow.</p>
+<p>blueprintr is a companion to <a href="https://github.com/ropensci/drake" class="external-link">drake</a> that focuses on
+documenting and testing tabular data. Whereas drake manages the workflow
+execution, blueprintr defines a collection of steps that need to be run
+in a drake workflow.</p>
 <div class="section level2">
 <h2 id="basic-use">Basic Use<a class="anchor" aria-label="anchor" href="#basic-use"></a>
 </h2>
-<p>The first, and recommended, step is to attach blueprintr to your R session with <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code>.</p>
+<p>The first, and recommended, step is to attach blueprintr to your R
+session with <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/nyuglobalties/blueprintr" class="external-link">blueprintr</a></span><span class="op">)</span></span></code></pre></div>
-<p>In a <a href="https://books.ropensci.org/drake/projects.html" class="external-link">drake project</a>, all packages that you want attached are declared in a <code>"packages.R"</code> file. This <code><a href="https://github.com/nyuglobalties/blueprintr" class="external-link">library(blueprintr)</a></code> command should go there.</p>
-<p>blueprintr is built around “blueprints.” Our first blueprint will be a blueprint for <code>mtcars</code>:</p>
+<p>In a <a href="https://books.ropensci.org/drake/projects.html" class="external-link">drake
+project</a>, all packages that you want attached are declared in a
+<code>"packages.R"</code> file. This <code><a href="https://github.com/nyuglobalties/blueprintr" class="external-link">library(blueprintr)</a></code>
+command should go there.</p>
+<p>blueprintr is built around “blueprints.” Our first blueprint will be
+a blueprint for <code>mtcars</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/blueprint.html">blueprint</a></span><span class="op">(</span></span>
 <span>  <span class="st">"mtcars_dat"</span>,</span>
@@ -127,7 +135,7 @@ div.vg-info span:before {
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Description: The famous mtcars dataset</span></span>
 <span><span class="co">#&gt; Annotations: DISABLED</span></span>
-<span><span class="co">#&gt; Metadata location: '/Users/runner/work/blueprintr/blueprintr/blueprints/mtcars_dat.csv'</span></span>
+<span><span class="co">#&gt; Metadata location: '/home/runner/work/blueprintr/blueprintr/blueprints/mtcars_dat.csv'</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; -- Command --</span></span>
 <span><span class="co">#&gt; Workflow command:</span></span>
@@ -142,24 +150,36 @@ div.vg-info span:before {
 <p>All blueprints have</p>
 <ul>
 <li>A name (the first argument) for the <em>target</em> dataset.</li>
-<li>A description or brief summary of what the target is. Can be <code>NULL</code>.</li>
-<li>A command, which is a quoted statement that has the code for building this target.</li>
-<li>A metadata location, which is a path to where the target metadata is saved.</li>
+<li>A description or brief summary of what the target is. Can be
+<code>NULL</code>.</li>
+<li>A command, which is a quoted statement that has the code for
+building this target.</li>
+<li>A metadata location, which is a path to where the target metadata is
+saved.</li>
 </ul>
 <div class="vg-warning">
-<span>the blueprint name is “mtcars_dat” rather than “mtcars”. If the two had the same name, drake would determine that the blueprint has a <em>circular dependency</em> (it depends on itself). To avoid this, blueprints should not have the same names as global variables, like <code>mtcars</code>.</span>
+<span>the blueprint name is “mtcars_dat” rather than “mtcars”. If the
+two had the same name, drake would determine that the blueprint has a
+<em>circular dependency</em> (it depends on itself). To avoid this,
+blueprints should not have the same names as global variables, like
+<code>mtcars</code>.</span>
 </div>
-<p>To get this loaded into a drake plan, we need to <em>attach</em> it to an already existing plan using</p>
+<p>To get this loaded into a drake plan, we need to <em>attach</em> it
+to an already existing plan using</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/attach_blueprint.html">attach_blueprint</a></span><span class="op">(</span><span class="va">plan</span>, <span class="va">blueprint</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/attach_blueprint.html">attach_blueprints</a></span><span class="op">(</span><span class="va">plan</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
 <div class="vg-info">
-<span><code>attach_blueprints</code> accepts “<a href="https://adv-r.hadley.nz/quasiquotation.html#tidy-dots" class="external-link">tidy dots</a>”, so if you have a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> of blueprints, you can “splat” all of those blueprints into <code>attach_blueprints</code> like <code>attach_blueprints(plan, !!!list_of_blueprints)</code></span>
+<span><code>attach_blueprints</code> accepts “<a href="https://adv-r.hadley.nz/quasiquotation.html#tidy-dots" class="external-link">tidy
+dots</a>”, so if you have a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> of blueprints, you can
+“splat” all of those blueprints into <code>attach_blueprints</code> like
+<code>attach_blueprints(plan, !!!list_of_blueprints)</code></span>
 </div>
 <p>If you don’t have an existing plan, you can create one with</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plan_from_blueprint.html">plan_from_blueprint</a></span><span class="op">(</span><span class="va">blueprint</span><span class="op">)</span></span></code></pre></div>
-<p>For now, we’ll use an already existing plan, which is probably what you’ll have most of the time.</p>
+<p>For now, we’ll use an already existing plan, which is probably what
+you’ll have most of the time.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/attach_blueprint.html">attach_blueprint</a></span><span class="op">(</span></span>
 <span>  <span class="va">existing_plan</span>,</span>
@@ -204,7 +224,8 @@ div.vg-info span:before {
 </tr>
 <tr class="odd">
 <td><code>{blueprint}_meta</code></td>
-<td>A copy of the dataset metadata — if the metadata file doesn’t exist, it will be created in this step</td>
+<td>A copy of the dataset metadata — if the metadata file doesn’t exist,
+it will be created in this step</td>
 </tr>
 <tr class="even">
 <td><code>{blueprint}_checks</code></td>
@@ -216,9 +237,13 @@ div.vg-info span:before {
 </tr>
 </tbody>
 </table>
-<p>At this point, you’re able to run <code><a href="https://docs.ropensci.org/drake/reference/make.html" class="external-link">drake::make()</a></code> on this plan!</p>
+<p>At this point, you’re able to run <code><a href="https://docs.ropensci.org/drake/reference/make.html" class="external-link">drake::make()</a></code> on this
+plan!</p>
 <div class="vg-warning">
-<span>when writing other targets in your plan, it is advised to <strong>not</strong> refer to the <code>{blueprint}_initial</code> step since it could have problems which are discovered in the <code>{blueprint}_checks</code> step.</span>
+<span>when writing other targets in your plan, it is advised to
+<strong>not</strong> refer to the <code>{blueprint}_initial</code> step
+since it could have problems which are discovered in the
+<code>{blueprint}_checks</code> step.</span>
 </div>
 </div>
   </div>
@@ -240,7 +265,7 @@ div.vg-info span:before {
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
