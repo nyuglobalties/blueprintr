@@ -1,3 +1,7 @@
+# blueprintr 0.2.5
+* Add capability to embed custom messages to check results, using `check.errors` attribute in returned logical value
+* Refactor side-effect messages from built-in checks to `check.errors`
+
 # blueprintr 0.2.4
 * Fix for issue where labelling large datasets would take a very long time
 
