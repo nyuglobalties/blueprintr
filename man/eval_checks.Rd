@@ -15,3 +15,16 @@ eval_checks(..., .env = parent.frame())
 Runs all checks -- dataset and variable -- on a blueprint
 to determine if a built dataset passes all restrictions.
 }
+\section{Check functions}{
+Check functions are simple functions that take in either
+a data.frame or variable at the minimum, plus some extra
+arguments if need, and returns a logical value: \code{TRUE} or \code{FALSE.}
+In blueprintr, the entire check passes or fails unlike other
+testing frameworks like {pointblank}. If you'd like to embed
+extra context for your test result, modify the "check.errors"
+attribute of the returned logical value with a character vector
+which will be rendered into a bulleted list. Note: if you embed
+reasons for a \code{TRUE}, the check will produce a warning in the drake
+or targets pipeline.
+}
+
