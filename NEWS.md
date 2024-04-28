@@ -1,6 +1,5 @@
 # blueprintr 0.2.5.9000 (dev version)
-* Updated the vignettes
-* Added a new folder under `inst` to add metadata to the vignettes
+* Update vignettes to demonstrate current workflow procedure (@hgao1, #59)
 
 # blueprintr 0.2.5
 * Add capability to embed custom messages to check results, using `check.errors` attribute in returned logical value
