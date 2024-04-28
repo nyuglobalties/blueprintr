@@ -1,6 +1,13 @@
-# blueprintr 0.2.4
+# blueprintr 0.2.5.9000 (dev version)
 * Updated the vignettes
 * Added a new folder under `inst` to add metadata to the vignettes
+
+# blueprintr 0.2.5
+* Add capability to embed custom messages to check results, using `check.errors` attribute in returned logical value
+* Refactor side-effect messages from built-in checks to `check.errors`
+
+# blueprintr 0.2.4
+* Fix for issue where labelling large datasets would take a very long time
 
 # blueprintr 0.2.3
 * Add ability to filter variable lineage with `blueprintr::filter_variable_lineage()`

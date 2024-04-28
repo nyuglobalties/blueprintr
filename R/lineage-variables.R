@@ -366,11 +366,10 @@ vl_parent_vars <- function(dat_table, dep_table) {
   parent_dat_table <- dat_table[!is.na(dat_table$parents), c("id", "uuid", "parents")]
 
   parent_dat_table_long <- dplyr::group_by(parent_dat_table, .data$uuid)
-  parent_dat_table_long <- dplyr::summarise(
+  parent_dat_table_long <- dplyr::reframe(
     parent_dat_table_long,
     id = unique(.data$id),
-    parents = unlist(strsplit(.data$parents, "\\|")),
-    .groups = "drop"
+    parents = unlist(strsplit(.data$parents, "\\|"))
   )
 
   # Choose current table variables over dependency tables' variables

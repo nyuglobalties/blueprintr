@@ -61,7 +61,7 @@ propagate_metadata <- function(metadata_dt, df, deps_metalist) {
 }
 
 link_dependency_meta <- function(meta_dt, deps_metalist) {
-  meta_dt <- dplyr::select(meta_dt, .data$name, .data$type)
+  meta_dt <- dplyr::select(meta_dt, "name", "type")
 
   deps_meta_full <- dplyr::bind_rows(!!!deps_metalist)
   deps_meta_full <- dplyr::rename(
@@ -69,7 +69,7 @@ link_dependency_meta <- function(meta_dt, deps_metalist) {
     deps_type = .data$type
   )
 
-  meta_dt <- dplyr::left_join(meta_dt, deps_meta_full, by = "name")
+  meta_dt <- dplyr::left_join(meta_dt, deps_meta_full, by = "name", multiple = "all")
   meta_dt <- dplyr::mutate(
     meta_dt,
     .origin = "metafile"

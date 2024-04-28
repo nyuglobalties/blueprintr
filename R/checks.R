@@ -29,28 +29,36 @@ all_variables_present <- function(df, meta, blueprint) {
   new_vars <- setdiff(names(df), known_vars)
   missing_vars <- setdiff(known_vars, names(df))
 
+  err_reasons <- NULL
+
   if (length(missing_vars) > 0) {
-    message(
-      glue("Expected variables are missing: {glue_collapse(missing_vars, ', ')}")
-    )
+    err_reasons <- glue("Expected variables are missing: [{glue_collapse(missing_vars, ', ')}]")
   }
 
   if (length(new_vars) > 0) {
-    message(
-      glue("Unexpected new variables: [{glue_collapse(new_vars, ', ')}]. "),
-      "Please edit documentation if this is intended."
-    )
+    err_reasons <- c(err_reasons, paste0(
+      paste0(
+        glue("Unexpected new variables: [{glue_collapse(new_vars, ', ')}]."),
+        "\n    Please edit documentation if this is intended."
+      )
+    ))
   }
 
+  res <- TRUE
+
   if (length(missing_vars) > 0) {
-    return(FALSE)
+    res <- FALSE
   }
 
   if (length(new_vars) > 0 && isTRUE(blueprint$stop_on_new_vars)) {
-    return(FALSE)
+    res <- FALSE
   }
 
-  TRUE
+  if (!res) {
+    return(fail_check(err_reasons))
+  }
+
+  warn_check(err_reasons)
 }
 
 #' @rdname checks
@@ -89,11 +97,7 @@ all_types_match <- function(df, meta) {
       dplyr::filter(.data$issue == TRUE) %>%
       dplyr::pull(.data$.err)
 
-    for (.err in errors) {
-      message(.err)
-    }
-
-    return(FALSE)
+    return(fail_check(errors))
   }
 
   TRUE
