@@ -48,21 +48,21 @@ check_data_call <- function(bp, meta) {
   )
 
   if (!is.null(meta) && ".parsed_tests" %in% names(meta)) {
-    variable_checks <-  purrr::map2(
+    variable_checks <- lapply2(
       meta$.parsed_tests,
       meta$name,
       function(.t, .n) {
         lapply(.t, interpret_raw_check, blueprint_target_name(bp), variable = .n)
       }
     )
-    variable_checks <- purrr::flatten(variable_checks)
+    variable_checks <- flatten(variable_checks)
   } else {
     variable_checks <- list()
   }
 
   all_checks <- c(all_checks, variable_checks)
 
-  call2(
+  rlang::call2(
     "eval_checks",
     !!!all_checks,
     .ns = "blueprintr"

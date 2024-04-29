@@ -20,7 +20,7 @@ plan_from_blueprint <- function(blueprint) {
 #' @rdname attach_blueprint
 #' @export
 attach_blueprints <- function(plan, ...) {
-  dots <- dots_list(...)
+  dots <- rlang::dots_list(...)
 
   for (blueprint in dots) {
     plan <- attach_blueprint(plan, blueprint)
@@ -48,13 +48,18 @@ attach_blueprint <- function(plan, blueprint) {
 
   bp_plan <- blueprint_plan(blueprint)
 
-  dplyr::bind_rows(plan, bp_plan)
+  out <- as.data.frame(tidytable::bind_rows(plan, bp_plan))
+
+  structure(
+    out,
+    class = c("drake_plan", class(out))
+  )
 }
 
 blueprint_plan <- function(bp) {
   steps <- assembly_steps(drake_assembler(), bp)
 
-  dplyr::bind_rows(!!!lapply(steps, function(step) step$built_payload))
+  tidytable::bind_rows(lapply(steps, function(step) step$built_payload))
 }
 
 deparse_lang_cols <- function(plan) {

@@ -82,7 +82,7 @@ test_that("extract_ast and collapse_ast are inverses", {
   expr7 <- quote(function(.x) {
     .x + 1
   })
-  expr8 <- quote(dplyr:::abort_glue(words))
+  expr8 <- quote(tidytable:::abort_glue(words))
   expr9 <- quote(stuff@hidden_function(words))
   expr10 <- quote(stuff$thing(words))
   expr11 <- quote(func(function(.x) ifelse(is.na(.x), 0, .x)))

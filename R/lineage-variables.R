@@ -363,34 +363,50 @@ vl_parent_tables <- function(dat_table, dep_table) {
 }
 
 vl_parent_vars <- function(dat_table, dep_table) {
-  parent_dat_table <- dat_table[!is.na(dat_table$parents), c("id", "uuid", "parents")]
+  parent_dat_table <- tidytable::filter(dat_table, !is.na(.data$parents))
+  parent_dat_table <- tidytable::select(
+    parent_dat_table,
+    tidyselect::all_of(c("id", "uuid", "parents"))
+  )
 
-  parent_dat_table_long <- dplyr::group_by(parent_dat_table, .data$uuid)
-  parent_dat_table_long <- dplyr::reframe(
-    parent_dat_table_long,
+  parent_dat_table_long <- tidytable::reframe(
+    parent_dat_table,
     id = unique(.data$id),
-    parents = unlist(strsplit(.data$parents, "\\|"))
+    parents = unlist(strsplit(.data$parents, "\\|")),
+    .by = tidyselect::all_of("uuid")
   )
 
   # Choose current table variables over dependency tables' variables
   # to preserve correct order of provenance
-  edges <- parent_dat_table_long[, c("parents", "id")]
+  edges <- tidytable::select(
+    parent_dat_table_long,
+    tidyselect::all_of(c("parents", "id"))
+  )
   names(edges) <- c("uuid", "to")
 
-  dat_edges <- dat_table[, c("uuid", "id")]
+  dat_edges <- tidytable::select(
+    dat_table,
+    tidyselect::all_of(c("uuid", "id"))
+  )
   names(dat_edges) <- c("uuid", "from_dat")
 
-  dep_edges <- dep_table[, c("uuid", "id")]
+  dep_edges <- tidytable::select(
+    dep_table,
+    tidyselect::all_of(c("uuid", "id"))
+  )
   names(dep_edges) <- c("uuid", "from_dep")
 
-  edges <- merge(edges, dat_edges, by = "uuid", all.x = TRUE)
-  edges <- merge(edges, dep_edges, by = "uuid", all.x = TRUE)
+  edges <- tidytable::left_join(edges, dat_edges, by = "uuid")
+  edges <- tidytable::left_join(edges, dep_edges, by = "uuid")
 
-  edges$from <- dplyr::coalesce(edges$from_dat, edges$from_dep)
+  edges$from <- tidytable::coalesce(edges$from_dat, edges$from_dep)
   edges$from_dat <- NULL
   edges$from_dep <- NULL
 
-  edges[, c("from", "to", "uuid")]
+  as.data.frame(tidytable::select(
+    edges,
+    tidyselect::all_of(c("from", "to", "uuid"))
+  ))
 }
 
 variable_uuid_option <- function() {

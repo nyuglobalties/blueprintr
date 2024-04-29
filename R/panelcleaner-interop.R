@@ -5,19 +5,19 @@ mdf_import_meta <- function(metadata_dt, mapped_df) {
 
   mapping_subset <- mdfm_keep_panel(mapped_df)
 
-  mapping_subset <- dplyr::select(
+  mapping_subset <- tidytable::select(
     mapping_subset,
     name = !!as.name(mdf_schema_homogenized_name(mapped_df)),
     pm_coding = !!as.name(mdf_schema_homogenized_coding(mapped_df))
   )
 
-  metadata_dt <- dplyr::left_join(
+  metadata_dt <- tidytable::left_join(
     metadata_dt,
     mapping_subset,
     by = "name"
   )
 
-  coalesce_pm_coding_cols(metadata_dt)
+  coalesce_pm_coding_cols(as.data.frame(metadata_dt))
 }
 
 mdfm_keep_panel <- function(mapped_df) {
@@ -56,7 +56,7 @@ coalesce_pm_coding_cols <- function(df) {
   stopifnot("pm_coding" %in% names(df))
 
   if ("coding" %in% names(df)) {
-    df$coding <- dplyr::coalesce(df$pm_coding, df$coding)
+    df$coding <- tidytable::coalesce(df$pm_coding, df$coding)
   } else {
     df$coding <- df$pm_coding
   }

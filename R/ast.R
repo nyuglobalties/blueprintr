@@ -24,7 +24,7 @@ ast <- function(.call) {
       "function" = function_ast(.call),
       structure(
         list(
-          head = call_name(.call),
+          head = rlang::call_name(.call),
           args = as.list(.call)[-1]
         ),
         class = "ast"
@@ -34,13 +34,13 @@ ast <- function(.call) {
 }
 
 head_is_symbol <- function(.call) {
-  is_symbol(node_car(.call))
+  rlang::is_symbol(rlang::node_car(.call))
 }
 
 head_sym_chr <- function(.call) {
   stopifnot(head_is_symbol(.call))
 
-  as.character(node_car(.call))
+  as.character(rlang::node_car(.call))
 }
 
 qualified_ast <- function(.call) {
@@ -48,7 +48,7 @@ qualified_ast <- function(.call) {
   qual_head <- qualified_head(.call)
 
   if (is_namespaced_call(.call)) {
-    namespace <- call_ns(.call)
+    namespace <- rlang::call_ns(.call)
   } else {
     namespace <- NULL
   }
@@ -66,15 +66,15 @@ qualified_ast <- function(.call) {
 }
 
 call_name_ <- function(.call) {
-  out <- call_name(.call)
+  out <- rlang::call_name(.call)
 
   if (!is.null(out)) {
     return(out)
   }
 
-  out <- node_cdar(.call)[[2]]
+  out <- rlang::node_cdar(.call)[[2]]
 
-  if (!is_symbol(out)) {
+  if (!rlang::is_symbol(out)) {
     bp_err("Cannot identify head symbol: {safe_deparse(.call)}")
   }
 
@@ -86,18 +86,18 @@ is_language <- function(x) {
 }
 
 is_leaf <- function(x) {
-  is_syntactic_literal(x) || is_symbol(x)
+  rlang::is_syntactic_literal(x) || rlang::is_symbol(x)
 }
 
 qualifier <- function(.call) {
   stopifnot(is_language(.call))
 
   if (is_qualified_call(.call)) {
-    return(qualifier(node_car(.call)))
+    return(qualifier(rlang::node_car(.call)))
   }
 
   if (is_qualified_expr(.call)) {
-    node_car(.call)
+    rlang::node_car(.call)
   } else {
     NULL
   }
@@ -106,7 +106,7 @@ qualifier <- function(.call) {
 qualified_head <- function(.call) {
   stopifnot(is_language(.call))
 
-  extract_ast(node_car(node_cdar(.call)))
+  extract_ast(rlang::node_car(rlang::node_cdar(.call)))
 }
 
 is_qualified_expr <- function(.call) {
@@ -114,15 +114,15 @@ is_qualified_expr <- function(.call) {
     return(FALSE)
   }
 
-  if (!is_symbol(node_car(.call))) {
+  if (!rlang::is_symbol(rlang::node_car(.call))) {
     return(FALSE)
   }
 
-  if (length(node_cdr(.call)) != 2) {
+  if (length(rlang::node_cdr(.call)) != 2) {
     return(FALSE)
   }
 
-  head_sym <- node_car(.call)
+  head_sym <- rlang::node_car(.call)
 
   identical(head_sym, quote(`::`)) ||
     identical(head_sym, quote(`:::`)) ||
@@ -135,11 +135,11 @@ is_qualified_call <- function(.call) {
     return(FALSE)
   }
 
-  if (!is_language(node_car(.call))) {
+  if (!is_language(rlang::node_car(.call))) {
     return(FALSE)
   }
 
-  is_qualified_expr(node_car(.call))
+  is_qualified_expr(rlang::node_car(.call))
 }
 
 is_namespaced_call <- function(.call) {
@@ -170,7 +170,7 @@ function_ast <- function(.call) {
 
   structure(
     list(
-      head = call_name(.call),
+      head = rlang::call_name(.call),
       fargs = as.list(call_list[[2]]),
       args = call_list[[3]]
     ),
@@ -205,5 +205,5 @@ is_namespaced_ast <- function(x) {
 mutable_fargs <- function(ex) {
   stopifnot(is_function_ast(ex))
 
-  vlapply(ex$fargs, function(x) !(is_symbol(x) && identical(as.character(x), "")))
+  vlapply(ex$fargs, function(x) !(rlang::is_symbol(x) && identical(as.character(x), "")))
 }

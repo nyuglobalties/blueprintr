@@ -58,7 +58,7 @@ codebook_export_call <- function(bp) {
   codebook_title <- bp$codebook_title %||% NULL
   with_data <- bp$codebook_summaries %||% FALSE
 
-  command <- call2(
+  command <- rlang::call2(
     "render_codebook",
     as.name(blueprint_reference_name(bp)),
     as.name(metadata_target_name(bp)),
@@ -75,7 +75,7 @@ codebook_export_call <- function(bp) {
     command[["title"]] <- codebook_title
   }
 
-  call2("{", command, codebook_file)
+  rlang::call2("{", command, codebook_file)
 }
 
 #' Render codebooks for datasets
@@ -94,7 +94,7 @@ codebook_export_call <- function(bp) {
 render_codebook <- function(blueprint,
                             meta,
                             file,
-                            title = glue("{ui_value(blueprint$name)} Codebook"),
+                            title = glue::glue("{ui_value(blueprint$name)} Codebook"),
                             dataset = NULL,
                             template = bp_path("codebook_templates/default_codebook.Rmd"),
                             ...) {
@@ -116,7 +116,7 @@ render_codebook <- function(blueprint,
 
   if (!dir.exists(dirname(file))) {
     dir.create(dirname(file), recursive = TRUE)
-    message(glue("Created '{dirname(file)}'"))
+    message(glue::glue("Created '{dirname(file)}'"))
   }
 
   rmarkdown::render(

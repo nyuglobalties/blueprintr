@@ -15,7 +15,7 @@ metadata_call <- function(bp) {
   deps <- blueprint_target_deps(bp)
   deps_syms <- lapply(deps, function(dep) as.name(paste0(dep, "_meta")))
 
-  call2(
+  rlang::call2(
     "create_metadata_file",
     as.name(blueprint_target_name(bp)),
     as.name(blueprint_reference_name(bp)),

@@ -13,7 +13,7 @@ create_metadata_file <- function(df, blueprint, ...) {
   stopifnot(is.data.frame(df))
 
   metadata_dt <- initial_metadata_dt(df)
-  deps_metalist <- dots_list(...)
+  deps_metalist <- rlang::dots_list(...)
 
   metadata_dt <- propagate_metadata(metadata_dt, df, deps_metalist)
 
@@ -30,7 +30,7 @@ create_metadata_file <- function(df, blueprint, ...) {
 }
 
 initial_metadata_dt <- function(df) {
-  dplyr::tibble(
+  tidytable::tidytable(
     name = names(df),
     description = NA_character_,
     type = vcapply(df, typeof)
@@ -61,16 +61,16 @@ propagate_metadata <- function(metadata_dt, df, deps_metalist) {
 }
 
 link_dependency_meta <- function(meta_dt, deps_metalist) {
-  meta_dt <- dplyr::select(meta_dt, "name", "type")
+  meta_dt <- tidytable::select(meta_dt, tidyselect::all_of(c("name", "type")))
 
-  deps_meta_full <- dplyr::bind_rows(!!!deps_metalist)
-  deps_meta_full <- dplyr::rename(
+  deps_meta_full <- tidytable::bind_rows(deps_metalist)
+  deps_meta_full <- tidytable::rename(
     deps_meta_full,
-    deps_type = .data$type
+    deps_type = "type"
   )
 
-  meta_dt <- dplyr::left_join(meta_dt, deps_meta_full, by = "name", multiple = "all")
-  meta_dt <- dplyr::mutate(
+  meta_dt <- tidytable::left_join(meta_dt, deps_meta_full, by = "name", multiple = "all")
+  meta_dt <- tidytable::mutate(
     meta_dt,
     .origin = "metafile"
   )
@@ -80,29 +80,28 @@ link_dependency_meta <- function(meta_dt, deps_metalist) {
   # *unique*, non-NA values
   fields <- setdiff(names(meta_dt), "name")
 
-  meta_dt <- dplyr::group_by(meta_dt, .data$name)
-  meta_dt <- dplyr::summarise(
+  meta_dt <- tidytable::summarise(
     meta_dt,
-    dplyr::across(
-      .cols = dplyr::all_of(fields),
+    tidytable::across(
+      .cols = tidyselect::all_of(fields),
       .fns = function(x) {
         paste0(unique_val(x), collapse = "|")
       }
     ),
-    .groups = "drop"
+    .by = "name"
   )
 
   meta_dt
 }
 
 link_annotation_meta <- function(meta_dt, df) {
-  meta_dt <- dplyr::select(meta_dt, .data$name, .data$type)
-  meta_dt <- dplyr::left_join(
+  meta_dt <- tidytable::select(meta_dt, tidyselect::all_of(c("name", "type")))
+  meta_dt <- tidytable::left_join(
     meta_dt,
     annotation_table_df(df),
     by = "name"
   )
-  dplyr::mutate(
+  tidytable::mutate(
     meta_dt,
     .origin = "annotations"
   )
@@ -114,33 +113,33 @@ reconcile_dependencies <- function(dec_dt, meta_dt) {
   accepted_vars <- accepted_vars[!grepl("^\\.", accepted_vars)]
   accepted_vars <- c(accepted_vars, ".origin")
 
-  dec_dt <- dplyr::select(
+  dec_dt <- tidytable::select(
     dec_dt,
-    dplyr::any_of(accepted_vars)
+    tidytable::any_of(accepted_vars)
   )
 
-  meta_dt <- dplyr::select(
+  meta_dt <- tidytable::select(
     meta_dt,
-    dplyr::any_of(accepted_vars)
+    tidytable::any_of(accepted_vars)
   )
 
-  all_meta <- dplyr::bind_rows(dec_dt, meta_dt)
+  all_meta <- tidytable::bind_rows(dec_dt, meta_dt)
   fields <- setdiff(names(all_meta), c("name", ".origin"))
 
-  wide_meta <- tidyr::pivot_wider(
+  wide_meta <- tidytable::pivot_wider(
     all_meta,
     names_from = .data$.origin,
-    values_from = dplyr::all_of(fields)
+    values_from = tidytable::all_of(fields)
   )
 
   # Remove rows with NA type_annotations
   # These don't exist in the dataset
-  wide_meta <- dplyr::filter(
+  wide_meta <- tidytable::filter(
     wide_meta,
     !is.na(.data$type_annotations)
   )
 
-  wide_meta <- dplyr::rename(
+  wide_meta <- tidytable::rename(
     wide_meta,
     type = .data$type_annotations
   )
@@ -150,15 +149,15 @@ reconcile_dependencies <- function(dec_dt, meta_dt) {
   custom_fields <- setdiff(fields, "type")
 
   for (field in custom_fields) {
-    decs <- glue("{field}_annotations")
-    mets <- glue("{field}_metafile")
+    decs <- glue::glue("{field}_annotations")
+    mets <- glue::glue("{field}_metafile")
 
-    wide_meta[[field]] <- dplyr::coalesce(
+    wide_meta[[field]] <- tidytable::coalesce(
       wide_meta[[decs]],
       wide_meta[[mets]]
     )
 
-    wide_meta <- dplyr::relocate(
+    wide_meta <- tidytable::relocate(
       wide_meta,
       .data[[field]],
       .before = .data[[decs]]
@@ -173,7 +172,7 @@ reconcile_dependencies <- function(dec_dt, meta_dt) {
 
 handle_write_meta_file <- function(metadata_dt, bp) {
   if ("deps_type" %in% names(metadata_dt)) {
-    metadata_dt <- dplyr::mutate(metadata_dt, deps_type = NULL)
+    metadata_dt <- tidytable::mutate(metadata_dt, deps_type = NULL)
   }
 
   write_meta_file(metadata_dt, metadata_path(bp))
@@ -189,7 +188,7 @@ write_meta_file <- function(x, path) {
 
 remove_parsed_tests <- function(x) {
   if (".parsed_tests" %in% names(x)) {
-    x <- dplyr::select(x, -.data$.parsed_tests)
+    x <- tidytable::select(x, -.data$.parsed_tests)
   }
 
   x

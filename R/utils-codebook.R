@@ -1,4 +1,3 @@
-
 paragraph <- function(x) {
   cat_line(x)
   cat_line()
@@ -53,9 +52,9 @@ codeblock <- function(x) {
 
 span_tag <- function(x, class = NULL) {
   if (!is.null(class)) {
-    cat_line(glue('<span class="{class}">{x}</span>'))
-  } else{
-    cat_line(glue('<span>{x}</span>'))
+    cat_line(glue::glue('<span class="{class}">{x}</span>'))
+  } else {
+    cat_line(glue::glue("<span>{x}</span>"))
   }
 }
 
@@ -69,44 +68,47 @@ is_empty_text <- function(x) {
 
 remove_dropped <- function(meta_dt) {
   if ("dropped" %in% names(meta_dt)) {
-    meta_dt <- dplyr::filter(meta_dt, is.na(.data$dropped) | .data$dropped == FALSE)
+    meta_dt <- tidytable::filter(meta_dt, is.na(.data$dropped) | .data$dropped == FALSE)
   }
 
-  meta_dt
+  as.data.frame(meta_dt)
 }
 
 create_coding_list <- function(meta_dt) {
   if ("coding" %in% names(meta_dt)) {
-    meta_dt <- dplyr::mutate(
+    meta_dt <- tidytable::mutate(
       meta_dt,
       .evaluated_coding = rcoder::as_coding_list(.data$coding)
     )
   }
 
-  meta_dt
+  as.data.frame(meta_dt)
 }
 
 arrange_by_sections <- function(meta_dt) {
-  meta <- dplyr::mutate(
+  meta <- tidytable::mutate(
     meta_dt,
     section = ifelse(is_empty_text(.data$section), "Other", .data$section)
   )
 
-  meta_categorized <- dplyr::filter(meta, .data$section != "Other")
-  meta_uncategorized <- dplyr::filter(meta, .data$section == "Other")
+  meta_categorized <- tidytable::filter(meta, .data$section != "Other")
+  meta_uncategorized <- tidytable::filter(meta, .data$section == "Other")
 
-  meta_categorized <- dplyr::mutate(
+  meta_categorized <- tidytable::mutate(
     meta_categorized,
-    .section_order = purrr::map_int(.data$section, ~ which(unique(.data$section) == .x))
+    .section_order = viapply(
+      .data$section,
+      function(.x) which(unique(.data$section) == .x)
+    )
   )
-  meta_categorized <- dplyr::arrange(meta_categorized, .data$.section_order)
-  meta_categorized <- dplyr::mutate(meta_categorized, .section_order = NULL)
+  meta_categorized <- tidytable::arrange(meta_categorized, .data$.section_order)
+  meta_categorized <- tidytable::mutate(meta_categorized, .section_order = NULL)
 
-  dplyr::bind_rows(meta_categorized, meta_uncategorized)
+  as.data.frame(tidytable::bind_rows(meta_categorized, meta_uncategorized))
 }
 
 variable_tags <- function(variable, meta_dt) {
-  var_tags <- dplyr::filter(meta_dt, .data$name == variable)[["tags"]]
+  var_tags <- tidytable::filter(meta_dt, .data$name == variable)[["tags"]]
 
   if (is.na(var_tags)) {
     return(character())
@@ -117,10 +119,10 @@ variable_tags <- function(variable, meta_dt) {
 
 coding_table <- function(coding) {
   coding_df <- as.data.frame(coding)
-  coding_df <- dplyr::select(coding_df, .data$label, .data$value)
-  coding_df <- dplyr::filter(coding_df, !duplicated(.data$label))
+  coding_df <- tidytable::select(coding_df, .data$label, .data$value)
+  coding_df <- tidytable::filter(coding_df, !duplicated(.data$label))
 
-  coding_df <- kableExtra::kable(coding_df)
+  coding_df <- kableExtra::kable(as.data.frame(coding_df))
   coding_df <- kableExtra::kable_styling(
     coding_df,
     bootstrap_options = "striped",
@@ -132,11 +134,11 @@ coding_table <- function(coding) {
 }
 
 write_variable <- function(variable, meta, data, in_group = FALSE) {
-  var_desc <- dplyr::filter(meta, .data$name == variable)[["description"]]
+  var_desc <- tidytable::filter(meta, .data$name == variable)[["description"]]
   var_title <- NULL
 
   if ("title" %in% names(meta)) {
-    var_title <- dplyr::filter(meta, .data$name == variable)[["title"]]
+    var_title <- tidytable::filter(meta, .data$name == variable)[["title"]]
 
     if (is_empty_text(var_title)) {
       var_title <- NULL
@@ -144,7 +146,7 @@ write_variable <- function(variable, meta, data, in_group = FALSE) {
   }
 
   if ("coding" %in% names(meta)) {
-    var_coding <- dplyr::filter(meta, .data$name == variable)[[".evaluated_coding"]][[1]]
+    var_coding <- tidytable::filter(meta, .data$name == variable)[[".evaluated_coding"]][[1]]
 
     if (rcoder::is_empty_coding(var_coding)) {
       var_coding <- NULL
@@ -196,7 +198,7 @@ write_variable <- function(variable, meta, data, in_group = FALSE) {
 }
 
 write_group <- function(.group, meta, data) {
-  meta <- dplyr::filter(meta, .data$group == .group)
+  meta <- tidytable::filter(meta, .data$group == .group)
 
   if ("group_description" %in% names(meta)) {
     group_description <- unique(meta$group_description)[1]

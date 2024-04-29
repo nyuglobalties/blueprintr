@@ -8,7 +8,7 @@ render_codebook(
   blueprint,
   meta,
   file,
-  title = glue("{ui_value(blueprint$name)} Codebook"),
+  title = glue::glue("{ui_value(blueprint$name)} Codebook"),
   dataset = NULL,
   template = bp_path("codebook_templates/default_codebook.Rmd"),
   ...

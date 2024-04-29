@@ -32,13 +32,13 @@ all_variables_present <- function(df, meta, blueprint) {
   err_reasons <- NULL
 
   if (length(missing_vars) > 0) {
-    err_reasons <- glue("Expected variables are missing: [{glue_collapse(missing_vars, ', ')}]")
+    err_reasons <- glue::glue("Expected variables are missing: [{glue::glue_collapse(missing_vars, ', ')}]")
   }
 
   if (length(new_vars) > 0) {
     err_reasons <- c(err_reasons, paste0(
       paste0(
-        glue("Unexpected new variables: [{glue_collapse(new_vars, ', ')}]."),
+        glue::glue("Unexpected new variables: [{glue::glue_collapse(new_vars, ', ')}]."),
         "\n    Please edit documentation if this is intended."
       )
     ))
@@ -67,35 +67,35 @@ all_types_match <- function(df, meta) {
   stopifnot(is.data.frame(df))
   stopifnot(inherits(meta, "blueprint_metadata"))
 
-  df_types <- dplyr::tibble(
+  df_types <- tidytable::tidytable(
     name = names(df),
     type = vcapply(df, typeof)
   )
 
   df_types <-
     df_types %>%
-    dplyr::left_join(
+    tidytable::left_join(
       meta %>%
-        dplyr::select(.data$name, expected_type = .data$type),
+        tidytable::select(.data$name, expected_type = .data$type),
       by = "name"
     ) %>%
-    dplyr::mutate(issue = .data$expected_type != .data$type)
+    tidytable::mutate(issue = .data$expected_type != .data$type)
 
   if (any(df_types$issue, na.rm = TRUE)) {
     format <- "{name}: '{type}' found, '{expected_type}' expected"
 
     df_types <-
       df_types %>%
-      dplyr::mutate(.err = ifelse(
+      tidytable::mutate(.err = ifelse(
         .data$issue == TRUE,
-        glue(format),
+        glue::glue(format),
         NA_character_
       ))
 
     errors <-
       df_types %>%
-      dplyr::filter(.data$issue == TRUE) %>%
-      dplyr::pull(.data$.err)
+      tidytable::filter(.data$issue == TRUE) %>%
+      tidytable::pull(.data$.err)
 
     return(fail_check(errors))
   }

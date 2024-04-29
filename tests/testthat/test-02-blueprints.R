@@ -54,16 +54,16 @@ test_that("Dependencies are handled properly", {
     command = {
       ids <- .TARGET("id_vars")
 
-      demos <- dplyr::tibble(
+      demos <- tidytable::tidytable(
         student_id = c("ST5402", "ST4910", "ST2819"),
         age = c(8, 10, 9),
         grade = c(4, 5, 5)
       )
 
       demos %>%
-        dplyr::left_join(
+        tidytable::left_join(
           ids %>%
-            dplyr::select(student_id, classroom_id),
+            tidytable::select(student_id, classroom_id),
           by = "student_id"
         )
     },
@@ -88,10 +88,10 @@ test_that("Dependencies are handled properly", {
 
   expect_identical(
     student_demo_meta %>%
-      dplyr::filter(.data$name == "student_id") %>%
-      dplyr::pull(.data$description),
+      tidytable::filter(.data$name == "student_id") %>%
+      tidytable::pull(.data$description),
     id_vars_meta %>%
-      dplyr::filter(.data$name == "student_id") %>%
-      dplyr::pull(.data$description)
+      tidytable::filter(.data$name == "student_id") %>%
+      tidytable::pull(.data$description)
   )
 })

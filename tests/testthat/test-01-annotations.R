@@ -26,10 +26,10 @@ test_that("Annotations behave as expected", {
   dec_table <- annotation_table(x, "x")
   expect_equal(
     dec_table,
-    dplyr::tribble(
+    as.data.frame(tidytable::tribble(
       ~name, ~field,
       "x", 2
-    )
+    ))
   )
 })
 

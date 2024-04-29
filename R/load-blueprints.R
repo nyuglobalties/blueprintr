@@ -48,7 +48,7 @@ fetch_blueprints_from_dir <- function(dirs) {
 }
 
 load_dirs_recurse <- function(dir, recurse) {
-  subdirs <- fs::dir_ls(dir, type = "d", recurse = TRUE)
+  subdirs <- list.dirs(path = dir)
 
   if (length(subdirs) > 0 && isTRUE(recurse)) {
     dirs <- c(dir, subdirs)
@@ -64,7 +64,7 @@ fetch_blueprint_files <- function(directory) {
     bp_err("Blueprint directory '{directory}' does not exist")
   }
 
-  bp_scripts <- fs::dir_ls(directory, regexp = "\\.[Rr]$")
+  bp_scripts <- list.files(path = directory, full.names = TRUE, pattern = "\\.[Rr]$")
 
   if (length(bp_scripts) == 0L) {
     if (warn_empty_blueprints_dir()) {

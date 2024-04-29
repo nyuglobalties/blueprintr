@@ -46,7 +46,7 @@ assemble_payload.drake_assembler <- function(asm, payload) {
   dots <- bpstep_payload_extra_args(payload)
 
   if (length(dots) > 0) {
-    quoted_target <- call2(
+    quoted_target <- rlang::call2(
       "target",
       command = payload$target_command,
       !!!dots,

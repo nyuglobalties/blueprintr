@@ -2,7 +2,7 @@ checks <- function(...) {
   dots <- as.list(substitute(list(...))[-1])
 
   checklist <- lapply(dots, check)
-  check_dat <- dplyr::tibble(
+  check_dat <- tidytable::tidytable(
     check_func = lapply(checklist, function(x) x$check_func),
     target = vcapply(checklist, function(x) x$target),
     variable = vcapply(checklist, function(x) if (is.null(x$variable)) NA_character_ else x$variable)
@@ -31,7 +31,7 @@ check_func_target <- function(func) {
   first_arg <- rlang::call_args(func)[[1]]
 
   if (is_variable_check_func(func)) {
-    as.character(node_cadr(first_arg))
+    as.character(rlang::node_cadr(first_arg))
   } else {
     as.character(first_arg)
   }
@@ -41,7 +41,7 @@ check_func_variable <- function(func) {
   if (is_variable_check_func(func)) {
     first_arg <- rlang::call_args(func)[[1]]
 
-    as.character(node_cddr(first_arg)[[1]])
+    as.character(rlang::node_cddr(first_arg)[[1]])
   } else {
     NULL
   }
@@ -134,11 +134,11 @@ eval_checks <- function(..., .env = parent.frame()) {
 
 checks_error <- function(checks) {
   checks <- checks %>%
-    dplyr::mutate(
+    tidytable::mutate(
       .call = vcapply(.data$check_func, safe_deparse, collapse = " ", trim = TRUE),
     ) %>%
-    dplyr::mutate(
-      .message = dplyr::if_else(
+    tidytable::mutate(
+      .message = tidytable::if_else(
         .data$.pass == FALSE,
         paste0(
           "`", .data$.call, "` is not TRUE", .data$.fail_meta
@@ -146,7 +146,7 @@ checks_error <- function(checks) {
         NA_character_
       ),
       # Include the warning here for user experience
-      .message = dplyr::if_else(
+      .message = tidytable::if_else(
         .data$.pass == TRUE & .data$.fail_meta != "",
         paste0(
           "`", .data$.call, "` has some potential issues", .data$.fail_meta
@@ -156,11 +156,11 @@ checks_error <- function(checks) {
     )
 
   err_msgs <- checks %>%
-    dplyr::filter(!is.na(.data$.message)) %>%
-    dplyr::pull(.data$.message)
+    tidytable::filter(!is.na(.data$.message)) %>%
+    tidytable::pull(.data$.message)
 
   rlang::abort(
-    glue_collapse(err_msgs, "\n"),
+    glue::glue_collapse(err_msgs, "\n"),
     class = "checks_error",
     checks = checks
   )
@@ -168,11 +168,11 @@ checks_error <- function(checks) {
 
 checks_warn <- function(checks) {
   checks <- checks %>%
-    dplyr::mutate(
+    tidytable::mutate(
       .call = vcapply(.data$check_func, safe_deparse, collapse = " ", trim = TRUE),
     ) %>%
-    dplyr::mutate(
-      .message = dplyr::if_else(
+    tidytable::mutate(
+      .message = tidytable::if_else(
         .data$.pass == TRUE & .data$.fail_meta != "",
         paste0(
           "`", .data$.call, "` has some potential issues", .data$.fail_meta
@@ -182,11 +182,11 @@ checks_warn <- function(checks) {
     )
 
   warn_msgs <- checks %>%
-    dplyr::filter(!is.na(.data$.message)) %>%
-    dplyr::pull(.data$.message)
+    tidytable::filter(!is.na(.data$.message)) %>%
+    tidytable::pull(.data$.message)
 
   rlang::warn(
-    message = glue_collapse(warn_msgs, "\n"),
+    message = glue::glue_collapse(warn_msgs, "\n"),
     class = "checks_warn",
     checks = checks
   )

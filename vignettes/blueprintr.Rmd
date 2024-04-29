@@ -86,7 +86,7 @@ Let's take a well known dataset-- `mtcars`, and create a blueprint for it.
 
 ```{r}
 # Keeping the row names under the column `rn`
-our_mtcars <- mtcars |> tibble::as_tibble(rownames = "rn")
+our_mtcars <- mtcars |> tidytable::as_tidytable(rownames = "rn")
 
 # Inspecting our mtcars dataset
 head(our_mtcars)
