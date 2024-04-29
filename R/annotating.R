@@ -119,13 +119,13 @@ annotation_table_df <- function(df) {
     annotation_table(df[[nx]], nx)
   })
 
-  dplyr::bind_rows(!!!dec_dats)
+  tidytable::bind_rows(dec_dats)
 }
 
 annotation_table <- function(x, nx) {
   stopifnot(is.character(nx))
 
-  dec_dat <- dplyr::tibble(name = nx)
+  dec_dat <- tidytable::tidytable(name = nx)
 
   if (length(annotation_names(x)) == 0) {
     return(dec_dat)
@@ -135,7 +135,7 @@ annotation_table <- function(x, nx) {
     dec_dat[[dec]] <- annotation(x, dec)
   }
 
-  dec_dat
+  as.data.frame(dec_dat)
 }
 
 #' "Super Annotations"

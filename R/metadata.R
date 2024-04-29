@@ -19,8 +19,10 @@ metadata <- function(df) {
   }
 
   if ("tests" %in% names(df) && !is.list(df$tests)) {
-    df <- dplyr::mutate(df, .parsed_tests = parse_tests(.data$tests))
+    df <- tidytable::mutate(df, .parsed_tests = parse_tests(.data$tests))
   }
+
+  df <- as.data.frame(df)
 
   structure(
     df,
@@ -35,7 +37,7 @@ parse_variable_tests <- function(x) {
     x <- ""
   }
 
-  x <- glue("check_list({x})")
+  x <- glue::glue("check_list({x})")
 
   rlang::eval_bare(rlang::parse_expr(x))
 }

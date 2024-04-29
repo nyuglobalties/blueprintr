@@ -1,17 +1,17 @@
 test_that("Metadata file dependency tables render correctly", {
-  foo <- dplyr::tribble(
+  foo <- tidytable::tribble(
     ~name, ~type, ~description,
     "x", "integer", "An integer",
     "y", "character", "A string"
   )
 
-  bar <- dplyr::tribble(
+  bar <- tidytable::tribble(
     ~name, ~type, ~description,
     "x", "character", "Not an integer",
     "z", "character", "Some other string"
   )
 
-  baz <- dplyr::tribble(
+  baz <- tidytable::tribble(
     ~name, ~type,
     "x", "integer",
     "z", "character"
@@ -48,7 +48,7 @@ test_that("Metadata file dependency tables render correctly", {
 })
 
 test_that("Annotation dependency tables render correctly", {
-  dat <- dplyr::tibble(
+  dat <- tidytable::tidytable(
     x = sample(0:3, 100, replace = TRUE),
     y = rnorm(100)
   )
@@ -71,25 +71,25 @@ test_that("Annotation dependency tables render correctly", {
 })
 
 test_that("Coalescing annotation vs. metafile deps works", {
-  foo <- dplyr::tribble(
+  foo <- tidytable::tribble(
     ~name, ~type, ~description, ~extra,
     "x", "integer", "An integer", "not be seen",
     "y", "character", "A string", NA
   )
 
-  bar <- dplyr::tribble(
+  bar <- tidytable::tribble(
     ~name, ~type, ~description,
     "x", "character", "Not an integer",
     "z", "double", "Normally distributed thing"
   )
 
-  baz <- dplyr::tribble(
+  baz <- tidytable::tribble(
     ~name, ~type,
     "x", "integer",
     "z", "double"
   )
 
-  dat <- dplyr::tibble(
+  dat <- tidytable::tidytable(
     x = sample(0:3, 100, replace = TRUE),
     y = rnorm(100)
   )

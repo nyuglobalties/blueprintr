@@ -11,7 +11,7 @@ collapse_ast.default <- function(ex) {
 collapse_ast.ast <- function(ex) {
   collapsed_args <- lapply(ex$args, collapse_ast)
 
-  call2(ex$head, !!!collapsed_args)
+  rlang::call2(ex$head, !!!collapsed_args)
 }
 
 #' @export
@@ -21,13 +21,13 @@ collapse_ast.qualified_ast <- function(ex) {
   if (!is_namespaced_ast(ex)) {
     collapsed_head <- collapse_ast(ex$qual_head)
 
-    ncar <- call2(ex$qual_sym, collapsed_head, ex$head)
-    call2(ncar, !!!collapsed_args)
+    ncar <- rlang::call2(ex$qual_sym, collapsed_head, ex$head)
+    rlang::call2(ncar, !!!collapsed_args)
   } else {
     if (identical(ex$qual_sym, quote(`::`))) {
-      call2(ex$head, !!!collapsed_args, .ns = ex$ns)
+      rlang::call2(ex$head, !!!collapsed_args, .ns = ex$ns)
     } else {
-      call2(ex$qual_sym, ex$qual_head, call2(ex$head, !!!collapsed_args))
+      rlang::call2(ex$qual_sym, ex$qual_head, rlang::call2(ex$head, !!!collapsed_args))
     }
   }
 }
@@ -36,7 +36,7 @@ collapse_ast.qualified_ast <- function(ex) {
 collapse_ast.function_ast <- function(ex) {
   collapsed_body <- collapse_ast(ex$args)
   ex$fargs[mutable_fargs(ex)] <- lapply(ex$fargs[mutable_fargs(ex)], collapse_ast)
-  call2("function", as.pairlist(ex$fargs), collapsed_body)
+  rlang::call2("function", as.pairlist(ex$fargs), collapsed_body)
 }
 
 #' @export

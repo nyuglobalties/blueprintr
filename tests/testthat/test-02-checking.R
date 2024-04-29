@@ -56,7 +56,7 @@ test_that("Content checking embeds extra information if desired", {
     metadata_directory = bp_path("blueprints"),
     command = {
       df <- mtcars
-      dplyr::rename(df, ma = am)
+      tidytable::rename(df, ma = am)
     }
   )
 

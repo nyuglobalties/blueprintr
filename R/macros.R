@@ -158,7 +158,7 @@ is_source_ast <- function(ast) {
 eval_ast <- function(ast, env = parent.frame()) {
   collapsed <- collapse_ast(ast)
 
-  eval_tidy(collapsed, env = env)
+  rlang::eval_tidy(collapsed, env = env)
 }
 
 translate_macros <- function(command) {

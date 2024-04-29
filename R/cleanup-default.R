@@ -7,7 +7,7 @@ drop_columns <- function(df, blueprint, meta) {
   dropped_cols <- meta[!is.na(meta$dropped) & meta$dropped == TRUE, "name", drop = TRUE]
 
   if (length(dropped_cols) > 0) {
-    df <- dplyr::select(df, -tidyselect::all_of(dropped_cols))
+    df <- tidytable::select(df, -tidyselect::all_of(dropped_cols))
   }
 
   df

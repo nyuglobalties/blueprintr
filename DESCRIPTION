@@ -7,6 +7,9 @@ Authors@R:
              role = c("aut", "cre"),
              email = "psanker@nyu.edu",
              comment = c(ORCID = "0000-0003-2302-0445")),
+      person(given = "Hillary",
+             family = "Gao",
+             role = "ctb"),
       person(given = "Global TIES for Children",
              role = c("cph")))
 Description: Documents and tests datasets in a reproducible
@@ -34,7 +37,7 @@ Suggests:
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 URL: https://github.com/nyuglobalties/blueprintr
 BugReports: https://github.com/nyuglobalties/blueprintr/issues
 Depends: 
@@ -44,17 +47,14 @@ Imports:
     here,
     drake (>= 7.11.0),
     glue,
-    purrr,
-    dplyr,
     magrittr,
     readr,
-    tidyr,
-    fs,
     lifecycle,
-    tidyselect,
+    tidytable,
+    tidyselect (>= 1.2.0),
     snakecase,
-    digest
+    digest,
+    data.table
 VignetteBuilder: knitr
 Remotes:
-    nyuglobalties/rcoder,
     nyuglobalties/panelcleaner

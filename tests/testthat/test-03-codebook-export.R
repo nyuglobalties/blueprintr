@@ -23,8 +23,8 @@ test_that("Codebook exports are added to plan correctly", {
 
   render_cmd <-
     plan %>%
-    dplyr::filter(.data$target == blueprint_codebook_name(test_bp_1)) %>%
-    dplyr::pull(.data$command) %>%
+    tidytable::filter(.data$target == blueprint_codebook_name(test_bp_1)) %>%
+    tidytable::pull(.data$command) %>%
     `[[`(1)
 
   expect_true(!is.null(render_cmd[[2]][["dataset"]]))
@@ -48,8 +48,8 @@ test_that("Codebook exports are added to plan correctly", {
 
   render_cmd <-
     plan %>%
-    dplyr::filter(.data$target == blueprint_codebook_name(test_bp_1)) %>%
-    dplyr::pull(.data$command) %>%
+    tidytable::filter(.data$target == blueprint_codebook_name(test_bp_1)) %>%
+    tidytable::pull(.data$command) %>%
     `[[`(1)
 
   expect_identical(

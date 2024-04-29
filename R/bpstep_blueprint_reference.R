@@ -11,7 +11,7 @@ bpstep_blueprint_reference <- function(bp, ...) {
 }
 
 blueprint_ref_call <- function(bp) {
-  call2(
+  rlang::call2(
     "blueprint",
     !!!bp,
     .ns = "blueprintr"

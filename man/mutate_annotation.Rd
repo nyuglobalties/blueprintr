@@ -11,7 +11,7 @@ mutate_annotation_across(
   .data,
   .field,
   .fn,
-  .cols = dplyr::everything(),
+  .cols = tidyselect::everything(),
   .with_names = FALSE,
   ...,
   .overwrite = TRUE
@@ -23,7 +23,7 @@ mutate_annotation_across(
 \item{.field}{The name of the annotation field that you wish to modify}
 
 \item{...}{For \code{mutate_annotation}, named parameters that contain the annotation
-values. Like \code{dplyr::mutate}, each parameter name is a variable
+values. Like \code{tidytable::mutate}, each parameter name is a variable
 (that must already exist!), and each parameter value is an R expression,
 evaluated with \code{.data} as a data mask.
 
@@ -52,7 +52,7 @@ Usually, metadata should be a reflection of what the data
 However, in the course of data aggregation, it can be common to
 perform massive transformations that would be cumbersome to
 document manually. This exposes a metadata-manipulation framework
-prior to metadata file creation, in the style of \code{dplyr::mutate}.
+prior to metadata file creation, in the style of \code{tidytable::mutate}.
 }
 \examples{
 # Adds a "mean" annotation to 'mpg'

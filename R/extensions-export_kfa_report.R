@@ -175,7 +175,7 @@ render_kfa_report <- function(dat,
     ))
   }
 
-  meta <- dplyr::mutate(
+  meta <- tidytable::mutate(
     meta,
     .scale = strsplit(.data$scale, "\\,\\s*")
   )
@@ -193,7 +193,7 @@ render_kfa_report <- function(dat,
     ))
   }
 
-  scale_dat <- dplyr::select(
+  scale_dat <- tidytable::select(
     dat,
     tidyselect::all_of(scale_vars)
   )

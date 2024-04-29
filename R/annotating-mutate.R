@@ -5,13 +5,13 @@
 #' However, in the course of data aggregation, it can be common to
 #' perform massive transformations that would be cumbersome to
 #' document manually. This exposes a metadata-manipulation framework
-#' prior to metadata file creation, in the style of `dplyr::mutate`.
+#' prior to metadata file creation, in the style of `tidytable::mutate`.
 #'
 #' @param .data A `data.frame`
 #' @param .field The name of the annotation field that you wish to modify
 #' @param ...
 #'   For `mutate_annotation`, named parameters that contain the annotation
-#'     values. Like `dplyr::mutate`, each parameter name is a variable
+#'     values. Like `tidytable::mutate`, each parameter name is a variable
 #'     (that must already exist!), and each parameter value is an R expression,
 #'     evaluated with `.data` as a data mask.
 #'
@@ -78,7 +78,7 @@ mutate_annotation <- function(.data, .field, ..., .overwrite = TRUE) {
 mutate_annotation_across <- function(.data,
                                      .field,
                                      .fn,
-                                     .cols = dplyr::everything(),
+                                     .cols = tidyselect::everything(),
                                      .with_names = FALSE,
                                      ...,
                                      .overwrite = TRUE) {
@@ -86,7 +86,7 @@ mutate_annotation_across <- function(.data,
   stopifnot(is.character(.field), length(.field) == 1)
   stopifnot(is.function(.fn))
 
-  vars <- names(dplyr::select(.data, {{ .cols }}))
+  vars <- names(tidytable::select(.data, {{ .cols }}))
 
   for (var in vars) {
     if (isTRUE(.with_names)) {

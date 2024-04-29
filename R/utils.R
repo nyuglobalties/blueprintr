@@ -11,6 +11,7 @@ is_missing <- function(x) {
   UseMethod("is_missing", x)
 }
 
+#' @export
 is_missing.default <- function(x) {
   if (is.null(x)) {
     return(TRUE)
@@ -24,9 +25,29 @@ is_missing.character <- function(x) {
   all(is.na(x) | x == "")
 }
 
-viapply <- function(.x, .f, ...) vapply(.x, .f, integer(1L), ...)
-vcapply <- function(.x, .f, ...) vapply(.x, .f, character(1L), ...)
-vlapply <- function(.x, .f, ...) vapply(.x, .f, logical(1L), ...)
+set_names <- function(x, nms) {
+  names(x) <- nms
+  x
+}
+
+vapply_mold <- function(type) {
+  function(.x, .f, ...) {
+    vapply(.x, .f, type, ...)
+  }
+}
+
+viapply <- vapply_mold(integer(1L))
+vcapply <- vapply_mold(character(1L))
+vlapply <- vapply_mold(logical(1L))
+
+lapply2 <- function(.x, .y, .f, ...) {
+  out <- mapply(.f, .x, .y, MoreArgs = list(...), SIMPLIFY = FALSE)
+  if (length(out) == length(.x)) {
+    set_names(out, names(.x))
+  } else {
+    set_names(out, NULL)
+  }
+}
 
 collapse_message_list <- function(x, and = TRUE) {
   x <- paste0("'", x, "'")
@@ -59,7 +80,7 @@ safe_deparse <- function(x, collapse = "\n", backtick = TRUE, trim = FALSE, ...)
 cat_line <- function(x = NULL, indent = 0, .envir = parent.frame()) {
   ws <- rep("  ", indent)
 
-  cat(ws, glue(glue_collapse(x), .envir = .envir), "\n", sep = "")
+  cat(ws, glue::glue(glue::glue_collapse(x), .envir = .envir), "\n", sep = "")
 }
 
 ui_value <- function(x) {
@@ -71,19 +92,19 @@ ui_quote <- function(x) {
 }
 
 bp_err <- function(x, ..., .envir = parent.frame()) {
-  msg <- glue(glue_collapse(x), .envir = .envir)
+  msg <- glue::glue(glue::glue_collapse(x), .envir = .envir)
 
   rlang::abort(class = "bp_error", message = msg, ...)
 }
 
 bp_warn <- function(x, .envir = parent.frame()) {
-  msg <- glue(glue_collapse(x), .envir = .envir)
+  msg <- glue::glue(glue::glue_collapse(x), .envir = .envir)
 
   rlang::warn(.subclass = "bp_warning", message = msg)
 }
 
 bp_msg <- function(x, .envir = parent.frame()) {
-  msg <- glue(glue_collapse(x), .envir = .envir)
+  msg <- glue::glue(glue::glue_collapse(x), .envir = .envir)
 
   message(msg)
 }
@@ -91,9 +112,9 @@ bp_msg <- function(x, .envir = parent.frame()) {
 bp_assert <- function(x, msg = NULL, .envir = parent.frame()) {
   if (is.null(msg)) {
     deparsed <- safe_deparse(substitute(x))
-    msg <- glue("Assertion {ui_quote(deparsed)} not met")
+    msg <- glue::glue("Assertion {ui_quote(deparsed)} not met")
   } else {
-    msg <- glue(glue_collapse(msg, "\n"), .envir = .envir)
+    msg <- glue::glue(glue::glue_collapse(msg, "\n"), .envir = .envir)
   }
 
   if (!isTRUE(x)) {

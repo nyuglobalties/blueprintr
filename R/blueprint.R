@@ -70,7 +70,7 @@ blueprint <- function(name,
 
   default_path <- file.path(
     metadata_directory,
-    glue("{metadata_file_name}.{metadata_file_type}")
+    glue::glue("{metadata_file_name}.{metadata_file_type}")
   )
   path <- metadata_file_path %||% default_path
 
@@ -154,8 +154,8 @@ is_blueprint <- function(x) {
 }
 
 capture_command <- function(quoted_statement) {
-  if (identical(quote(.), node_car(quoted_statement))) {
-    return(eval(node_cdr(quoted_statement)[[1]]))
+  if (identical(quote(.), rlang::node_car(quoted_statement))) {
+    return(eval(rlang::node_cdr(quoted_statement)[[1]]))
   }
 
   quoted_statement

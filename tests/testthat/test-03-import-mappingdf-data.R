@@ -1,7 +1,7 @@
 test_that("Mapped DFs are interpreted correctly", {
   skip_if_not_installed("panelcleaner")
 
-  basic_mapping_df <- dplyr::tribble(
+  basic_mapping_df <- tidytable::tribble(
     ~name_1, ~coding_1, ~description_1, ~panel, ~homogenized_name, ~homogenized_coding,
     "x1", NA, "A numeric variable", "example", "x1", NA,
     "x_2", "coding(code('Yes', 1), code('No', 0))", "A binary variable", "example", "x2", "coding(code('Yes', 1), code('No', 0))"
@@ -26,7 +26,7 @@ test_that("Mapped DFs are interpreted correctly", {
 test_that("mdf_keep_panel() works", {
   skip_if_not_installed("panelcleaner")
 
-  basic_mapping_df <- dplyr::tribble(
+  basic_mapping_df <- tidytable::tribble(
     ~name_1, ~coding_1, ~description_1, ~panel, ~homogenized_name, ~homogenized_coding,
     "x1", NA, "A numeric variable", "example", "x1", NA,
     "x_2", "coding(code('Yes', 1), code('No', 0))", "A binary variable", "example", "x2", "coding(code('Yes', 1), code('No', 0))",
@@ -35,7 +35,7 @@ test_that("mdf_keep_panel() works", {
 
   basic_mapping <- panelcleaner::panel_mapping(basic_mapping_df, 1)
 
-  expect_mapping_df <- dplyr::tribble(
+  expect_mapping_df <- tidytable::tribble(
     ~name_1, ~coding_1, ~description_1, ~panel, ~homogenized_name, ~homogenized_coding,
     "x1", NA, "A numeric variable", "example", "x1", NA,
     "x_2", "coding(code('Yes', 1), code('No', 0))", "A binary variable", "example", "x2", "coding(code('Yes', 1), code('No', 0))"
@@ -65,7 +65,7 @@ test_that("mapped_df import works correctly", {
     meta_dt
   )
 
-  basic_mapping_df <- dplyr::tribble(
+  basic_mapping_df <- tidytable::tribble(
     ~name_1, ~coding_1, ~description_1, ~panel, ~homogenized_name, ~homogenized_coding,
     "x1", NA, "A numeric variable", "example", "x1", NA,
     "x_2", "coding(code('Yes', 1), code('No', 0))", "A binary variable", "example", "x2", "coding(code('Yes', 1), code('No', 0))",

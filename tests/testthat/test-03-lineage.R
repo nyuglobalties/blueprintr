@@ -3,7 +3,7 @@
 #' Unlike `attr_safe`, this assumes that multiple inputs
 #' are going into a function. The output preserves the
 #' attributes as a union, similar to the behavior of
-#' [dplyr::bind_rows]
+#' [tidytable::bind_rows]
 #'
 #' @param f A function that accept multiple inputs. `f` must
 #'   have no keyword arguments!
@@ -31,7 +31,7 @@ attr_safe_variadic <- function(f, ...) {
 }
 
 attr_safe_coalesce <- function(...) {
-  attr_safe_variadic(dplyr::coalesce, ...)
+  attr_safe_variadic(tidytable::coalesce, ...)
 }
 
 test_that("Basic variable lineage works correctly", {
@@ -48,14 +48,14 @@ test_that("Basic variable lineage works correctly", {
     "child_table",
     command = {
       .TARGET("parent_bp") %>%
-        dplyr::mutate(new_var = rnorm(dplyr::n()))
+        tidytable::mutate(new_var = rnorm(tidytable::n()))
     }
   )
 
   parent_bp_dat <- mtcars
   parent_bp_dat <- add_variable_uuids(parent_bp_dat)
 
-  child_bp_dat <- parent_bp_dat %>% dplyr::mutate(new_var = rnorm(dplyr::n()))
+  child_bp_dat <- parent_bp_dat %>% tidytable::mutate(new_var = rnorm(tidytable::n()))
   child_bp_dat <- add_variable_uuids(child_bp_dat)
 
   child_dat_table <- vl_dat_table(child_bp_dat, "child_table")
@@ -96,16 +96,16 @@ test_that("Parent variables are treated correctly", {
     "child_table",
     command = {
       .TARGET("parent_bp") %>%
-        dplyr::mutate(new_var = attr_safe_coalesce(mpg, cyl))
+        tidytable::mutate(new_var = attr_safe_coalesce(mpg, cyl))
     }
   )
 
   parent_bp_dat <- mtcars
   parent_bp_dat <- add_variable_uuids(parent_bp_dat)
 
-  # Testing using an "attribute-safe" form of dplyr::coalesce()
+  # Testing using an "attribute-safe" form of tidytable::coalesce()
   # that keeps a union of all attributes
-  child_bp_dat <- parent_bp_dat %>% dplyr::mutate(new_var = attr_safe_coalesce(mpg, cyl))
+  child_bp_dat <- parent_bp_dat %>% tidytable::mutate(new_var = attr_safe_coalesce(mpg, cyl))
   child_bp_dat <- add_variable_uuids(child_bp_dat)
 
   child_dat_table <- vl_dat_table(child_bp_dat, "child_table")
@@ -129,14 +129,14 @@ test_that("Lineage with deep ancestry works", {
     "part1_table",
     command =
       .TARGET("root_table") %>%
-        dplyr::select(mpg, cyl)
+        tidytable::select(mpg, cyl)
   )
 
   part2_bp <- blueprint(
     "part2_table",
     command =
       .TARGET("root_table") %>%
-        dplyr::select(disp, hp)
+        tidytable::select(disp, hp)
   )
 
   combined_bp <- blueprint(
@@ -147,10 +147,10 @@ test_that("Lineage with deep ancestry works", {
   root_bp_dat <- mtcars
   root_bp_dat <- add_variable_uuids(root_bp_dat)
 
-  part1_bp_dat <- dplyr::select(root_bp_dat, mpg, cyl)
+  part1_bp_dat <- tidytable::select(root_bp_dat, mpg, cyl)
   part1_bp_dat <- add_variable_uuids(part1_bp_dat)
 
-  part2_bp_dat <- dplyr::select(root_bp_dat, disp, hp)
+  part2_bp_dat <- tidytable::select(root_bp_dat, disp, hp)
   part2_bp_dat <- add_variable_uuids(part2_bp_dat)
 
   combined_bp_dat <- cbind(part1_bp_dat, part2_bp_dat)
@@ -264,14 +264,14 @@ test_that("Deep lineage works with sources", {
     "part1_table",
     command =
       .TARGET("root_table") %>%
-        dplyr::select(mpg, cyl)
+        tidytable::select(mpg, cyl)
   )
 
   part2_bp <- blueprint(
     "part2_table",
     command =
       .TARGET("root_table") %>%
-        dplyr::select(disp, hp)
+        tidytable::select(disp, hp)
   )
 
   combined_bp <- blueprint(
@@ -284,10 +284,10 @@ test_that("Deep lineage works with sources", {
   root_bp_dat <- source_dat
   root_bp_dat <- add_variable_uuids(root_bp_dat)
 
-  part1_bp_dat <- dplyr::select(root_bp_dat, mpg, cyl)
+  part1_bp_dat <- tidytable::select(root_bp_dat, mpg, cyl)
   part1_bp_dat <- add_variable_uuids(part1_bp_dat)
 
-  part2_bp_dat <- dplyr::select(root_bp_dat, disp, hp)
+  part2_bp_dat <- tidytable::select(root_bp_dat, disp, hp)
   part2_bp_dat <- add_variable_uuids(part2_bp_dat)
 
   combined_bp_dat <- cbind(part1_bp_dat, part2_bp_dat)
@@ -350,14 +350,14 @@ test_that("Filtering variable lineage", {
     "part1_table",
     command =
       .TARGET("root_table") %>%
-        dplyr::select(mpg, cyl)
+        tidytable::select(mpg, cyl)
   )
 
   part2_bp <- blueprint(
     "part2_table",
     command =
       .TARGET("root_table") %>%
-        dplyr::select(disp, hp)
+        tidytable::select(disp, hp)
   )
 
   combined_bp <- blueprint(
@@ -368,10 +368,10 @@ test_that("Filtering variable lineage", {
   root_bp_dat <- mtcars
   root_bp_dat <- add_variable_uuids(root_bp_dat)
 
-  part1_bp_dat <- dplyr::select(root_bp_dat, mpg, cyl)
+  part1_bp_dat <- tidytable::select(root_bp_dat, mpg, cyl)
   part1_bp_dat <- add_variable_uuids(part1_bp_dat)
 
-  part2_bp_dat <- dplyr::select(root_bp_dat, disp, hp)
+  part2_bp_dat <- tidytable::select(root_bp_dat, disp, hp)
   part2_bp_dat <- add_variable_uuids(part2_bp_dat)
 
   combined_bp_dat <- cbind(part1_bp_dat, part2_bp_dat)
