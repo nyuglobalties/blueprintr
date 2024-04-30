@@ -25,7 +25,7 @@ params:
 
 ```{r startup_checks, include=FALSE}
 stopifnot(is.data.frame(params$dataset) || is.null(params$dataset))
-stopifnot(inherits(params$blueprint, "blueprint")) 
+stopifnot(inherits(params$blueprint, "blueprint"))
 stopifnot(inherits(params$meta, "blueprint_metadata"))
 ```
 

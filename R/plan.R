@@ -6,6 +6,8 @@
 #' @return A drake plan with all of the necessary blueprint steps
 #' @export
 plan_from_blueprint <- function(blueprint) {
+  check_drake_installed()
+
   plan <- drake::drake_plan()
 
   # drake_plan() does not add the class by default
@@ -15,6 +17,21 @@ plan_from_blueprint <- function(blueprint) {
   )
 
   attach_blueprint(plan, blueprint)
+}
+
+check_drake_installed <- function() {
+  if (!requireNamespace("drake", quietly = TRUE)) {
+    drake_not_installed_error()
+  }
+}
+
+drake_not_installed_error <- function() {
+  bp_err(c(
+    "As of blueprintr 0.3.0, targets is the preferred execution engine ",
+    "and is thus installed automatically.\n",
+    "To use the drake functionality (anything with \"plans\"), ",
+    "please run `install.packages('drake')`."
+  ))
 }
 
 #' @rdname attach_blueprint

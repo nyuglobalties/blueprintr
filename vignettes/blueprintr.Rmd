@@ -34,31 +34,29 @@ knitr::opts_chunk$set(
 )
 
 set.seed(0x7bae)
-
-cache_location <- tempdir()
-
-drake::clean(cache = drake::drake_cache(cache_location))
 ```
 
-`blueprintr` is a framework for managing your data assets in a reproducible fashion. While it uses [drake](https://github.com/ropensci/drake) or [targets](https://cran.r-project.org/web/packages/targets/), it adds automated steps for tabular dataset documentation and testing. This allows researchers to create a replicable framework to prevent programming issues from affecting analysis results.
+`blueprintr` is a framework for managing your data assets in a reproducible fashion. While it uses [targets](https://cran.r-project.org/web/packages/targets/) or [drake](https://github.com/ropensci/drake), it adds automated steps for tabular dataset documentation and testing. This allows researchers to create a replicable framework to prevent programming issues from affecting analysis results.
 
 ## Installation 
 
 ```{r setup, results= FALSE}
-# install.packages("remotes")
-# remotes::install_github("nyuglobalties/blueprintr")
+# install.packages("blueprintr", repos = "https://nyuglobalties.r-universe.dev")
 
 library(blueprintr)
 ```
 
 ## Designed Use of blueprintr
+
 `blueprintr` provides your data with guardrails typically found in software engineering workflows. 
 This allows you to test and document before deploying to production.
 
 The top level of the `blueprintr` workflow is a "blueprints" directory, consisting of `.R` and `.csv` files. 
 
 ### About blueprints
+
 Each blueprint has two components to it: 
+
 * Data Construction Spec, usually a `.R` file that instructs drake or targets on how to build a specific dataset. 
 * Metadata, usually a `.csv` file that incorporates any mapping files and checks that need to be done on the dataset. 
 
@@ -77,12 +75,11 @@ Target name             | Description
 `{blueprint}_checks`    | Runs all tests on the `{blueprint}_initial` target
 `{blueprint}`           | The built dataset after running some cleanup tasks
 
-<div class="vg-warning"><span>when writing other targets in your plan, it is advised to **not** refer to the `{blueprint}_initial` step since it could have problems which are discovered in the `{blueprint}_checks` step.</span></div>
-
+<div class="vg-warning"><span>When writing other steps in your workflow (be it targets or drake), it is advised to **not** refer to the `{blueprint}_initial` step since it could have problems which are discovered in the `{blueprint}_checks` step.</span></div>
 
 ## Example
 
-Let's take a well known dataset-- `mtcars`, and create a blueprint for it.
+Let's take a well known dataset -- `mtcars`, and create a blueprint for it.
 
 ```{r}
 # Keeping the row names under the column `rn`
@@ -92,9 +89,11 @@ our_mtcars <- mtcars |> tidytable::as_tidytable(rownames = "rn")
 head(our_mtcars)
 ```
 
-We can load in a user-created mapping file. This mapping file acts as a map for any variable name changes, as well as coding changes. 
+When we ingest data from various sources, it's usually helpful to outline the expected metadata for the sources. At TIES, we document this metadata in a user-created "mapping file." This mapping file acts as a map for any variable name changes, as well as categorical variable coding changes. 
+
 ```{r}
 mapping_file <- system.file("mapping/mtcars_item_mapping.csv", package = "blueprintr", mustWork = TRUE)
+
 # Read this csv file:
 item_mapping <- mapping_file |>
   readr::read_csv(
@@ -113,6 +112,7 @@ item_mapping
 
 Then, we typically use a tool such as `panelcleaner` to attach our mapping file to the `mtcars` database.
 This is a command executed in the dataset construction spec.
+
 ```{r}
 blueprint(
   "mt_cars",
@@ -137,15 +137,55 @@ blueprint(
 ) |>
   bp_include_panelcleaner_meta()
 ```
+
+Save this script with a filename of your choice inside of the "blueprints" directory of your project. We'll assume you are using targets for your project:
+
+```
+./
+  _targets.R
+  blueprints/
+    ... all blueprint R and CSV files go here ...
+  R/
+    ... all associated R function definitions are here ...
+  project.Rproj
+  ...
+```
+
+<div class="vg-info"><span>It is not required to use panelcleaner or even document the source metadata. This is just a convention we at TIES developed. However, we strongly advise doing something similar to track your data sources over time.</span></div>
+
 When running this code with either `targets` or `drake`, the blueprint metadata is automatically created.
 For our mtcars example, this looks like:
+
 ```{r, echo= FALSE}
 mtcars_metadata <- system.file("project/blueprints/example/homogenized.csv", package = "blueprintr", mustWork = TRUE)
 # Read this csv file:
 mtcars_metadata |>
   readr::read_csv()
 ```
-Manually editing the metadata allows the user to add tests to check the data type and values. 
+
+Manually editing the metadata allows the user to add tests to check the data type and values.
+
+The last step of our work is to load this blueprint into either targets or drake. For this example, we'll use targets as drake is deprecated. A full discussion of targets is beyond the scope of this vignette, but you can find [an excellent walkthrough here](https://books.ropensci.org/targets/walkthrough.html). The only detail that is needed is to add `blueprintr::tar_blueprints()` to your `_targets.R` file:
+
+```r
+# _targets.R
+library(targets)
+
+# ...
+
+list(
+  tar_target(
+    item_mapping,
+    readr::read_csv("where/your/mapping/file/is/stored.csv")
+  ),
+  
+  blueprintr::tar_blueprints(),
+
+  # Other targets for your project!
+)
+```
+
+This will load all blueprints in the "blueprints" directory. If you have a nested directory structure, use `blueprintr::tar_blueprints(recurse = TRUE)`.
+
 And there you have it! You have created your first blueprint on the `mtcars` dataset. 
-When running a pipeline with `blueprintr`, the checks allow researchers to be warned of any issues at an early stage, 
-allowing them to produce replicable results. 
+When running a pipeline with `blueprintr`, the checks allow researchers to be warned of any issues at an early stage, allowing them to produce replicable results. 

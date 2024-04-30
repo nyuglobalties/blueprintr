@@ -1,4 +1,5 @@
 # blueprintr 0.2.5.9000 (dev version)
+* Switch default workflow executor to targets
 * Update vignettes to demonstrate current workflow procedure (@hgao1, #59)
 
 # blueprintr 0.2.5

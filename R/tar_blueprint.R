@@ -11,6 +11,7 @@
 #' @param directory A folder containing R scripts that evaluate to `blueprint()`
 #'                  objects
 #' @param recurse Recursively loads blueprints from a directory if `TRUE`
+#' @param bp A blueprint object
 #' @return A `list()` of `tar_target` objects
 
 #' @details # Empty blueprint folder
@@ -40,6 +41,8 @@ tar_blueprints <- function(directory = here::here("blueprints"),
   flatten(raw_targets)
 }
 
+#' @rdname tar_blueprint
+#' @export
 tar_blueprint_raw <- function(bp) {
   # Suppress loading objects if in interactive macro eval mode
   old_state <- options(blueprintr.attach_state = TRUE)

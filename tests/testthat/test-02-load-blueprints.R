@@ -39,36 +39,29 @@ test_that("blueprint file fetching works correctly", {
 })
 
 test_that("Loading from file works", {
-  plan <- drake::drake_plan(dummy = 1:5)
+  plan <- mock_drake_plan(dummy = 1:5)
 
-  plan <-
-    plan %>%
-    load_blueprint(bp_path("blueprints/test_blueprint.R"))
+  plan <- load_blueprint(plan, bp_path("blueprints/test_blueprint.R"))
 
   expect_true("test_blueprint_initial" %in% plan$target)
   expect_true("test_blueprint" %in% plan$target)
 })
 
 test_that("Loading from directory works", {
-  plan <- drake::drake_plan(dummy = 1:5)
-
-  plan <-
-    plan %>%
-    load_blueprints(directory = bp_path("blueprints"))
+  plan <- mock_drake_plan(dummy = 1:5)
+  plan <- load_blueprints(plan, directory = bp_path("blueprints"))
 
   expect_true("test_blueprint_initial" %in% plan$target)
   expect_true("test_blueprint" %in% plan$target)
 })
 
 test_that("Recursively loading from directory works", {
-  plan <- drake::drake_plan(dummy = 1:5)
-
-  plan <-
-    plan %>%
-    load_blueprints(
-      directory = bp_path("blueprints"),
-      recurse = TRUE
-    )
+  plan <- mock_drake_plan(dummy = 1:5)
+  plan <- load_blueprints(
+    plan,
+    directory = bp_path("blueprints"),
+    recurse = TRUE
+  )
 
   expect_true("test_blueprint_initial" %in% plan$target)
   expect_true("test_blueprint" %in% plan$target)

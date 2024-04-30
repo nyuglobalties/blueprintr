@@ -1,44 +1,58 @@
 test_that("kfa report steps have correct names", {
-  test_bp <- blueprint(
+  test_bp_0 <- blueprint(
     "test_bp",
     description = "dummy",
     command = mtcars
   )
 
   test_bp_withkfa <- bp_export_kfa_report(
-    test_bp,
+    test_bp_0,
     scale = "Scale with Spaces and Odd-Symbols"
   )
 
-  plan <- plan_from_blueprint(test_bp_withkfa)
+  targets::tar_dir({
+    targets::tar_script({
+      blueprintr::tar_blueprint_raw(test_bp_withkfa)
+    })
 
-  # snake_case translation successful
-  expect_true(
-    "test_bp_scale_with_spaces_and_odd_symbols_kfa_report" %in% plan$target
-  )
+    manifest <- tar_manifest_local()
 
-  cmd <- plan[
-    plan[["target"]] == "test_bp_scale_with_spaces_and_odd_symbols_kfa_report",
-    "command",
-    drop = TRUE
-  ][[1]]
+    # snake_case translation successful
+    expect_true(
+      "test_bp_scale_with_spaces_and_odd_symbols_kfa_report" %in% manifest$name
+    )
 
-  expect_identical(cmd[["scale"]], "Scale with Spaces and Odd-Symbols")
+    cmd <- manifest %>%
+      tidytable::filter(.data$name == "test_bp_scale_with_spaces_and_odd_symbols_kfa_report") %>%
+      tidytable::pull("command") %>%
+      rlang::parse_expr()
+
+    expect_identical(cmd[["scale"]], "Scale with Spaces and Odd-Symbols")
+  })
 
   test_bp_withkfas <- bp_export_kfa_report(
-    test_bp,
+    test_bp_0,
     scale = c("Measure A", "Measure B")
   )
 
-  plan <- plan_from_blueprint(test_bp_withkfas)
+  targets::tar_dir({
+    targets::tar_script({
+      blueprintr::tar_blueprint_raw(test_bp_withkfas)
+    })
 
-  expect_true(all(
-    c("test_bp_measure_a_kfa_report", "test_bp_measure_b_kfa_report") %in% plan$target # nolint
-  ))
+    manifest <- tar_manifest_local()
+
+    expect_true(all(
+      c(
+        "test_bp_measure_a_kfa_report",
+        "test_bp_measure_b_kfa_report"
+      ) %in% manifest$name
+    ))
+  })
 })
 
 test_that("kfa report custom paths rendered correctly", {
-  test_bp <- blueprint(
+  test_bp_0 <- blueprint(
     "test_bp",
     description = "dummy",
     command = mtcars
@@ -46,31 +60,35 @@ test_that("kfa report custom paths rendered correctly", {
 
   # Using path_pattern first
   test_bp_withkfas <- bp_export_kfa_report(
-    test_bp,
+    test_bp_0,
     scale = c("Measure A", "Measure B"),
     path_pattern = "report-{snakecase_scale}.html"
   )
 
-  plan <- plan_from_blueprint(test_bp_withkfas)
+  targets::tar_dir({
+    targets::tar_script({
+      blueprintr::tar_blueprint_raw(test_bp_withkfas)
+    })
 
-  cmd1 <- plan[
-    plan[["target"]] == "test_bp_measure_a_kfa_report",
-    "command",
-    drop = TRUE
-  ][[1]]
+    manifest <- tar_manifest_local()
 
-  cmd2 <- plan[
-    plan[["target"]] == "test_bp_measure_b_kfa_report",
-    "command",
-    drop = TRUE
-  ][[1]]
+    cmd1 <- manifest %>%
+      tidytable::filter(.data$name == "test_bp_measure_a_kfa_report") %>%
+      tidytable::pull("command") %>%
+      rlang::parse_expr()
 
-  expect_identical(cmd1[["path_pattern"]], "report-{snakecase_scale}.html")
-  expect_identical(cmd2[["path_pattern"]], "report-{snakecase_scale}.html")
+    cmd2 <- manifest %>%
+      tidytable::filter(.data$name == "test_bp_measure_b_kfa_report") %>%
+      tidytable::pull("command") %>%
+      rlang::parse_expr()
+
+    expect_identical(cmd1[["path_pattern"]], "report-{snakecase_scale}.html")
+    expect_identical(cmd2[["path_pattern"]], "report-{snakecase_scale}.html")
+  })
 })
 
 test_that("kfa argument forwarding works", {
-  test_bp <- blueprint(
+  test_bp_0 <- blueprint(
     "test_bp",
     description = "dummy",
     command = mtcars
@@ -78,35 +96,37 @@ test_that("kfa argument forwarding works", {
 
   # Using path_pattern first
   test_bp_withkfas <- bp_export_kfa_report(
-    test_bp,
+    test_bp_0,
     scale = c("Measure A", "Measure B"),
     kfa_args = list(ordered = TRUE, k = 3)
   )
 
-  plan <- plan_from_blueprint(test_bp_withkfas)
+  targets::tar_dir({
+    targets::tar_script({
+      blueprintr::tar_blueprint_raw(test_bp_withkfas)
+    })
 
-  cmd1 <- plan[
-    plan[["target"]] == "test_bp_measure_a_kfa_report",
-    "command",
-    drop = TRUE
-  ][[1]]
+    manifest <- tar_manifest_local()
 
-  cmd2 <- plan[
-    plan[["target"]] == "test_bp_measure_b_kfa_report",
-    "command",
-    drop = TRUE
-  ][[1]]
+    cmd1 <- manifest %>%
+      tidytable::filter(.data$name == "test_bp_measure_a_kfa_report") %>%
+      tidytable::pull("command") %>%
+      rlang::parse_expr()
 
-  expect_identical(cmd1[["k"]], cmd2[["k"]]) # Scales get same set of args for kfa
-  expect_identical(cmd1[["k"]], 3)
-  expect_true(cmd1[["ordered"]])
+    cmd2 <- manifest %>%
+      tidytable::filter(.data$name == "test_bp_measure_b_kfa_report") %>%
+      tidytable::pull("command") %>%
+      rlang::parse_expr()
+
+    expect_identical(cmd1[["k"]], cmd2[["k"]]) # Scales get same set of args for kfa
+    expect_identical(cmd1[["k"]], 3)
+    expect_true(cmd1[["ordered"]])
+  })
 })
 
 # Emulating issue ID'd in Peru pipeline
 # turns out this error I was testing was in targets 0.10.0: ropensci/targets#758
 test_that("targets accepts kfa target names", {
-  skip_if_not_installed("targets")
-
   scales <- c(
     "Self-Regulation",
     "Self-Regulated Learning",
@@ -136,3 +156,4 @@ test_that("targets accepts kfa target names", {
 
   expect_silent(pipeline <- tar_blueprint_raw(test_bp_composed))
 })
+

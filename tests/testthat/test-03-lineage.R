@@ -127,16 +127,14 @@ test_that("Lineage with deep ancestry works", {
 
   part1_bp <- blueprint(
     "part1_table",
-    command =
-      .TARGET("root_table") %>%
-        tidytable::select(mpg, cyl)
+    command = .TARGET("root_table") %>%
+      tidytable::select(mpg, cyl)
   )
 
   part2_bp <- blueprint(
     "part2_table",
-    command =
-      .TARGET("root_table") %>%
-        tidytable::select(disp, hp)
+    command = .TARGET("root_table") %>%
+      tidytable::select(disp, hp)
   )
 
   combined_bp <- blueprint(
@@ -262,16 +260,14 @@ test_that("Deep lineage works with sources", {
 
   part1_bp <- blueprint(
     "part1_table",
-    command =
-      .TARGET("root_table") %>%
-        tidytable::select(mpg, cyl)
+    command = .TARGET("root_table") %>%
+      tidytable::select(mpg, cyl)
   )
 
   part2_bp <- blueprint(
     "part2_table",
-    command =
-      .TARGET("root_table") %>%
-        tidytable::select(disp, hp)
+    command = .TARGET("root_table") %>%
+      tidytable::select(disp, hp)
   )
 
   combined_bp <- blueprint(
@@ -348,16 +344,14 @@ test_that("Filtering variable lineage", {
 
   part1_bp <- blueprint(
     "part1_table",
-    command =
-      .TARGET("root_table") %>%
-        tidytable::select(mpg, cyl)
+    command = .TARGET("root_table") %>%
+      tidytable::select(mpg, cyl)
   )
 
   part2_bp <- blueprint(
     "part2_table",
-    command =
-      .TARGET("root_table") %>%
-        tidytable::select(disp, hp)
+    command = .TARGET("root_table") %>%
+      tidytable::select(disp, hp)
   )
 
   combined_bp <- blueprint(
