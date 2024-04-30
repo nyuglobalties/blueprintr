@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# blueprintr <img src="man/figures/logo.png" style="float:right; width:139px" />
+# blueprintr <img src="man/figures/logo.png" style="float:right; width:139px; text-align:right" />
 
 > blueprintr is a companion to
 > [targets](https://github.com/ropensci/targets) that adds automated
