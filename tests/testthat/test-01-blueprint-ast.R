@@ -5,17 +5,17 @@ test_that("Chunk comprehension works", {
     .TARGET("chunk1") %>%
       left_join(
         .TARGET("chunk2") %>%
-        select(site_id, tent),
+          select(site_id, tent),
         by = "site_id"
       ) %>%
       mutate(still_tent = tent_last == tent)
   })
 
   answer <- bquote({
-  chunk1 %>%
-    left_join(
-      chunk2 %>%
-        select(site_id, tent),
+    chunk1 %>%
+      left_join(
+        chunk2 %>%
+          select(site_id, tent),
         by = "site_id"
       ) %>%
       mutate(still_tent = tent_last == tent)
@@ -70,7 +70,7 @@ test_that("Chunk comprehension works", {
 
   command_4 <- quote(
     .TARGET("dataset") %>%
-      processing$process(param = TRUE) %>% 
+      processing$process(param = TRUE) %>%
       mutate(
         var = processing$func(variable)
       )
@@ -78,7 +78,7 @@ test_that("Chunk comprehension works", {
 
   answer_4 <- quote(
     dataset %>%
-      processing$process(param = TRUE) %>% 
+      processing$process(param = TRUE) %>%
       mutate(
         var = processing$func(variable)
       )

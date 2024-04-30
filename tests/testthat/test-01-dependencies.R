@@ -104,13 +104,13 @@ test_that("Coalescing annotation vs. metafile deps works", {
 
   reconciled <- reconcile_dependencies(linked, meta_dt_bad)
 
-  # Demontrates that the actual variables found in the
+  # Demonstrates that the actual variables found in the
   # dataset are preserved
   expect_true(
     setequal(reconciled$name, c("x", "y"))
   )
 
-  # Demontrates that the actual type information of
+  # Demonstrates that the actual type information of
   # the underlying is preserved
   expect_identical(
     reconciled$type[[1]],

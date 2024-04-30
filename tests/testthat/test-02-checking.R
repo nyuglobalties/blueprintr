@@ -19,13 +19,15 @@ test_that("Target content checks work", {
     }
   )
 
-  plan <- plan_from_blueprint(mtcars_bp)
-
-  drake::clean()
-  expect_error(drake::make(plan))
-
-  meta <- drake::diagnose(mtcars_chunk_checks)
-  expect_true(inherits(meta$error, "checks_error"))
+  targets::tar_dir({
+    targets::tar_script({
+      blueprintr::tar_blueprint_raw(mtcars_bp)
+    })
+    expect_error(
+      tar_make_local(),
+      class = "checks_error"
+    )
+  })
 })
 
 test_that("Variable checks work", {
@@ -40,13 +42,15 @@ test_that("Variable checks work", {
     }
   )
 
-  plan <- plan_from_blueprint(mtcars_bp)
-
-  drake::clean()
-  expect_error(drake::make(plan))
-
-  meta <- drake::diagnose(mtcars_vartests_checks)
-  expect_true(inherits(meta$error, "checks_error"))
+  targets::tar_dir({
+    targets::tar_script({
+      blueprintr::tar_blueprint_raw(mtcars_bp)
+    })
+    expect_error(
+      tar_make_local(),
+      class = "checks_error"
+    )
+  })
 })
 
 test_that("Content checking embeds extra information if desired", {
@@ -60,11 +64,13 @@ test_that("Content checking embeds extra information if desired", {
     }
   )
 
-  plan <- plan_from_blueprint(mtcars_bp)
-
-  drake::clean()
-  err <- expect_error(drake::make(plan))
-  expect_true(any(grepl("  \\* ", err$message))) # Embeds reasons into err message
+  targets::tar_dir({
+    targets::tar_script({
+      blueprintr::tar_blueprint_raw(mtcars_bp)
+    })
+    err <- expect_error(tar_make_local())
+    expect_true(any(grepl("  \\* ", err$message))) # Embeds reasons into err message
+  })
 
   mtcars_bp <- blueprint(
     "mtcars_vartests",
@@ -77,11 +83,11 @@ test_that("Content checking embeds extra information if desired", {
     }
   )
 
-  plan <- plan_from_blueprint(mtcars_bp)
-
-  drake::clean()
-  expect_warning(drake::make(plan))
-
-  meta <- drake::diagnose(mtcars_vartests_checks)
-  expect_true(any(grepl("  \\* ", meta$warnings))) # Allow passing with warning messages!
+  targets::tar_dir({
+    targets::tar_script({
+      blueprintr::tar_blueprint_raw(mtcars_bp)
+    })
+    # Allow passing with warning messages!
+    expect_warning(tar_make_local())
+  })
 })

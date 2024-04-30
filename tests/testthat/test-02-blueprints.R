@@ -1,37 +1,47 @@
 context("blueprints")
 
 test_that("blueprint tests are run", {
-  mtcars_bp <- blueprint(
-    "mtcars_chunk",
-    command = {
-      mtcars
-    },
-    metadata_directory = bp_path("blueprints")
-  )
+  targets::tar_dir({
+    mtcars_bp <- blueprint(
+      "mtcars_chunk",
+      command = {
+        mtcars
+      },
+      metadata_directory = bp_path("blueprints")
+    )
 
-  plan <- plan_from_blueprint(mtcars_bp)
+    targets::tar_script({
+      blueprintr::tar_blueprint_raw(mtcars_bp)
+    })
 
-  drake::clean()
-  expect_message(drake::make(plan))
+    expect_message(tar_make_local())
 
-  bad_mtcars_bp <- blueprint(
-    "bad_mtcars_chunk",
-    command = {
-      df <- .TARGET("mtcars_chunk")
-      df$mpg <- NULL
-      df
-    },
-    metadata_file_path =
-      file.path(
-        bp_path("blueprints"),
-        "mtcars_chunk.csv"
-      )
-  )
+    bad_mtcars_bp <- blueprint(
+      "bad_mtcars_chunk",
+      command = {
+        df <- .TARGET("mtcars_chunk")
+        df$mpg <- NULL
+        df
+      },
+      metadata_file_path =
+        file.path(
+          bp_path("blueprints"),
+          "mtcars_chunk.csv"
+        )
+    )
 
-  plan <- attach_blueprints(plan, bad_mtcars_bp)
+    targets::tar_script(
+      {
+        list(
+          blueprintr::tar_blueprint_raw(mtcars_bp),
+          blueprintr::tar_blueprint_raw(bad_mtcars_bp)
+        )
+      },
+      ask = FALSE
+    )
 
-  drake::clean()
-  expect_error(drake::make(plan))
+    expect_error(tar_make_local())
+  })
 })
 
 test_that("Dependencies are handled properly", {
@@ -77,21 +87,26 @@ test_that("Dependencies are handled properly", {
   expect_identical(blueprint_target_deps(id_bp), character())
   expect_identical(blueprint_target_deps(student_demo_bp), "id_vars")
 
-  plan <- plan_from_blueprint(id_bp) %>%
-    attach_blueprint(student_demo_bp)
+  targets::tar_dir({
+    targets::tar_script({
+      list(
+        blueprintr::tar_blueprint_raw(id_bp),
+        blueprintr::tar_blueprint_raw(student_demo_bp)
+      )
+    })
 
-  drake::clean()
-  drake::make(plan)
+    tar_make_local()
 
-  student_demo_meta <- drake::readd(student_demographics_meta)
-  id_vars_meta <- drake::readd(id_vars_meta)
+    student_demo_meta <- targets::tar_read(student_demographics_meta)
+    id_vars_meta <- targets::tar_read(id_vars_meta)
 
-  expect_identical(
-    student_demo_meta %>%
-      tidytable::filter(.data$name == "student_id") %>%
-      tidytable::pull(.data$description),
-    id_vars_meta %>%
-      tidytable::filter(.data$name == "student_id") %>%
-      tidytable::pull(.data$description)
-  )
+    expect_identical(
+      student_demo_meta %>%
+        tidytable::filter(.data$name == "student_id") %>%
+        tidytable::pull(.data$description),
+      id_vars_meta %>%
+        tidytable::filter(.data$name == "student_id") %>%
+        tidytable::pull(.data$description)
+    )
+  })
 })

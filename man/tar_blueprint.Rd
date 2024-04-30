@@ -3,11 +3,14 @@
 \name{tar_blueprint}
 \alias{tar_blueprint}
 \alias{tar_blueprints}
+\alias{tar_blueprint_raw}
 \title{Add a blueprint to a "targets" pipeline}
 \usage{
 tar_blueprint(...)
 
 tar_blueprints(directory = here::here("blueprints"), recurse = FALSE)
+
+tar_blueprint_raw(bp)
 }
 \arguments{
 \item{...}{Arguments passed to \code{blueprint()}}
@@ -16,6 +19,8 @@ tar_blueprints(directory = here::here("blueprints"), recurse = FALSE)
 objects}
 
 \item{recurse}{Recursively loads blueprints from a directory if \code{TRUE}}
+
+\item{bp}{A blueprint object}
 }
 \value{
 A \code{list()} of \code{tar_target} objects

@@ -128,7 +128,7 @@ reconcile_dependencies <- function(dec_dt, meta_dt) {
 
   wide_meta <- tidytable::pivot_wider(
     all_meta,
-    names_from = .data$.origin,
+    names_from = ".origin",
     values_from = tidytable::all_of(fields)
   )
 
@@ -141,7 +141,7 @@ reconcile_dependencies <- function(dec_dt, meta_dt) {
 
   wide_meta <- tidytable::rename(
     wide_meta,
-    type = .data$type_annotations
+    type = "type_annotations"
   )
 
   wide_meta[["type_metafile"]] <- NULL
@@ -159,8 +159,8 @@ reconcile_dependencies <- function(dec_dt, meta_dt) {
 
     wide_meta <- tidytable::relocate(
       wide_meta,
-      .data[[field]],
-      .before = .data[[decs]]
+      tidyselect::all_of(field),
+      .before = tidyselect::all_of(decs)
     )
 
     wide_meta[[decs]] <- NULL

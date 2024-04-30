@@ -1,13 +1,18 @@
 test_that("Codebook exports are added to plan correctly", {
-  test_bp <- blueprint(
+  test_bp_0 <- blueprint(
     "test_bp",
     command = mtcars
   )
-  test_bp <- bp_export_codebook(test_bp)
+  test_bp_0 <- bp_export_codebook(test_bp_0)
 
-  plan <- plan_from_blueprint(test_bp)
+  targets::tar_dir({
+    targets::tar_script({
+      blueprintr::tar_blueprint_raw(test_bp_0)
+    })
 
-  expect_true(blueprint_codebook_name(test_bp) %in% plan$target)
+    manifest <- tar_manifest_local()
+    expect_true(blueprint_codebook_name(test_bp_0) %in% manifest$name)
+  })
 
   test_bp_1 <- blueprint(
     "test_bp",
@@ -19,21 +24,26 @@ test_that("Codebook exports are added to plan correctly", {
     summaries = TRUE
   )
 
-  plan <- plan_from_blueprint(test_bp_1)
+  targets::tar_dir({
+    targets::tar_script({
+      blueprintr::tar_blueprint_raw(test_bp_1)
+    })
 
-  render_cmd <-
-    plan %>%
-    tidytable::filter(.data$target == blueprint_codebook_name(test_bp_1)) %>%
-    tidytable::pull(.data$command) %>%
-    `[[`(1)
+    manifest <- tar_manifest_local()
 
-  expect_true(!is.null(render_cmd[[2]][["dataset"]]))
-  expect_identical(
-    as.character(render_cmd[[2]][["dataset"]]),
-    blueprint_final_name(test_bp_1)
-  )
+    render_cmd <- manifest %>%
+      tidytable::filter(.data$name == blueprint_codebook_name(test_bp_1)) %>%
+      tidytable::pull(.data$command) %>%
+      rlang::parse_expr()
 
-  random_template_location <- "some/randsome/rmarkdown/file.Rmd"
+    expect_true(!is.null(render_cmd[[2]][["dataset"]]))
+    expect_identical(
+      as.character(render_cmd[[2]][["dataset"]]),
+      blueprint_final_name(test_bp_1)
+    )
+  })
+
+  random_template_location <- "some/random/rmarkdown/file.Rmd"
   test_bp_2 <- blueprint(
     "test_bp",
     command = mtcars
@@ -44,18 +54,23 @@ test_that("Codebook exports are added to plan correctly", {
     template = random_template_location
   )
 
-  plan <- plan_from_blueprint(test_bp_2)
+  targets::tar_dir({
+    targets::tar_script({
+      blueprintr::tar_blueprint_raw(test_bp_2)
+    })
 
-  render_cmd <-
-    plan %>%
-    tidytable::filter(.data$target == blueprint_codebook_name(test_bp_1)) %>%
-    tidytable::pull(.data$command) %>%
-    `[[`(1)
+    manifest <- tar_manifest_local()
 
-  expect_identical(
-    render_cmd[[2]][["template"]],
-    bquote(knitr_in(.(random_template_location)))
-  )
+    render_cmd <- manifest %>%
+      tidytable::filter(.data$name == blueprint_codebook_name(test_bp_2)) %>%
+      tidytable::pull(.data$command) %>%
+      rlang::parse_expr()
+
+    expect_identical(
+      render_cmd[[2]][["template"]],
+      bquote(knitr_in(.(random_template_location)))
+    )
+  })
 })
 
 test_that("Codebooks are rendered safely", {
@@ -67,27 +82,32 @@ test_that("Codebooks are rendered safely", {
     metadata_directory = bp_path("blueprints")
   )
 
-  plan <- plan_from_blueprint(test_bp)
+  targets::tar_dir({
+    targets::tar_script({
+      blueprintr::tar_blueprint_raw(test_bp)
+    })
 
-  drake::clean()
-  drake::make(plan)
+    tar_make_local()
 
-  drake::loadd(mtcars_chunk_rearranged_blueprint)
-  drake::loadd(mtcars_chunk_rearranged_meta)
+    targets::tar_load(mtcars_chunk_rearranged_blueprint)
+    targets::tar_load(mtcars_chunk_rearranged_meta)
+    temp_file <- file.path(tempdir(), "mtcars_chunk_rearranged.html")
 
-  temp_file <- file.path(tempdir(), "mtcars_chunk_rearranged.html")
+    # Suppress viewing the table
+    opts <- options(kableExtra_view_html = FALSE)
 
-  render_out <- tryCatch(
-    render_codebook(
-      mtcars_chunk_rearranged_blueprint,
-      mtcars_chunk_rearranged_meta,
-      temp_file
-    ),
-    error = function(e) e
-  )
+    render_out <- tryCatch(
+      render_codebook(
+        mtcars_chunk_rearranged_blueprint,
+        mtcars_chunk_rearranged_meta,
+        temp_file
+      ),
+      error = function(e) e
+    )
 
-  expect_true(!inherits(render_out, "error"))
-  unlink(temp_file)
+    expect_true(!inherits(render_out, "error"))
+    options(opts)
+  })
 })
 
 test_that("Codebook export step added correctly", {
@@ -101,8 +121,13 @@ test_that("Codebook export step added correctly", {
     test_bp
   )
 
-  plan <- plan_from_blueprint(test_bp_with_cbexport)
-  expect_true("mtcars_chunk_rearranged_codebook" %in% plan$target)
+  targets::tar_dir({
+    targets::tar_script({
+      blueprintr::tar_blueprint_raw(test_bp_with_cbexport)
+    })
+    manifest <- tar_manifest_local()
+    expect_true("mtcars_chunk_rearranged_codebook" %in% manifest$name)
+  })
 
   # Adding custom args
   test_bp_with_cbexport <- bp_export_codebook(
@@ -110,63 +135,29 @@ test_that("Codebook export step added correctly", {
     summaries = TRUE
   )
 
-  plan <- plan_from_blueprint(test_bp_with_cbexport)
-  expect_true("mtcars_chunk_rearranged_codebook" %in% plan$target)
-
   test_bp_with_cbexport <- bp_export_codebook(
     test_bp,
     file = here::here("testy.html")
   )
 
-  plan <- plan_from_blueprint(test_bp_with_cbexport)
-  expect_true("mtcars_chunk_rearranged_codebook" %in% plan$target)
+  targets::tar_dir({
+    targets::tar_script({
+      blueprintr::tar_blueprint_raw(test_bp_with_cbexport)
+    })
+    manifest <- tar_manifest_local()
+    expect_true("mtcars_chunk_rearranged_codebook" %in% manifest$name)
+  })
 
   test_bp_with_cbexport <- bp_export_codebook(
     test_bp,
     title = "test"
   )
 
-  plan <- plan_from_blueprint(test_bp_with_cbexport)
-  expect_true("mtcars_chunk_rearranged_codebook" %in% plan$target)
-})
-
-test_that("targets attachment works", {
-  skip_if_not_installed("targets")
-
-  test_bp <- blueprint(
-    "mtcars_chunk_rearranged",
-    command = mtcars,
-    metadata_directory = bp_path("blueprints")
-  )
-
-  test_bp_with_cbexport <- bp_export_codebook(
-    test_bp
-  )
-
-  tar_list <- tar_blueprint_raw(test_bp_with_cbexport)
-  expect_true("mtcars_chunk_rearranged_codebook" %in% vcapply(tar_list, function(x) x$settings$name)) # nolint
-
-  test_bp_with_cbexport <- bp_export_codebook(
-    test_bp,
-    summaries = TRUE
-  )
-
-  tar_list <- tar_blueprint_raw(test_bp_with_cbexport)
-  expect_true("mtcars_chunk_rearranged_codebook" %in% vcapply(tar_list, function(x) x$settings$name)) # nolint
-
-  test_bp_with_cbexport <- bp_export_codebook(
-    test_bp,
-    file = here::here("testy.html")
-  )
-
-  tar_list <- tar_blueprint_raw(test_bp_with_cbexport)
-  expect_true("mtcars_chunk_rearranged_codebook" %in% vcapply(tar_list, function(x) x$settings$name)) # nolint
-
-  test_bp_with_cbexport <- bp_export_codebook(
-    test_bp,
-    title = "testy"
-  )
-
-  tar_list <- tar_blueprint_raw(test_bp_with_cbexport)
-  expect_true("mtcars_chunk_rearranged_codebook" %in% vcapply(tar_list, function(x) x$settings$name)) # nolint
+  targets::tar_dir({
+    targets::tar_script({
+      blueprintr::tar_blueprint_raw(test_bp_with_cbexport)
+    })
+    manifest <- tar_manifest_local()
+    expect_true("mtcars_chunk_rearranged_codebook" %in% manifest$name)
+  })
 })

@@ -76,7 +76,7 @@ all_types_match <- function(df, meta) {
     df_types %>%
     tidytable::left_join(
       meta %>%
-        tidytable::select(.data$name, expected_type = .data$type),
+        tidytable::select("name", expected_type = "type"),
       by = "name"
     ) %>%
     tidytable::mutate(issue = .data$expected_type != .data$type)
