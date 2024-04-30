@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# blueprintr <img src="man/figures/logo.png" style="float:right; width:139px; text-align:right" />
+# blueprintr <img src="man/figures/logo.png" style="width:139px; text-align:right" />
 
 > blueprintr is a companion to [targets](https://github.com/ropensci/targets) that adds automated steps for tabular dataset documentation and testing. Designed for social science research projects, this package creates a framework to build trust in your data and to prevent programming issues from affecting your analysis results.
 
