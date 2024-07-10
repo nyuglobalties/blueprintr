@@ -18,5 +18,9 @@ has_reorder_feature <- function(blueprint, meta) {
 }
 
 reorder_columns <- function(df, blueprint, meta) {
+  if (tidytable::is_tidytable(df) || data.table::is.data.table(df)) {
+    df <- as.data.frame(df)
+  }
+
   df[, meta$name]
 }

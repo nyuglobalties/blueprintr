@@ -1,6 +1,7 @@
-# blueprintr 0.2.5.9000 (dev version)
+# blueprintr 0.2.6
 * Switch default workflow executor to targets
 * Update vignettes to demonstrate current workflow procedure (@hgao1, #59)
+* Remove dplyr dependency
 
 # blueprintr 0.2.5
 * Add capability to embed custom messages to check results, using `check.errors` attribute in returned logical value

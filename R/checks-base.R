@@ -95,12 +95,12 @@ warn_check <- function(reasons = NULL) {
 #' a data.frame or variable at the minimum, plus some extra
 #' arguments if need, and returns a logical value: `TRUE` or `FALSE.`
 #' In blueprintr, the entire check passes or fails unlike other
-#' testing frameworks like {pointblank}. If you'd like to embed
+#' testing frameworks like pointblank. If you'd like to embed
 #' extra context for your test result, modify the "check.errors"
 #' attribute of the returned logical value with a character vector
 #' which will be rendered into a bulleted list. Note: if you embed
-#' reasons for a `TRUE`, the check will produce a warning in the drake
-#' or targets pipeline.
+#' reasons for a `TRUE`, the check will produce a warning in the targets
+#' or drake pipeline.
 #'
 #' @param ... All quoted check calls
 #' @param .env The environment in which the calls are evaluated
