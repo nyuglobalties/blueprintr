@@ -13,13 +13,17 @@ test_that("Metadata file dependency tables render correctly", {
 
   baz <- tidytable::tribble(
     ~name, ~type,
-    "x", "integer",
-    "z", "character"
+    "z", "character",
+    "x", "integer"
   )
 
   meta_dt_ok1 <- link_dependency_meta(baz, list(foo))
   meta_dt_ok2 <- link_dependency_meta(baz, list(bar))
   meta_dt_bad <- link_dependency_meta(baz, list(foo, bar))
+
+  # Order is preserved
+  expect_identical(meta_dt_ok1$name, c("z", "x"))
+  expect_identical(meta_dt_ok2$name, c("z", "x"))
 
   expect_equal(
     meta_dt_ok1[meta_dt_ok1$name == "x", ][["type"]],
@@ -73,8 +77,8 @@ test_that("Annotation dependency tables render correctly", {
 test_that("Coalescing annotation vs. metafile deps works", {
   foo <- tidytable::tribble(
     ~name, ~type, ~description, ~extra,
+    "y", "character", "A string", NA,
     "x", "integer", "An integer", "not be seen",
-    "y", "character", "A string", NA
   )
 
   bar <- tidytable::tribble(
@@ -90,8 +94,8 @@ test_that("Coalescing annotation vs. metafile deps works", {
   )
 
   dat <- tidytable::tidytable(
-    x = sample(0:3, 100, replace = TRUE),
-    y = rnorm(100)
+    y = rnorm(100),
+    x = sample(0:3, 100, replace = TRUE)
   )
 
   dat$x <- add_annotation(dat$x, "class", "ordinal")
