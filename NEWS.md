@@ -1,3 +1,6 @@
+# blueprintr 0.2.7
+* Remove automatic sorting introduced in newer versions of tidytable
+
 # blueprintr 0.2.6
 * Switch default workflow executor to targets
 * Update vignettes to demonstrate current workflow procedure (@hgao1, #59)

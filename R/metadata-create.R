@@ -88,7 +88,8 @@ link_dependency_meta <- function(meta_dt, deps_metalist) {
         paste0(unique_val(x), collapse = "|")
       }
     ),
-    .by = "name"
+    .by = "name",
+    .sort = FALSE
   )
 
   meta_dt
