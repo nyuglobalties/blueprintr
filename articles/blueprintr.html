@@ -5,29 +5,27 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A Walkthrough of blueprintr • blueprintr</title>
+<title>Introduction to blueprintr • blueprintr</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="A Walkthrough of blueprintr">
-<meta property="og:description" content="blueprintr">
-<meta property="og:image" content="/logo.png">
+<meta property="og:title" content="Introduction to blueprintr">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -41,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">blueprintr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.7</span>
       </span>
     </div>
 
@@ -61,7 +59,7 @@
 <li>
   <a href="https://github.com/nyuglobalties/blueprintr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -72,15 +70,15 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>A Walkthrough of blueprintr</h1>
+      <h1 data-toc-skip>Introduction to blueprintr</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/nyuglobalties/blueprintr/blob/HEAD/vignettes/blueprintr.Rmd" class="external-link"><code>vignettes/blueprintr.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/nyuglobalties/blueprintr/blob/v0.2.7/vignettes/blueprintr.Rmd" class="external-link"><code>vignettes/blueprintr.Rmd</code></a></small>
       <div class="hidden name"><code>blueprintr.Rmd</code></div>
 
     </div>
@@ -106,103 +104,48 @@ div.vg-info span:before {
   content: "💡 Note: ";
 }
 </style>
-<p>blueprintr is a companion to <a href="https://github.com/ropensci/drake" class="external-link">drake</a> that focuses on
-documenting and testing tabular data. Whereas drake manages the workflow
-execution, blueprintr defines a collection of steps that need to be run
-in a drake workflow.</p>
+<p><code>blueprintr</code> is a framework for managing your data assets
+in a reproducible fashion. While it uses <a href="https://cran.r-project.org/web/packages/targets/" class="external-link">targets</a> or
+<a href="https://github.com/ropensci/drake" class="external-link">drake</a>, it adds automated
+steps for tabular dataset documentation and testing. This allows
+researchers to create a replicable framework to prevent programming
+issues from affecting analysis results.</p>
 <div class="section level2">
-<h2 id="basic-use">Basic Use<a class="anchor" aria-label="anchor" href="#basic-use"></a>
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>The first, and recommended, step is to attach blueprintr to your R
-session with <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/nyuglobalties/blueprintr" class="external-link">blueprintr</a></span><span class="op">)</span></span></code></pre></div>
-<p>In a <a href="https://books.ropensci.org/drake/projects.html" class="external-link">drake
-project</a>, all packages that you want attached are declared in a
-<code>"packages.R"</code> file. This <code><a href="https://github.com/nyuglobalties/blueprintr" class="external-link">library(blueprintr)</a></code>
-command should go there.</p>
-<p>blueprintr is built around “blueprints.” Our first blueprint will be
-a blueprint for <code>mtcars</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/blueprint.html">blueprint</a></span><span class="op">(</span></span>
-<span>  <span class="st">"mtcars_dat"</span>,</span>
-<span>  description <span class="op">=</span> <span class="st">"The famous mtcars dataset"</span>,</span>
-<span>  command <span class="op">=</span> <span class="op">{</span></span>
-<span>    <span class="va">mtcars</span></span>
-<span>  <span class="op">}</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; &lt;blueprint: 'mtcars_dat'&gt;</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Description: The famous mtcars dataset</span></span>
-<span><span class="co">#&gt; Annotations: DISABLED</span></span>
-<span><span class="co">#&gt; Metadata location: '/home/runner/work/blueprintr/blueprintr/blueprints/mtcars_dat.csv'</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; -- Command --</span></span>
-<span><span class="co">#&gt; Workflow command:</span></span>
-<span><span class="co">#&gt; {</span></span>
-<span><span class="co">#&gt;     mtcars</span></span>
-<span><span class="co">#&gt; }</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Raw command:</span></span>
-<span><span class="co">#&gt; {</span></span>
-<span><span class="co">#&gt;     mtcars</span></span>
-<span><span class="co">#&gt; }</span></span></code></pre></div>
-<p>All blueprints have</p>
+<code class="sourceCode R"><span><span class="co"># install.packages("blueprintr", repos = "https://nyuglobalties.r-universe.dev")</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/nyuglobalties/blueprintr" class="external-link">blueprintr</a></span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="designed-use-of-blueprintr">Designed Use of blueprintr<a class="anchor" aria-label="anchor" href="#designed-use-of-blueprintr"></a>
+</h2>
+<p><code>blueprintr</code> provides your data with guardrails typically
+found in software engineering workflows. This allows you to test and
+document before deploying to production.</p>
+<p>The top level of the <code>blueprintr</code> workflow is a
+“blueprints” directory, consisting of <code>.R</code> and
+<code>.csv</code> files.</p>
+<div class="section level3">
+<h3 id="about-blueprints">About blueprints<a class="anchor" aria-label="anchor" href="#about-blueprints"></a>
+</h3>
+<p>Each blueprint has two components to it:</p>
 <ul>
-<li>A name (the first argument) for the <em>target</em> dataset.</li>
-<li>A description or brief summary of what the target is. Can be
-<code>NULL</code>.</li>
-<li>A command, which is a quoted statement that has the code for
-building this target.</li>
-<li>A metadata location, which is a path to where the target metadata is
-saved.</li>
+<li>Data Construction Spec, usually a <code>.R</code> file that
+instructs drake or targets on how to build a specific dataset.</li>
+<li>Metadata, usually a <code>.csv</code> file that incorporates any
+mapping files and checks that need to be done on the dataset.</li>
 </ul>
-<div class="vg-warning">
-<span>the blueprint name is “mtcars_dat” rather than “mtcars”. If the
-two had the same name, drake would determine that the blueprint has a
-<em>circular dependency</em> (it depends on itself). To avoid this,
-blueprints should not have the same names as global variables, like
-<code>mtcars</code>.</span>
-</div>
-<p>To get this loaded into a drake plan, we need to <em>attach</em> it
-to an already existing plan using</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/attach_blueprint.html">attach_blueprint</a></span><span class="op">(</span><span class="va">plan</span>, <span class="va">blueprint</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/attach_blueprint.html">attach_blueprints</a></span><span class="op">(</span><span class="va">plan</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
-<div class="vg-info">
-<span><code>attach_blueprints</code> accepts “<a href="https://adv-r.hadley.nz/quasiquotation.html#tidy-dots" class="external-link">tidy
-dots</a>”, so if you have a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> of blueprints, you can
-“splat” all of those blueprints into <code>attach_blueprints</code> like
-<code>attach_blueprints(plan, !!!list_of_blueprints)</code></span>
-</div>
-<p>If you don’t have an existing plan, you can create one with</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plan_from_blueprint.html">plan_from_blueprint</a></span><span class="op">(</span><span class="va">blueprint</span><span class="op">)</span></span></code></pre></div>
-<p>For now, we’ll use an already existing plan, which is probably what
-you’ll have most of the time.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/attach_blueprint.html">attach_blueprint</a></span><span class="op">(</span></span>
-<span>  <span class="va">existing_plan</span>,</span>
-<span>  <span class="fu"><a href="../reference/blueprint.html">blueprint</a></span><span class="op">(</span></span>
-<span>    <span class="st">"mtcars_dat"</span>,</span>
-<span>    description <span class="op">=</span> <span class="st">"The famous mtcars dataset"</span>,</span>
-<span>    command <span class="op">=</span> <span class="op">{</span></span>
-<span>      <span class="va">mtcars</span></span>
-<span>    <span class="op">}</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 8 × 3</span></span></span>
-<span><span class="co">#&gt;   target               command                                            format</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;expr_lst&gt;</span>                                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> initial_vector       runif(1000)                                      … <span style="color: #BB0000;">NA</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> squared              initial_vector^2                                 … <span style="color: #BB0000;">NA</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> mtcars_dat_initial   {     mtcars }                                   … <span style="color: #BB0000;">NA</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> mtcars_dat_blueprint blueprintr::blueprint(name = "mtcars_dat", comman… <span style="color: #BB0000;">NA</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> mtcars_dat_meta_path blueprintr::create_metadata_file(mtcars_dat_initi… file  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> mtcars_dat_meta      blueprintr::read_metadata(mtcars_dat_meta_path)  … <span style="color: #BB0000;">NA</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> mtcars_dat_checks    blueprintr::eval_checks(all_variables_present(mtc… <span style="color: #BB0000;">NA</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">8</span> mtcars_dat           blueprintr::cleanup(mtcars_dat_checks, mtcars_dat… <span style="color: #BB0000;">NA</span></span></span></code></pre></div>
-<p>blueprintr creates five “steps” (targets) per blueprint:</p>
+<p>In order to create a blueprint, we use the <code>blueprint</code>
+function. This function takes three arguments: name (the name of your
+generated dataset), description (a description of your dataset), command
+(any functions that need to be applied in order to build the
+dataset).</p>
+<p>A project may need only a few blueprints, but more likely you’ll need
+nested blueprints to transform the data.</p>
+<p><code>blueprintr</code> generates six “steps” (targets) per
+blueprint:</p>
 <table class="table">
 <colgroup>
 <col width="63%">
@@ -228,31 +171,212 @@ you’ll have most of the time.</p>
 it will be created in this step</td>
 </tr>
 <tr class="even">
-<td><code>{blueprint}_checks</code></td>
-<td>Runs all checks on the <code>{blueprint}_initial</code> target</td>
+<td><code>{blueprint}_meta_path</code></td>
+<td>Creates the metadata file or loads it</td>
 </tr>
 <tr class="odd">
+<td><code>{blueprint}_checks</code></td>
+<td>Runs all tests on the <code>{blueprint}_initial</code> target</td>
+</tr>
+<tr class="even">
 <td><code>{blueprint}</code></td>
 <td>The built dataset after running some cleanup tasks</td>
 </tr>
 </tbody>
 </table>
-<p>At this point, you’re able to run <code><a href="https://docs.ropensci.org/drake/reference/make.html" class="external-link">drake::make()</a></code> on this
-plan!</p>
 <div class="vg-warning">
-<span>when writing other targets in your plan, it is advised to
-<strong>not</strong> refer to the <code>{blueprint}_initial</code> step
-since it could have problems which are discovered in the
-<code>{blueprint}_checks</code> step.</span>
+<span>When writing other steps in your workflow (be it targets or
+drake), it is advised to <strong>not</strong> refer to the
+<code>{blueprint}_initial</code> step since it could have problems which
+are discovered in the <code>{blueprint}_checks</code> step.</span>
 </div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h2>
+<p>Let’s take a well known dataset – <code>mtcars</code>, and create a
+blueprint for it.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Keeping the row names under the column `rn`</span></span>
+<span><span class="va">our_mtcars</span> <span class="op">&lt;-</span> <span class="va">mtcars</span> <span class="op">|&gt;</span> <span class="fu">tidytable</span><span class="fu">::</span><span class="fu"><a href="https://markfairbanks.github.io/tidytable/reference/as_tidytable.html" class="external-link">as_tidytable</a></span><span class="op">(</span>rownames <span class="op">=</span> <span class="st">"rn"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Inspecting our mtcars dataset</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">our_mtcars</span><span class="op">)</span></span></code></pre></div>
+<p>When we ingest data from various sources, it’s usually helpful to
+outline the expected metadata for the sources. At TIES, we document this
+metadata in a user-created “mapping file.” This mapping file acts as a
+map for any variable name changes, as well as categorical variable
+coding changes.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mapping_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"mapping/mtcars_item_mapping.csv"</span>, package <span class="op">=</span> <span class="st">"blueprintr"</span>, mustWork <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Read this csv file:</span></span>
+<span><span class="va">item_mapping</span> <span class="op">&lt;-</span> <span class="va">mapping_file</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv</a></span><span class="op">(</span></span>
+<span>    col_types <span class="op">=</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/cols.html" class="external-link">cols</a></span><span class="op">(</span></span>
+<span>      name_1 <span class="op">=</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html" class="external-link">col_character</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>      description_1 <span class="op">=</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html" class="external-link">col_character</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>      coding_1 <span class="op">=</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html" class="external-link">col_character</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>      panel <span class="op">=</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html" class="external-link">col_character</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>      homogenized_name <span class="op">=</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html" class="external-link">col_character</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>      homogenized_coding <span class="op">=</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html" class="external-link">col_character</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>      homogenized_description <span class="op">=</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html" class="external-link">col_character</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="va">item_mapping</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 12 × 7</span></span></span>
+<span><span class="co">#&gt;    name_1 description_1       coding_1 panel homogenized_name homogenized_coding</span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> rn     Name of car          <span style="color: #BB0000;">NA</span>      MTCA… name              <span style="color: #BB0000;">NA</span>               </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> mpg    Miles per gallon     <span style="color: #BB0000;">NA</span>      MTCA… mpg               <span style="color: #BB0000;">NA</span>               </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> cyl    Number of cylinders  <span style="color: #BB0000;">NA</span>      MTCA… cyl               <span style="color: #BB0000;">NA</span>               </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> disp   Displacement         <span style="color: #BB0000;">NA</span>      MTCA… disp              <span style="color: #BB0000;">NA</span>               </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> hp     Gross horsepower     <span style="color: #BB0000;">NA</span>      MTCA… hp                <span style="color: #BB0000;">NA</span>               </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> drat   Rear axle ratio      <span style="color: #BB0000;">NA</span>      MTCA… drat              <span style="color: #BB0000;">NA</span>               </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> wt     Weight               <span style="color: #BB0000;">NA</span>      MTCA… wt                <span style="color: #BB0000;">NA</span>               </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> qsec   Quarter mile time    <span style="color: #BB0000;">NA</span>      MTCA… qsec              <span style="color: #BB0000;">NA</span>               </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> vs     Engine              <span style="color: #949494;">"</span>coding… MTCA… vs               <span style="color: #949494;">"</span>coding(code(\"1\…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> am     Transmission        <span style="color: #949494;">"</span>coding… MTCA… am               <span style="color: #949494;">"</span>coding(code(\"1\…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> gear   Number of forward …  <span style="color: #BB0000;">NA</span>      MTCA… gear              <span style="color: #BB0000;">NA</span>               </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> carb   Number of carburet…  <span style="color: #BB0000;">NA</span>      MTCA… carb              <span style="color: #BB0000;">NA</span>               </span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 1 more variable: homogenized_description &lt;chr&gt;</span></span></span></code></pre></div>
+<p>Then, we typically use a tool such as <code>panelcleaner</code> to
+attach our mapping file to the <code>mtcars</code> database. This is a
+command executed in the dataset construction spec.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/blueprint.html">blueprint</a></span><span class="op">(</span></span>
+<span>  <span class="st">"mt_cars"</span>,</span>
+<span>  description <span class="op">=</span> <span class="st">"mtcars database with attached metadata"</span>,</span>
+<span>  annotate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  command <span class="op">=</span> <span class="op">{</span></span>
+<span>    <span class="va">pnl</span> <span class="op">&lt;-</span> <span class="fu">panelcleaner</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/panelcleaner/man/enpanel.html" class="external-link">enpanel</a></span><span class="op">(</span><span class="st">"MTCARS_PANEL"</span>, <span class="va">our_mtcars</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu">panelcleaner</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/panelcleaner/man/add_mapping.html" class="external-link">add_mapping</a></span><span class="op">(</span><span class="va">item_mapping</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu">panelcleaner</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/panelcleaner/man/homogenize_panel.html" class="external-link">homogenize_panel</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu">panelcleaner</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/panelcleaner/man/homogenize_panel.html" class="external-link">bind_waves</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">pnl_name</span> <span class="op">&lt;-</span> <span class="fu">get_attr</span><span class="op">(</span><span class="va">pnl</span>, <span class="st">"panel_name"</span><span class="op">)</span></span>
+<span>    <span class="va">pnl_mapping</span> <span class="op">&lt;-</span> <span class="fu">get_attr</span><span class="op">(</span><span class="va">pnl</span>, <span class="st">"mapping"</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">pnl</span> <span class="op">&lt;-</span></span>
+<span>      <span class="va">pnl</span></span>
+<span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">pnl</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mapped_df"</span>, <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">pnl</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu">set_attrs</span><span class="op">(</span><span class="va">pnl</span>, mapping <span class="op">=</span> <span class="va">pnl_mapping</span>, panel_name <span class="op">=</span> <span class="va">pnl_name</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/bp_include_panelcleaner_meta.html">bp_include_panelcleaner_meta</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;blueprint: 'mt_cars'&gt;</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Description: mtcars database with attached metadata</span></span>
+<span><span class="co">#&gt; Annotations: ENABLED</span></span>
+<span><span class="co">#&gt; Metadata location: '/home/runner/work/blueprintr/blueprintr/blueprints/mt_cars.csv'</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; -- Command --</span></span>
+<span><span class="co">#&gt; Workflow command:</span></span>
+<span><span class="co">#&gt; {</span></span>
+<span><span class="co">#&gt;     pnl &lt;- as.data.frame(panelcleaner::bind_waves(panelcleaner::homogenize_panel(panelcleaner::add_mapping(panelcleaner::enpanel("MTCARS_PANEL", </span></span>
+<span><span class="co">#&gt;         our_mtcars), item_mapping))))</span></span>
+<span><span class="co">#&gt;     pnl_name &lt;- get_attr(pnl, "panel_name")</span></span>
+<span><span class="co">#&gt;     pnl_mapping &lt;- get_attr(pnl, "mapping")</span></span>
+<span><span class="co">#&gt;     pnl &lt;- pnl</span></span>
+<span><span class="co">#&gt;     class(pnl) &lt;- c("mapped_df", class(pnl))</span></span>
+<span><span class="co">#&gt;     set_attrs(pnl, mapping = pnl_mapping, panel_name = pnl_name)</span></span>
+<span><span class="co">#&gt; }</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Raw command:</span></span>
+<span><span class="co">#&gt; {</span></span>
+<span><span class="co">#&gt;     pnl &lt;- as.data.frame(panelcleaner::bind_waves(panelcleaner::homogenize_panel(panelcleaner::add_mapping(panelcleaner::enpanel("MTCARS_PANEL", </span></span>
+<span><span class="co">#&gt;         our_mtcars), item_mapping))))</span></span>
+<span><span class="co">#&gt;     pnl_name &lt;- get_attr(pnl, "panel_name")</span></span>
+<span><span class="co">#&gt;     pnl_mapping &lt;- get_attr(pnl, "mapping")</span></span>
+<span><span class="co">#&gt;     pnl &lt;- pnl</span></span>
+<span><span class="co">#&gt;     class(pnl) &lt;- c("mapped_df", class(pnl))</span></span>
+<span><span class="co">#&gt;     set_attrs(pnl, mapping = pnl_mapping, panel_name = pnl_name)</span></span>
+<span><span class="co">#&gt; }</span></span></code></pre></div>
+<p>Save this script with a filename of your choice inside of the
+“blueprints” directory of your project. We’ll assume you are using
+targets for your project:</p>
+<pre><code>./
+  _targets.R
+  blueprints/
+    ... all blueprint R and CSV files go here ...
+  R/
+    ... all associated R function definitions are here ...
+  project.Rproj
+  ...</code></pre>
+<div class="vg-info">
+<span>It is not required to use panelcleaner or even document the source
+metadata. This is just a convention we at TIES developed. However, we
+strongly advise doing something similar to track your data sources over
+time.</span>
+</div>
+<p>When running this code with either <code>targets</code> or
+<code>drake</code>, the blueprint metadata is automatically created. For
+our mtcars example, this looks like:</p>
+<pre><code><span><span class="co">#&gt; <span style="font-weight: bold;">Rows: </span><span style="color: #0000BB;">13</span> <span style="font-weight: bold;">Columns: </span><span style="color: #0000BB;">4</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Delimiter:</span> ","</span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">chr</span> (4): name, type, description, coding</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 13 × 4</span></span></span>
+<span><span class="co">#&gt;    name  type      description             coding                               </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> name  character Name of Car              <span style="color: #BB0000;">NA</span>                                  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> mpg   double    Miles per gallon         <span style="color: #BB0000;">NA</span>                                  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> cyl   double    Number of cylinders      <span style="color: #BB0000;">NA</span>                                  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> disp  double    Displacement             <span style="color: #BB0000;">NA</span>                                  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> hp    double    Gross horsepower         <span style="color: #BB0000;">NA</span>                                  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> drat  double    Rear axle ratio          <span style="color: #BB0000;">NA</span>                                  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> wt    double    Weight                   <span style="color: #BB0000;">NA</span>                                  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> qsec  double    Quarter mile time        <span style="color: #BB0000;">NA</span>                                  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> vs    character Engine                  <span style="color: #949494;">"</span>coding(code(\"straight\",\"1\"), co…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> am    character Transmission            <span style="color: #949494;">"</span>coding(code(\"manual\",\"1\"), code…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> gear  double    Number of forward gears  <span style="color: #BB0000;">NA</span>                                  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> carb  double    Number of carburetors    <span style="color: #BB0000;">NA</span>                                  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> wave  character <span style="color: #BB0000;">NA</span>                       <span style="color: #BB0000;">NA</span></span></span></code></pre>
+<p>Manually editing the metadata allows the user to add tests to check
+the data type and values.</p>
+<p>The last step of our work is to load this blueprint into either
+targets or drake. For this example, we’ll use targets as drake is
+deprecated. A full discussion of targets is beyond the scope of this
+vignette, but you can find <a href="https://books.ropensci.org/targets/walkthrough.html" class="external-link">an excellent
+walkthrough here</a>. The only detail that is needed is to add
+<code><a href="../reference/tar_blueprint.html">blueprintr::tar_blueprints()</a></code> to your
+<code>_targets.R</code> file:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># _targets.R</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/targets/" class="external-link">targets</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># ...</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://docs.ropensci.org/targets/reference/tar_target.html" class="external-link">tar_target</a></span><span class="op">(</span></span>
+<span>    <span class="va">item_mapping</span>,</span>
+<span>    <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv</a></span><span class="op">(</span><span class="st">"where/your/mapping/file/is/stored.csv"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  </span>
+<span>  <span class="fu">blueprintr</span><span class="fu">::</span><span class="fu"><a href="../reference/tar_blueprint.html">tar_blueprints</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span></span>
+<span>  <span class="co"># Other targets for your project!</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>This will load all blueprints in the “blueprints” directory. If you
+have a nested directory structure, use
+<code>blueprintr::tar_blueprints(recurse = TRUE)</code>.</p>
+<p>And there you have it! You have created your first blueprint on the
+<code>mtcars</code> dataset. When running a pipeline with
+<code>blueprintr</code>, the checks allow researchers to be warned of
+any issues at an early stage, allowing them to produce replicable
+results.</p>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -265,16 +389,16 @@ since it could have problems which are discovered in the
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>
