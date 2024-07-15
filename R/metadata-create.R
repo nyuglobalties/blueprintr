@@ -125,13 +125,29 @@ reconcile_dependencies <- function(dec_dt, meta_dt) {
   )
 
   all_meta <- tidytable::bind_rows(dec_dt, meta_dt)
+
+  # As of tidytable 0.11.0, pivoting affects the row order.
+  # While analytically this may be fine, this messes up metadata creation.
+  # These row IDs return the data to its original order.
+  all_meta <- tidytable::mutate(
+    all_meta,
+    .id = seq_len(.N),
+  )
   fields <- setdiff(names(all_meta), c("name", ".origin"))
 
   wide_meta <- tidytable::pivot_wider(
     all_meta,
     names_from = ".origin",
     values_from = tidytable::all_of(fields)
-  )
+  ) |>
+    tidytable::mutate(
+      .id = tidytable::coalesce(
+        .id_annotations,
+        .id_metafile,
+      )
+    ) |>
+    tidytable::arrange(.id) |>
+    tidytable::select(-tidyselect::starts_with(".id"))
 
   # Remove rows with NA type_annotations
   # These don't exist in the dataset
