@@ -149,6 +149,8 @@ reconcile_dependencies <- function(dec_dt, meta_dt) {
     tidytable::arrange(.id) |>
     tidytable::select(-tidyselect::starts_with(".id"))
 
+  fields <- setdiff(fields, ".id")
+
   # Remove rows with NA type_annotations
   # These don't exist in the dataset
   wide_meta <- tidytable::filter(
